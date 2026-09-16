@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Columbia Animal Hospital — preview render</title>
+<link rel="preload" href="../assets/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Geist';src:url('../assets/fonts/geist-latin-wght-normal.woff2') format('woff2-variations');font-weight:100 900;font-display:swap}
+@font-face{font-family:'Instrument Serif';src:url('../assets/fonts/instrument-serif-latin-400-italic.woff2') format('woff2');font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:'Geist Mono';src:url('../assets/fonts/geist-mono-latin-wght-normal.woff2') format('woff2-variations');font-weight:100 900;font-display:swap}
+:root{
+  --pine:#1B4237; --pine-2:#2C5A4C; --cream:#FBF9F4; --sand:#EFEADF;
+  --bark:#14201C; --muted:#63736D; --line:#E2DDD1; --gold:#C98A3C;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Geist',system-ui,sans-serif;background:var(--cream);color:var(--bark);line-height:1.6;letter-spacing:-0.012em;-webkit-font-smoothing:antialiased;font-size:15px}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+ul{list-style:none;padding:0}
+.w{max-width:1080px;margin-inline:auto;padding-inline:clamp(1rem,4vw,2.5rem)}
+.mono{font-family:'Geist Mono',monospace;font-size:.6875rem;letter-spacing:.14em;text-transform:uppercase}
+.ital{font-family:'Instrument Serif',serif;font-style:italic;font-weight:400}
+
+/* top bar */
+.util{background:var(--pine);color:#CFE0D8;font-size:.75rem}
+.util .w{display:flex;justify-content:space-between;gap:1rem;padding-block:.5rem;flex-wrap:wrap}
+.util b{color:#fff;font-weight:500}
+header{position:sticky;top:0;z-index:9;background:rgba(251,249,244,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header .w{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.875rem}
+.brand{display:flex;align-items:center;gap:.625rem;font-weight:600;font-size:1rem;letter-spacing:-.03em;line-height:1.15}
+.brand svg{width:30px;height:30px;flex:none}
+.brand span{display:block;font-size:.625rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-family:'Geist Mono',monospace}
+nav ul{display:flex;gap:1.375rem;font-size:.8125rem;color:#41524C}
+@media(max-width:720px){nav{display:none}}
+.cta{background:var(--pine);color:#fff;padding:.625rem 1.125rem;border-radius:999px;font-size:.8125rem;font-weight:500;white-space:nowrap}
+
+/* hero */
+.hero{padding-block:clamp(2.5rem,6vw,4.5rem) clamp(2rem,5vw,3.5rem)}
+.hero .w{display:grid;gap:clamp(1.75rem,4vw,3rem);align-items:center}
+@media(min-width:800px){.hero .w{grid-template-columns:1.05fr .95fr}}
+.hero h1{font-size:clamp(2.125rem,1.2rem+3.4vw,3.75rem);line-height:.98;letter-spacing:-.045em;font-weight:500;margin-bottom:1rem;text-wrap:balance}
+.hero h1 i{color:var(--pine-2)}
+.hero p{color:var(--muted);max-width:42ch;margin-bottom:1.5rem;font-size:1.0625rem}
+.row{display:flex;gap:.625rem;flex-wrap:wrap}
+.btn{padding:.8125rem 1.375rem;border-radius:999px;font-size:.875rem;font-weight:500;display:inline-flex;align-items:center;gap:.5rem}
+.btn-p{background:var(--pine);color:#fff}
+.btn-g{border:1px solid var(--line);color:var(--bark)}
+.shot{border-radius:14px;overflow:hidden;aspect-ratio:5/4;position:relative;background:linear-gradient(155deg,#DCE7E1,#9FB8AC 40%,var(--pine-2));box-shadow:0 24px 60px -24px rgba(20,32,28,.4)}
+.shot::after{content:'';position:absolute;inset:auto 0 0 0;height:52%;background:linear-gradient(transparent,rgba(20,32,28,.55))}
+.shot figcaption{position:absolute;z-index:2;left:1rem;right:1rem;bottom:1rem;color:#fff;font-size:.75rem;opacity:.9}
+.paw{position:absolute;inset:0;display:grid;place-items:center;opacity:.22}
+.paw svg{width:44%;height:auto;color:#fff}
+
+/* trust strip */
+.strip{border-block:1px solid var(--line);background:var(--sand)}
+.strip .w{display:grid;gap:1rem;padding-block:1.25rem;grid-template-columns:repeat(2,1fr)}
+@media(min-width:760px){.strip .w{grid-template-columns:repeat(4,1fr)}}
+.strip div b{display:block;font-size:.9375rem;font-weight:550;letter-spacing:-.02em}
+.strip div span{font-size:.75rem;color:var(--muted)}
+
+/* services */
+section{padding-block:clamp(2.5rem,6vw,4.5rem)}
+.head{margin-bottom:2rem;max-width:52ch}
+.head .mono{color:var(--pine-2);display:block;margin-bottom:.75rem}
+.head h2{font-size:clamp(1.625rem,1.1rem+1.9vw,2.5rem);line-height:1.08;letter-spacing:-.035em;font-weight:500;text-wrap:balance}
+.cards{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.375rem}
+.card i{display:grid;place-items:center;width:2.25rem;height:2.25rem;border-radius:50%;background:var(--sand);color:var(--pine);margin-bottom:.875rem}
+.card i svg{width:16px;height:16px}
+.card b{display:block;font-size:1rem;font-weight:550;letter-spacing:-.025em;margin-bottom:.375rem}
+.card p{font-size:.8125rem;color:var(--muted);line-height:1.6}
+
+/* hours + contact */
+.split{background:var(--pine);color:#E8F0EC}
+.split .w{display:grid;gap:clamp(1.75rem,4vw,3rem);padding-block:clamp(2.5rem,6vw,4rem)}
+@media(min-width:800px){.split .w{grid-template-columns:1fr 1fr}}
+.split h2{font-size:clamp(1.625rem,1.1rem+1.9vw,2.5rem);line-height:1.05;letter-spacing:-.04em;font-weight:500;color:#fff;margin-bottom:.875rem}
+.split h2 i{color:#9FC9B7}
+.split p{color:#B5CCC3;max-width:40ch;margin-bottom:1.5rem}
+.hours{border-top:1px solid rgba(255,255,255,.16)}
+.hours li{display:flex;justify-content:space-between;gap:1rem;padding:.8125rem 0;border-bottom:1px solid rgba(255,255,255,.16);font-size:.875rem}
+.hours li b{font-weight:500;color:#fff}
+.hours li span{color:#9FB8AC;font-family:'Geist Mono',monospace;font-size:.75rem;letter-spacing:.04em}
+.alert{margin-top:1.25rem;display:flex;gap:.75rem;align-items:flex-start;background:rgba(201,138,60,.16);border:1px solid rgba(201,138,60,.4);border-radius:10px;padding:.875rem 1rem;font-size:.8125rem;color:#EBD9BE}
+.alert svg{width:16px;height:16px;flex:none;margin-top:.15rem;color:var(--gold)}
+
+/* footer */
+footer{background:var(--bark);color:#A9B8B2;font-size:.8125rem}
+footer .w{padding-block:2rem}
+.frow{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));margin-bottom:1.75rem}
+footer h5{color:#fff;font-family:'Geist Mono',monospace;font-size:.625rem;letter-spacing:.14em;text-transform:uppercase;margin-bottom:.75rem;font-weight:500}
+footer li{padding:.25rem 0}
+.fbot{border-top:1px solid rgba(255,255,255,.12);padding-top:1.25rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.6875rem;color:#6E7D77}
+</style>
+</head>
+<body>
+
+<div class="util"><div class="w">
+  <span>1409 Hwy 98 E · Columbia, MS 39429</span>
+  <span>After-hours emergency? <b>A veterinarian is on call.</b></span>
+</div></div>
+
+<header><div class="w">
+  <a class="brand" href="#">
+    <svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><circle cx="20" cy="20" r="19" stroke="#2C5A4C" stroke-width="1.5"/><path d="M20 27c-4 0-6.6-2.2-6.6-4.6 0-2.1 1.9-3.2 3.1-4.6 1-1.2 1.6-3 3.5-3s2.5 1.8 3.5 3c1.2 1.4 3.1 2.5 3.1 4.6C26.6 24.8 24 27 20 27Z" fill="#2C5A4C"/><circle cx="13.5" cy="14.5" r="2.1" fill="#2C5A4C"/><circle cx="26.5" cy="14.5" r="2.1" fill="#2C5A4C"/><circle cx="19.9" cy="10.6" r="2.1" fill="#2C5A4C"/></svg>
+    <span style="font-family:inherit;font-size:1rem;font-weight:600;letter-spacing:-.03em;color:var(--bark);text-transform:none">Columbia Animal Hospital<span>Columbia, Mississippi</span></span>
+  </a>
+  <nav><ul><li>Services</li><li>Our Team</li><li>New Patients</li><li>Surgery</li><li>Contact</li></ul></nav>
+  <a class="cta" href="#">Request an Appointment</a>
+</div></header>
+
+<div class="hero"><div class="w">
+  <div>
+    <h1>Care your pet can feel. Expertise you can <i class="ital">trust.</i></h1>
+    <p>Full-service veterinary medicine, surgery, and wellness care for the families of Marion County — with a veterinarian on call when it can’t wait.</p>
+    <div class="row">
+      <a class="btn btn-p" href="#">Request an Appointment</a>
+      <a class="btn btn-g" href="tel:+16017363041">Call (601) 736-3041</a>
+    </div>
+  </div>
+  <figure class="shot">
+    <div class="paw"><svg viewBox="0 0 40 40" fill="currentColor" aria-hidden="true"><path d="M20 30c-5 0-8.3-2.8-8.3-5.8 0-2.6 2.4-4 3.9-5.7 1.3-1.5 2-3.8 4.4-3.8s3.1 2.3 4.4 3.8c1.5 1.7 3.9 3.1 3.9 5.7 0 3-3.3 5.8-8.3 5.8Z"/><circle cx="11.8" cy="14.6" r="2.7"/><circle cx="28.2" cy="14.6" r="2.7"/><circle cx="19.9" cy="9.8" r="2.7"/></svg></div>
+    <figcaption>Exam rooms, surgical suite, and in-house diagnostics under one roof.</figcaption>
+  </figure>
+</div></div>
+
+<div class="strip"><div class="w">
+  <div><b>Mon–Fri</b><span>7:30a – 5:30p</span></div>
+  <div><b>Saturday</b><span>8:00a – 12:00p</span></div>
+  <div><b>On-call vet</b><span>After-hours emergencies</span></div>
+  <div><b>(601) 736-3041</b><span>Call or text to book</span></div>
+</div></div>
+
+<section><div class="w">
+  <div class="head">
+    <span class="mono">What we do</span>
+    <h2>Everything your pet needs, in one place in Columbia.</h2>
+  </div>
+  <div class="cards">
+    <div class="card"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.6-7-9.6A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 7 3.4C19 16.4 12 21 12 21Z"/></svg></i><b>Wellness &amp; Prevention</b><p>Annual exams, vaccinations, parasite prevention, and nutrition planning that keeps small problems small.</p></div>
+    <div class="card"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 4l6 6-9 9H5v-6l9-9Z"/></svg></i><b>Surgery</b><p>A state-of-the-art surgical suite for routine and advanced procedures, with monitoring throughout recovery.</p></div>
+    <div class="card"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2.5"/></svg></i><b>Diagnostics</b><p>In-house lab work and imaging, so you get answers during the visit instead of days later.</p></div>
+    <div class="card"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h4l2 5 4-10 2 5h4"/></svg></i><b>Urgent &amp; Emergency</b><p>A veterinarian on call after hours for the moments that can’t wait until Monday morning.</p></div>
+  </div>
+</div></section>
+
+<div class="split"><div class="w">
+  <div>
+    <h2>Open when Columbia <i class="ital">needs us.</i></h2>
+    <p>Drop in during regular hours, or call ahead and we’ll have a room ready. Located on Highway 98 East, minutes from downtown.</p>
+    <div class="row">
+      <a class="btn" style="background:#fff;color:var(--pine)" href="#">Get Directions</a>
+      <a class="btn" style="border:1px solid rgba(255,255,255,.3);color:#fff" href="#">New Patient Forms</a>
+    </div>
+  </div>
+  <div>
+    <ul class="hours">
+      <li><b>Monday – Friday</b><span>7:30 AM – 5:30 PM</span></li>
+      <li><b>Saturday</b><span>8:00 AM – 12:00 PM</span></li>
+      <li><b>Sunday</b><span>Closed</span></li>
+      <li><b>After hours</b><span>Vet on call</span></li>
+    </ul>
+    <div class="alert">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4M12 17h.01M10.3 3.9 2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+      <span><b style="color:#fff;font-weight:550">Emergency?</b> Call (601) 736-3041 — a veterinarian is on call after hours.</span>
+    </div>
+  </div>
+</div></div>
+
+<section><div class="w">
+  <div class="head">
+    <span class="mono">Before your first visit</span>
+    <h2>New here? We’ll make it easy.</h2>
+  </div>
+  <div class="cards">
+    <div class="card"><b>1 — Call or request online</b><p>Tell us what's going on and we’ll get you the first available slot that fits your schedule.</p></div>
+    <div class="card"><b>2 — Send records ahead</b><p>Have your previous clinic forward records so we start with the full picture of your pet’s history.</p></div>
+    <div class="card"><b>3 — Arrive a few minutes early</b><p>New-patient paperwork takes about five minutes, or you can fill it out before you come in.</p></div>
+  </div>
+</div></section>
+
+<footer><div class="w">
+  <div class="frow">
+    <div><h5>Columbia Animal Hospital</h5><ul><li>1409 Hwy 98 E</li><li>Columbia, MS 39429</li><li>(601) 736-3041</li></ul></div>
+    <div><h5>Hours</h5><ul><li>Mon–Fri 7:30a – 5:30p</li><li>Sat 8:00a – 12:00p</li><li>Sun Closed</li></ul></div>
+    <div><h5>Care</h5><ul><li>Wellness &amp; Vaccines</li><li>Surgery</li><li>Diagnostics</li><li>Urgent Care</li></ul></div>
+    <div><h5>Visit</h5><ul><li>Request Appointment</li><li>New Patient Forms</li><li>Directions</li></ul></div>
+  </div>
+  <div class="fbot"><span>© Columbia Animal Hospital</span><span>Design preview by 601 Digital</span></div>
+</div></footer>
+
+</body>
+</html>
