@@ -78,6 +78,9 @@ All motion lives in `main.js` and degrades safely:
 - **Mini renders** (`.mini--dated` / `.mini--premium`) — miniature website
   layouts sized entirely in `cqw` container units, so one markup block scales
   correctly whether it's a 340px thumbnail or a 1300px split-screen panel.
+  `.mini--dated` recreates the template the client is on today (gold monogram
+  masthead, sawtooth divider, pill nav over a photo carousel, three bordered
+  thumbnails with gradient buttons) rather than a generic "old site" pastiche.
 - **Contact form** (`[data-contact]`) — inline validation with a drawn-in
   champagne hairline on focus. Set `data-endpoint="…"` on the form to POST to a
   form service (Formspree, Basin, your own handler); with no endpoint it

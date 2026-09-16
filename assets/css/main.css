@@ -736,20 +736,132 @@ a { color: inherit; text-decoration: none; }
 .mini { display: block; overflow: hidden; background: #fff; container-type: inline-size; }
 .mini * { box-sizing: border-box; }
 
-/* — dated / "before" language — */
-.mini--dated { font-family: Verdana, Geneva, sans-serif; color: #333; background: #fff; }
-.mini--dated .mini__top { background: #2C4C7C; color: #fff; padding: 1.65cqw 1.93cqw; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.55cqw; }
-.mini--dated .mini__logo { font-size: 1.87cqw; font-weight: 700; text-shadow: 1px 1px 1px rgba(0,0,0,.4); }
-.mini--dated .mini__navrow { display: flex; gap: 1.32cqw; font-size: 1.1cqw; }
-.mini--dated .mini__banner { background: linear-gradient(#5E88C0, #2C4C7C); color: #fff; text-align: center; padding: 3.85cqw 1.65cqw; border-bottom: 3px solid #1B3560; }
-.mini--dated .mini__banner h3 { font-size: 2.42cqw; margin: 0 0 0.83cqw; text-shadow: 1px 1px 2px rgba(0,0,0,.5); }
-.mini--dated .mini__banner p { font-size: 1.21cqw; margin: 0; opacity: .92; }
-.mini--dated .mini__cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.38cqw; padding: 1.93cqw; }
-.mini--dated .mini__box { border: 1px solid #bbb; padding: 1.32cqw; background: #f7f7f7; }
-.mini--dated .mini__box h4 { font-size: 1.32cqw; margin: 0 0 0.66cqw; color: #2C4C7C; }
-.mini--dated .mini__box p { font-size: 1.02cqw; line-height: 1.5; margin: 0; color: #555; }
-.mini--dated .mini__btn { display: inline-block; margin-top: 1.1cqw; background: #E8A33D; color: #3a2a06; border: 1px solid #b87f22; padding: 0.77cqw 1.43cqw; font-size: 1.1cqw; font-weight: 700; border-radius: 3px; }
-.mini--dated .mini__foot { background: #2C4C7C; color: #cbd8ea; font-size: 0.99cqw; padding: 1.65cqw; text-align: center; }
+/* — dated / "before" language —
+   A faithful recreation of the template pattern the client is on today:
+   dark masthead with a gold monogram, sawtooth divider, pill nav floating on a
+   photo carousel, and a white three-column panel of bordered thumbnails.
+   Everything is sized in cqw so it scales from thumbnail to split-screen. */
+.mini--dated {
+  font-family: 'Trebuchet MS', Verdana, Geneva, sans-serif;
+  color: #444; background: #EDEDEA;
+}
+.mini--dated .mini__top {
+  background: #2E2A26;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 2cqw; padding: 1.25cqw 2.78cqw 1.1cqw;
+}
+.mini--dated .mini__brand { text-align: center; padding-left: 8cqw; }
+.mini--dated .mini__cah {
+  display: block;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 3.75cqw; line-height: 1; letter-spacing: .04em;
+  color: #C79A4E;
+  border-bottom: 0.12cqw solid #8A6B32;
+  padding-bottom: .35cqw;
+}
+.mini--dated .mini__cahsub {
+  display: block; margin-top: .42cqw;
+  font-family: Georgia, serif; font-size: .92cqw;
+  letter-spacing: .2em; color: #C79A4E; text-transform: uppercase;
+}
+.mini--dated .mini__addr { text-align: right; color: #fff; line-height: 1.55; }
+.mini--dated .mini__addr b { display: block; font-size: .92cqw; letter-spacing: .06em; margin-bottom: .3cqw; }
+.mini--dated .mini__addr span { display: block; font-size: .78cqw; color: #E8E4DE; }
+.mini--dated .mini__addr i { font-style: normal; color: #C79A4E; }
+
+/* the sawtooth edge under the masthead */
+.mini--dated .mini__zig {
+  height: .7cqw; background: #2E2A26;
+  clip-path: polygon(0 0, 100% 0, 100% 0,
+    99% 100%, 98% 0, 97% 100%, 96% 0, 95% 100%, 94% 0, 93% 100%, 92% 0, 91% 100%, 90% 0,
+    89% 100%, 88% 0, 87% 100%, 86% 0, 85% 100%, 84% 0, 83% 100%, 82% 0, 81% 100%, 80% 0,
+    79% 100%, 78% 0, 77% 100%, 76% 0, 75% 100%, 74% 0, 73% 100%, 72% 0, 71% 100%, 70% 0,
+    69% 100%, 68% 0, 67% 100%, 66% 0, 65% 100%, 64% 0, 63% 100%, 62% 0, 61% 100%, 60% 0,
+    59% 100%, 58% 0, 57% 100%, 56% 0, 55% 100%, 54% 0, 53% 100%, 52% 0, 51% 100%, 50% 0,
+    49% 100%, 48% 0, 47% 100%, 46% 0, 45% 100%, 44% 0, 43% 100%, 42% 0, 41% 100%, 40% 0,
+    39% 100%, 38% 0, 37% 100%, 36% 0, 35% 100%, 34% 0, 33% 100%, 32% 0, 31% 100%, 30% 0,
+    29% 100%, 28% 0, 27% 100%, 26% 0, 25% 100%, 24% 0, 23% 100%, 22% 0, 21% 100%, 20% 0,
+    19% 100%, 18% 0, 17% 100%, 16% 0, 15% 100%, 14% 0, 13% 100%, 12% 0, 11% 100%, 10% 0,
+    9% 100%, 8% 0, 7% 100%, 6% 0, 5% 100%, 4% 0, 3% 100%, 2% 0, 1% 100%, 0 0);
+}
+
+/* hero carousel */
+.mini--dated .mini__photo {
+  position: relative; flex: 0 0 auto; height: 24cqw;
+  background:
+    linear-gradient(#BFD4E2 0%, #D8E4EC 37%, #6E8C4A 37%, #8FAC64 100%);
+  display: grid; place-items: center;
+  overflow: hidden;
+}
+/* distant treeline behind the sign */
+.mini--dated .mini__trees {
+  position: absolute; left: 0; right: 0; top: 26%; height: 13%;
+  background: linear-gradient(#54754A 0%, #405E34 100%);
+  box-shadow: inset 0 .25cqw .5cqw rgba(0,0,0,.18);
+}
+
+.mini--dated .mini__nav {
+  position: absolute; top: 1.1cqw; left: 4cqw; right: 4cqw; z-index: 3;
+  background: #E8E4DB; border-radius: .35cqw;
+  display: flex; align-items: center; gap: 2.4cqw;
+  padding: .95cqw 2cqw;
+  font-size: .82cqw; letter-spacing: .1em; text-transform: uppercase; color: #55534F;
+  box-shadow: 0 .15cqw .4cqw rgba(0,0,0,.18);
+}
+.mini--dated .mini__nav b { color: #C8781F; font-weight: 700; }
+.mini--dated .mini__sign {
+  position: relative; z-index: 2;
+  background: #F4F3F0; border: .35cqw solid #DEDDD8;
+  padding: 1.5cqw 2.4cqw; text-align: center; color: #1C1C1C;
+  box-shadow: 0 .3cqw .8cqw rgba(0,0,0,.25);
+  margin-top: 2cqw;
+}
+.mini--dated .mini__sign em {
+  display: block; font-style: normal; font-weight: 700;
+  font-size: 1.9cqw; line-height: 1.12; letter-spacing: .01em;
+}
+.mini--dated .mini__sign u {
+  display: block; text-decoration: none; margin-top: .5cqw;
+  font-size: 1.75cqw; font-weight: 700;
+}
+.mini--dated .mini__arrow {
+  position: absolute; z-index: 3; top: 50%; transform: translateY(-50%);
+  width: 2.1cqw; height: 2.1cqw; border-radius: 50%;
+  background: rgba(255,255,255,.55); color: #4A4A4A;
+  display: grid; place-items: center; font-size: 1cqw;
+}
+.mini--dated .mini__arrow--l { left: 1.4cqw; }
+.mini--dated .mini__arrow--r { right: 1.4cqw; }
+
+/* white three-column panel overlapping the photo */
+.mini--dated .mini__panel {
+  width: 60%; margin: -4cqw auto 0; position: relative; z-index: 4;
+  background: #FBFBF9; border: .07cqw solid #E2E2DC;
+  padding: 1.7cqw;
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4cqw;
+  box-shadow: 0 .2cqw .6cqw rgba(0,0,0,.08);
+}
+.mini--dated .mini__box { text-align: center; }
+.mini--dated .mini__thumb {
+  aspect-ratio: 4 / 3; border: .07cqw solid #CFCFC8; padding: .28cqw;
+  background: #fff; margin-bottom: .9cqw;
+}
+.mini--dated .mini__thumb i { display: block; width: 100%; height: 100%; }
+.mini--dated .mini__thumb--surgery i { background: linear-gradient(150deg, #7FA8C9, #3E6B92 70%, #2A4B69); }
+.mini--dated .mini__thumb--xray i    { background: linear-gradient(150deg, #5A6570, #2E3740 65%, #1C2228); }
+.mini--dated .mini__thumb--groom i   { background: linear-gradient(150deg, #E8E4DE, #C4BEB4 70%, #9A9489); }
+.mini--dated .mini__box h4 {
+  font-size: .92cqw; letter-spacing: .06em; text-transform: uppercase;
+  color: #333; margin: 0 0 .7cqw; font-weight: 700;
+}
+.mini--dated .mini__box p { font-size: .78cqw; line-height: 1.62; color: #6A6A66; margin: 0; }
+.mini--dated .mini__btn {
+  display: inline-block; margin-top: .95cqw;
+  background: linear-gradient(#F7F7F5, #DFDFDA);
+  border: .07cqw solid #BEBEB6; border-radius: .2cqw;
+  padding: .5cqw 1.1cqw; font-size: .76cqw; color: #4A4A46;
+}
+.mini--dated .mini__tail { flex: 1 1 auto; min-height: 2.4cqw; }
 
 /* — premium / "after" language — */
 .mini--premium { font-family: 'Geist', system-ui, sans-serif; color: #12201C; background: #FBFAF7; letter-spacing: -0.02em; }
@@ -1086,10 +1198,6 @@ body.menu-open { overflow: hidden; }
 /* Absorb slack into the hero band instead of leaving a dead gap above the footer. */
 .ba__layer .mini--premium .mini__hero,
 .xform__stage .mini--premium .mini__hero { flex: 1 1 auto; }
-.ba__layer .mini--dated .mini__banner,
-.xform__stage .mini--dated .mini__banner {
-  flex: 1 1 auto; display: flex; flex-direction: column; justify-content: center;
-}
 /* A hero image should support the headline, not swallow the page. */
 .mini--premium .mini__shot { aspect-ratio: 3 / 2; }
 
@@ -1098,9 +1206,6 @@ body.menu-open { overflow: hidden; }
 .ba__layer .mini--premium .mini__hero { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); }
 .ba__layer .mini--premium .mini__hero > div:not(.mini__shot) { order: 2; }
 .ba__layer .mini--premium .mini__hero > .mini__shot { order: 1; }
-/* Share slack between banner and content so neither stretches oddly. */
-.ba__layer .mini--dated .mini__cols,
-.xform__stage .mini--dated .mini__cols { flex: 2 1 auto; align-content: center; }
 
 /* Keep the 601 numeral and its caption together at the dial's centre. */
 .roots__dial { align-content: center; }

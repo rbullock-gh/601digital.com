@@ -1,65 +1,71 @@
 # Content to fill in before this goes live
 
-I built this without access to the existing 601digital.com (the domain does not
-resolve from this environment) and with an empty repository, so **nothing was
-carried over from an old site**. Everything below is either a placeholder or a
-claim I could not verify. Nothing on the site invents a client, a testimonial,
-a statistic, an award, or a result.
+Nothing on this site invents a client, testimonial, statistic, award, or result.
+This file tracks what is still a placeholder and which claims rest on your word
+rather than something I could verify.
 
-## 1. Blockers — must be replaced before launch
+## 1. Still outstanding
 
-| Where | Placeholder now | Needs |
+| Where | State now | Needs |
 |---|---|---|
-| Contact block + footer | `hello@601digital.com` | Real email address |
-| Contact block + footer | `(601) 555-0000` | Real phone number |
-| Contact form | no `data-endpoint` | A form endpoint (Formspree/Basin/your own). Until then the form opens a pre-filled mail draft. |
 | Testimonials section | Two quotes marked `PLACEHOLDER` | Real client quotes, with written permission |
-| Before/After "Before" panel | Representative dated-template render | A real screenshot of the previous site |
 | Work item 02 | "Slot open" card | A second real project, or delete the block |
+| Contact form | No `data-endpoint` set | A form endpoint (Formspree, Basin, your own handler) |
+| Before panel | Recreated from a screenshot | Optional: a real capture, for pixel-exactness |
 
-Search the repo for `is-placeholder` and `555-0000` to find these fast.
+Search the repo for `is-placeholder` to find the first two.
 
-## 2. Claims I used that you should confirm are true
+### Wiring the contact form
 
-These come from your brief, but I can't verify them — if any is wrong, change
-the copy rather than leaving it:
+Add the endpoint to the form tag in `index.html`:
+
+```html
+<form class="form" data-contact data-endpoint="https://formspree.io/f/YOUR_ID" novalidate ...>
+```
+
+With no endpoint the form validates, then composes a pre-filled draft to
+`601digital@gmail.com`. It is never a dead end, but a real endpoint means
+enquiries land in an inbox without the visitor's mail app cooperating.
+
+### Making the Before panel pixel-exact
+
+The Before panel is a faithful CSS recreation of the site live at
+columbiaanimalhospital.net today — the CAH monogram masthead, sawtooth divider,
+pill nav, photo carousel, and the Surgery / Digital Radiography / Grooming
+panel, using the client's own service copy. It is honest as it stands.
+
+If you want the actual pixels instead:
+
+1. Save a full-page screenshot to `assets/img/cah-before.png` (~1440px wide).
+2. Replace the contents of `.ba__layer--before` in `index.html` with:
+   `<img src="assets/img/cah-before.png" alt="The Columbia Animal Hospital website before the redesign">`
+
+The same swap works for the After side if you would rather show the shipped
+site than the design render.
+
+## 2. Claims that rest on your word
+
+If any of these is wrong, change the copy rather than leaving it:
 
 - **"The person who designs it is the person who builds it."** Used in the hero,
-  the 601 Difference section, and the footer. This is the site's core
-  differentiator — it only works if 601 Digital is genuinely solo or
-  near-solo.
-- **"1 — Person, start to launch"** (hero stat). Same assumption.
-- **"0 — Templates used"** (hero stat) — i.e. every site is custom.
-- **Columbia Animal Hospital is a 601 Digital project.** The whole featured case
-  study rests on this. The business details used (address, phone, hours, on-call
-  vet, surgical suite) came from public directory listings, so check them against
-  what the client actually publishes.
-- **Services list** — six services: Website Design & Development, Brand
-  Presentation, Search Visibility, Google Business Profile, Conversion-Focused
-  Design, Website Care. Remove any you don't actually offer.
+  the 601 Difference section, and the footer. It is the spine of the boutique
+  positioning and only works if 601 Digital is genuinely solo or near-solo.
+- **"1 — Person, start to launch"** and **"0 — Templates used"** (hero stats).
+- **Columbia Animal Hospital is a 601 Digital project.** The featured case study
+  rests on this.
+- **Services** — Website Design & Development, Brand Presentation, Search
+  Visibility, Google Business Profile, Conversion-Focused Design, Website Care.
+  Remove any you do not actually offer.
 
-## 3. The "Before" panel — read this one carefully
-
-The Before→After slider is the site's strongest feature, and right now the
-*After* side is a real design render but the *Before* side is *not* a capture of
-Columbia Animal Hospital's previous website. I had no network access to fetch it.
-
-It is a generic reconstruction of a dated template layout. There is a visible
-note under the slider saying exactly that.
-
-**To make it real:**
-1. Screenshot the old site (or pull it from the Wayback Machine).
-2. Save as `assets/img/cah-before.png` — full-page, ~1440px wide.
-3. In `index.html`, replace the contents of `.ba__layer--before` with:
-   `<img src="/assets/img/cah-before.png" alt="The previous Columbia Animal Hospital website">`
-4. Delete the note paragraph directly under the slider.
-
-Do the same for the After side with a real screenshot if you'd rather show the
-shipped site than the render.
-
-## 4. Not fabricated — deliberately left open
+## 3. Deliberately left open
 
 - The case study's **Result** column says metrics will be added once post-launch
-  data exists. Don't fill it with guesses; the layout already supports real
-  numbers when you have them.
+  data exists. Don't fill it with guesses; the layout supports real numbers.
 - No client logos are shown, since I don't know who has given permission.
+
+## 4. Confirmed and in place
+
+- Email: **601digital@gmail.com** · Telephone: **(769) 313-6636**
+- Client details used in the case study (address, phone, hours, surgical suite,
+  digital radiography, grooming, on-call vet) come from the client's own site
+  and public listings. Worth a last check against what they publish today.
