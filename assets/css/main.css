@@ -863,25 +863,122 @@ a { color: inherit; text-decoration: none; }
 }
 .mini--dated .mini__tail { flex: 1 1 auto; min-height: 2.4cqw; }
 
-/* — premium / "after" language — */
-.mini--premium { font-family: 'Geist', system-ui, sans-serif; color: #12201C; background: #FBFAF7; letter-spacing: -0.02em; }
-.mini--premium .mini__top { display: flex; justify-content: space-between; align-items: center; padding: 1.65cqw 2.2cqw; }
-.mini--premium .mini__logo { font-size: 1.43cqw; font-weight: 600; display: flex; align-items: center; gap: 0.55cqw; }
-.mini--premium .mini__logo b { width: 1.87cqw; height: 1.87cqw; border-radius: 50%; background: #2F6B4B; display: inline-block; flex: none; }
-.mini--premium .mini__navrow { display: flex; gap: 1.43cqw; font-size: 1.04cqw; color: #5C6A60; }
-.mini--premium .mini__pill { background: #2F6B4B; color: #fff; padding: 0.72cqw 1.32cqw; border-radius: 54.45cqw; font-size: 0.99cqw; font-weight: 500; }
-.mini--premium .mini__hero { padding: 2.75cqw 2.2cqw 2.2cqw; display: grid; grid-template-columns: 1.1fr .9fr; gap: 1.65cqw; align-items: center; }
-.mini--premium .mini__hero h3 { font-size: 3.3cqw; line-height: .98; letter-spacing: -0.045em; font-weight: 500; margin: 0 0 1.1cqw; }
-.mini--premium .mini__hero h3 i { font-family: var(--font-display); font-style: italic; color: #2F6B4B; }
-.mini--premium .mini__hero p { font-size: 1.1cqw; line-height: 1.5; color: #5C6A60; margin: 0 0 1.43cqw; max-width: 30ch; }
-.mini--premium .mini__shot { aspect-ratio: 4/3; border-radius: 0.83cqw; background: linear-gradient(150deg, #C9D8D0, #8FAA9E 45%, #2F6B4B); position: relative; overflow: hidden; }
-.mini--premium .mini__shot::after { content: ''; position: absolute; inset: auto 0 0 0; height: 45%; background: linear-gradient(transparent, rgba(23,60,46,.5)); }
-.mini--premium .mini__strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1cqw; padding: 0 2.2cqw 2.2cqw; }
-.mini--premium .mini__card { background: #fff; border: 1px solid #E6E3D8; border-radius: 0.77cqw; padding: 1.43cqw; }
-.mini--premium .mini__card b { display: block; font-size: 1.16cqw; font-weight: 550; margin-bottom: 0.5cqw; }
-.mini--premium .mini__card p { font-size: 0.94cqw; line-height: 1.5; color: #6B766D; margin: 0; }
-.mini--premium .mini__bar { background: #173C2E; color: #E8EFE9; display: flex; justify-content: space-between; align-items: center; padding: 1.54cqw 2.2cqw; font-size: 0.99cqw; }
-.mini--premium .mini__bar span { color: #91A99A; }
+/* — premium / "after" language —
+   Recreates the shipped 601 Digital redesign: white ground, serif display with
+   an amber italic accent, pill nav CTA, and a four-column practical strip. */
+.mini--premium {
+  font-family: var(--font-sans); color: #1C1B19; background: #FCFBF9;
+  letter-spacing: -0.012em;
+  --amber: #C67C22; --ink2: #16150F; --edge: #EBE7DF; --soft: #6B6862;
+}
+.mini--premium .mini__top {
+  display: flex; align-items: center; gap: 1.6cqw;
+  padding: 1.5cqw 2.78cqw; border-bottom: .07cqw solid var(--edge); background: #fff;
+}
+.mini--premium .mini__logo { display: flex; align-items: center; gap: .83cqw; flex: none; }
+.mini--premium .mini__logo b {
+  width: 2.7cqw; height: 2.7cqw; border-radius: .62cqw; background: var(--ink2);
+  display: grid; place-items: center; flex: none; color: #fff; font-size: 1.4cqw; line-height: 1;
+}
+.mini--premium .mini__logo em {
+  font-style: normal; display: block;
+  font-family: var(--font-display); font-size: 1.6cqw; font-weight: 600; line-height: 1.05;
+  letter-spacing: -0.01em;
+}
+.mini--premium .mini__logo i {
+  font-style: normal; display: block; margin-top: .14cqw;
+  font-size: .62cqw; letter-spacing: .16em; text-transform: uppercase; color: var(--soft);
+}
+.mini--premium .mini__navrow { display: flex; gap: 1.7cqw; font-size: 1cqw; color: #3E3C37; margin-left: auto; }
+.mini--premium .mini__navrow b { font-weight: 500; position: relative; }
+.mini--premium .mini__navrow b::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -.62cqw;
+  height: .14cqw; background: var(--amber);
+}
+.mini--premium .mini__phone { text-align: left; flex: none; padding-left: 1.4cqw; }
+.mini--premium .mini__phone b { display: block; font-size: 1.04cqw; font-weight: 600; letter-spacing: -0.02em; }
+.mini--premium .mini__phone i {
+  font-style: normal; display: block; font-size: .6cqw;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--soft);
+}
+.mini--premium .mini__pill {
+  background: var(--amber); color: #fff; flex: none;
+  padding: .83cqw 1.39cqw; border-radius: 99cqw; font-size: .95cqw; font-weight: 550;
+}
+
+.mini--premium .mini__hero {
+  padding: 3.3cqw 2.78cqw 2.2cqw;
+  display: grid; grid-template-columns: 1.02fr .98fr; gap: 2.4cqw; align-items: center;
+}
+.mini--premium .mini__badge {
+  display: inline-flex; align-items: center; gap: .55cqw;
+  border: .07cqw solid var(--edge); background: #fff; border-radius: 99cqw;
+  padding: .55cqw 1.1cqw; margin-bottom: 1.5cqw;
+  font-size: .7cqw; letter-spacing: .16em; text-transform: uppercase; color: var(--soft);
+}
+.mini--premium .mini__badge s {
+  text-decoration: none; width: 1.3cqw; height: 1.3cqw; border-radius: 50%;
+  background: #F6EDE1; display: grid; place-items: center; font-size: .7cqw;
+}
+.mini--premium .mini__hero h3 {
+  font-family: var(--font-display);
+  font-size: 4.3cqw; line-height: 1.02; letter-spacing: -0.018em; font-weight: 500;
+  margin: 0 0 1.25cqw;
+}
+.mini--premium .mini__hero h3 i { font-style: italic; color: var(--amber); }
+.mini--premium .mini__hero p { font-size: 1.15cqw; line-height: 1.55; color: var(--soft); margin: 0 0 1.9cqw; max-width: 32ch; }
+.mini--premium .mini__btns { display: flex; gap: .7cqw; flex-wrap: wrap; }
+.mini--premium .mini__btns span {
+  border-radius: 99cqw; padding: .9cqw 1.45cqw; font-size: .95cqw; font-weight: 550; white-space: nowrap;
+}
+.mini--premium .mini__btns .b1 { background: var(--amber); color: #fff; }
+.mini--premium .mini__btns .b2 { background: var(--ink2); color: #fff; }
+.mini--premium .mini__btns .b3 { border: .07cqw solid var(--edge); background: #fff; color: #1C1B19; }
+
+.mini--premium .mini__shot {
+  aspect-ratio: 4 / 3; border-radius: 1.1cqw; position: relative; overflow: hidden;
+  background: linear-gradient(160deg, #F3EEE6, #E4DACB 55%, #C9B79C);
+}
+.mini--premium .mini__shot::after {
+  content: ''; position: absolute; inset: auto 0 0 0; height: 46%;
+  background: linear-gradient(transparent, rgba(60,48,34,.28));
+}
+
+/* practical strip: call · find us · hours · after hours */
+.mini--premium .mini__info {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  border-top: .07cqw solid var(--edge); background: #fff;
+}
+.mini--premium .mini__ic {
+  display: flex; align-items: flex-start; gap: .9cqw;
+  padding: 1.6cqw 1.7cqw; border-left: .07cqw solid var(--edge);
+}
+.mini--premium .mini__ic:first-child { border-left: 0; }
+.mini--premium .mini__ic s {
+  text-decoration: none; flex: none;
+  width: 2.2cqw; height: 2.2cqw; border-radius: 50%;
+  background: #F6EDE1; display: grid; place-items: center; font-size: 1cqw;
+}
+.mini--premium .mini__ic:nth-child(2) s, .mini--premium .mini__ic:nth-child(4) s { background: #E8F0E9; }
+.mini--premium .mini__ic u { text-decoration: none; display: block; }
+.mini--premium .mini__ic b {
+  display: block; font-size: .62cqw; font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--soft); margin-bottom: .35cqw;
+}
+.mini--premium .mini__ic em {
+  font-style: normal; display: block;
+  font-family: var(--font-display); font-size: 1.45cqw; font-weight: 500; line-height: 1.12;
+  letter-spacing: -0.012em;
+}
+.mini--premium .mini__ic i { font-style: normal; display: block; font-size: .78cqw; color: var(--soft); margin-top: .25cqw; }
+
+/* real screenshots, when they exist, sit on top of the recreation */
+.ba__shot {
+  position: absolute; inset: 0; z-index: 1;
+  width: 100%; height: 100%; object-fit: cover; object-position: top center;
+  opacity: 0; transition: opacity .3s ease;
+}
+.ba__shot.is-loaded { opacity: 1; }
 
 /* ==========================================================================
    THE 601 TRANSFORMATION — sticky scroll morph
@@ -1301,3 +1398,10 @@ body.menu-open { overflow: hidden; }
 .form__status { color: var(--fg-faint); letter-spacing: .14em; margin: 0; }
 .form__status[data-state='error'] { color: #E0A183; }
 .form__status[data-state='ok'] { color: var(--champagne); }
+
+/* icon glyph sizing inside the premium render */
+.mini--premium .mini__logo b svg { width: 58%; height: auto; }
+.mini--premium .mini__ic s { color: #B4762A; }
+.mini--premium .mini__ic s svg, .mini--premium .mini__badge s svg { width: 56%; height: auto; }
+.mini--premium .mini__ic:nth-child(2) s, .mini--premium .mini__ic:nth-child(4) s { color: #3F6B52; }
+.mini--premium .mini__badge s { color: #B4762A; }

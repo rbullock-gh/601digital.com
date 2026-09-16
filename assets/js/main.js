@@ -435,6 +435,19 @@
   }
 
   /* ---------------------------------------------------------
+     14. Real before/after screenshots, when they exist.
+         Each layer ships a CSS recreation plus an <img> slot. Drop a file at
+         the slot's path and it takes over; if the file is absent the image
+         removes itself and the recreation shows through. No build step.
+     --------------------------------------------------------- */
+  $$('[data-shot]').forEach(img => {
+    const reveal = () => img.classList.add('is-loaded');
+    img.addEventListener('error', () => img.remove(), { once: true });
+    img.addEventListener('load', reveal, { once: true });
+    if (img.complete) { img.naturalWidth ? reveal() : img.remove(); }
+  });
+
+  /* ---------------------------------------------------------
      14. Contact form — posts to an endpoint if one is configured,
          otherwise composes a pre-filled mail draft so the demo works.
      --------------------------------------------------------- */

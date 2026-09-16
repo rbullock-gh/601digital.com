@@ -11,7 +11,7 @@ rather than something I could verify.
 | Testimonials section | Two quotes marked `PLACEHOLDER` | Real client quotes, with written permission |
 | Work item 02 | "Slot open" card | A second real project, or delete the block |
 | Contact form | No `data-endpoint` set | A form endpoint (Formspree, Basin, your own handler) |
-| Before panel | Recreated from a screenshot | Optional: a real capture, for pixel-exactness |
+| Before/After panels | CSS recreations of both real sites | Optional: the real screenshots, for pixel-exactness |
 
 Search the repo for `is-placeholder` to find the first two.
 
@@ -27,21 +27,39 @@ With no endpoint the form validates, then composes a pre-filled draft to
 `601digital@gmail.com`. It is never a dead end, but a real endpoint means
 enquiries land in an inbox without the visitor's mail app cooperating.
 
-### Making the Before panel pixel-exact
+### Using the real screenshots
 
-The Before panel is a faithful CSS recreation of the site live at
-columbiaanimalhospital.net today — the CAH monogram masthead, sawtooth divider,
-pill nav, photo carousel, and the Surgery / Digital Radiography / Grooming
-panel, using the client's own service copy. It is honest as it stands.
+Both panels are CSS recreations of real sites: on the left, the template live at
+columbiaanimalhospital.net today (CAH monogram masthead, sawtooth divider, pill
+nav, photo carousel, Surgery / Digital Radiography / Grooming panel). On the
+right, the shipped 601 Digital redesign (serif display with the amber italic
+accent, badge pill, three-button hero, four-column practical strip). Both use
+the client's own copy, so the comparison is like for like and honest as it
+stands.
 
-If you want the actual pixels instead:
+I could not add the actual screenshots myself — pasted images in a chat are not
+files I can write to disk. To swap them in:
 
-1. Save a full-page screenshot to `assets/img/cah-before.png` (~1440px wide).
-2. Replace the contents of `.ba__layer--before` in `index.html` with:
-   `<img src="assets/img/cah-before.png" alt="The Columbia Animal Hospital website before the redesign">`
+1. Save the two captures as:
+   - `assets/img/cah-before.png`
+   - `assets/img/cah-after.png`
 
-The same swap works for the After side if you would rather show the shipped
-site than the design render.
+   Full-page, roughly 1440px wide, PNG or JPG.
+
+2. In `index.html`, find the two `REAL SCREENSHOT` comments inside the
+   before/after block and remove the comment wrappers so each `<img class="ba__shot">`
+   tag is live.
+
+3. Delete the explanatory paragraph directly under the slider.
+
+Each image fades in over its recreation once loaded, and removes itself if the
+file is missing — so a typo in a filename degrades to the recreation rather than
+a broken image. The tags ship commented out purely so the site does not request
+files that are not there yet.
+
+**One thing the recreation cannot supply:** the three-dog photograph in the
+redesign's hero is a warm gradient placeholder. If you have that image, it is
+worth adding to the case study regardless of the slider.
 
 ## 2. Claims that rest on your word
 
