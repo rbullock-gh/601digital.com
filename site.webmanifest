@@ -1,11 +1,11 @@
 {
   "name": "601 Digital",
   "short_name": "601 Digital",
-  "description": "Custom web design and local search for South Mississippi businesses.",
+  "description": "Refined web design and development for businesses ready to look the part.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#F4F1EA",
-  "theme_color": "#0A0B0D",
+  "background_color": "#F5F1E8",
+  "theme_color": "#121212",
   "icons": [
     { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
     { "src": "/assets/img/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" }

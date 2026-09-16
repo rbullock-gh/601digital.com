@@ -10,8 +10,9 @@ a statistic, an award, or a result.
 
 | Where | Placeholder now | Needs |
 |---|---|---|
-| `index.html` CTA + footer | `hello@601digital.com` | Real email address |
-| `index.html` CTA + footer | `(601) 555-0000` | Real phone number |
+| Contact block + footer | `hello@601digital.com` | Real email address |
+| Contact block + footer | `(601) 555-0000` | Real phone number |
+| Contact form | no `data-endpoint` | A form endpoint (Formspree/Basin/your own). Until then the form opens a pre-filled mail draft. |
 | Testimonials section | Two quotes marked `PLACEHOLDER` | Real client quotes, with written permission |
 | Before/After "Before" panel | Representative dated-template render | A real screenshot of the previous site |
 | Work item 02 | "Slot open" card | A second real project, or delete the block |
@@ -33,8 +34,9 @@ the copy rather than leaving it:
   study rests on this. The business details used (address, phone, hours, on-call
   vet, surgical suite) came from public directory listings, so check them against
   what the client actually publishes.
-- **Services list** — I included Digital Growth as a sixth service. Remove it if
-  you don't offer it.
+- **Services list** — six services: Website Design & Development, Brand
+  Presentation, Search Visibility, Google Business Profile, Conversion-Focused
+  Design, Website Care. Remove any you don't actually offer.
 
 ## 3. The "Before" panel — read this one carefully
 

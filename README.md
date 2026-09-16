@@ -21,7 +21,7 @@ Pages, Vercel, or plain nginx/Apache).
 index.html                              One-page site, all sections
 assets/css/main.css                     Design system + every section
 assets/js/main.js                       Interaction layer (vanilla, no deps)
-assets/fonts/                           Self-hosted woff2 (Geist, Geist Mono, Instrument Serif)
+assets/fonts/                           Self-hosted woff2 (Cormorant Garamond, Geist)
 assets/img/og.png                       1200×630 social card
 work/columbia-animal-hospital-preview.html   Scrollable client render shown in the portfolio frame
 CONTENT-TO-FILL.md                      Placeholders + unverified claims — read before launch
@@ -31,13 +31,24 @@ CONTENT-TO-FILL.md                      Placeholders + unverified claims — rea
 
 Defined as custom properties at the top of `main.css`.
 
-- **Ink** `#0A0B0D` · **Paper** `#F4F1EA` (warm bone, not white) ·
-  **Clay** `#D9542B` · **Pine** `#16332C`
-- Dark sections get `class="inverted"`, which re-points the semantic tokens.
-  The nav detects which surface is under it and flips its own colour to match.
-- Type: Geist (tight grotesk) for display and UI, Instrument Serif *italic* for
-  accent words, Geist Mono for micro-labels. The grotesk/serif-italic pairing is
-  the signature — keep it.
+- **Charcoal** `#121212` · **Deep forest** `#173C2E` · **Rich green** `#2F6B4B` ·
+  **Sage** `#91A99A` · **Warm ivory** `#F5F1E8` · **Champagne** `#C8A96B`
+- Green carries structure (buttons, focus, active states). Champagne is the
+  *expensive detail* only — the logo mark, hairline rules, numerals, the scan
+  line, the "after" tag. Never a large fill. Keep it that way.
+- Dark sections get `class="inverted"` (deep forest). Add `inverted--charcoal`
+  for the deepest sections. The nav detects which surface is under it and flips
+  its own colour and pinned background to match.
+- Type: Cormorant Garamond for all display headings, with the *same face turned
+  italic* for the emphasised phrase — that restraint is the signature. Geist
+  carries body, UI, and the letterspaced uppercase micro-labels. Genuine
+  monospace is reserved for the simulated browser URL bar.
+
+### A trap worth remembering
+
+`ch` units resolve against **the element's own font**. A `max-width` in `ch` on a
+wrapper sized in body text will strangle a display-serif heading inside it (this
+cost us a clipped hero once). Put `ch` measures on the text element itself.
 - Fluid type scale (`--t-*`) is `clamp()`-based across a 360→1600px range, so
   there are no typography breakpoints to maintain.
 
@@ -67,6 +78,10 @@ All motion lives in `main.js` and degrades safely:
 - **Mini renders** (`.mini--dated` / `.mini--premium`) — miniature website
   layouts sized entirely in `cqw` container units, so one markup block scales
   correctly whether it's a 340px thumbnail or a 1300px split-screen panel.
+- **Contact form** (`[data-contact]`) — inline validation with a drawn-in
+  champagne hairline on focus. Set `data-endpoint="…"` on the form to POST to a
+  form service (Formspree, Basin, your own handler); with no endpoint it
+  composes a pre-filled mail draft instead, so the form is never a dead end.
 
 ## Accessibility
 

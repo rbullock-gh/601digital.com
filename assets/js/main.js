@@ -53,7 +53,11 @@
     const measure = () => {
       surfaces = $$('.surface').map(el => {
         const r = el.getBoundingClientRect();
-        return { top: r.top + scrollY, bottom: r.bottom + scrollY, dark: el.classList.contains('inverted') };
+        return {
+          top: r.top + scrollY, bottom: r.bottom + scrollY,
+          dark: el.classList.contains('inverted'),
+          charcoal: el.classList.contains('inverted--charcoal'),
+        };
       });
     };
     measure();
@@ -75,6 +79,7 @@
       const probe = y + nav.offsetHeight * 0.55;
       const hit = surfaces.find(s => probe >= s.top && probe < s.bottom);
       nav.classList.toggle('nav--dark', !!(hit && hit.dark));
+      nav.classList.toggle('nav--charcoal', !!(hit && hit.charcoal));
     });
   }
 
@@ -428,6 +433,73 @@
     }, { rootMargin: '-45% 0px -50% 0px' });
     spyTargets.forEach(s => io.observe(s));
   }
+
+  /* ---------------------------------------------------------
+     14. Contact form — posts to an endpoint if one is configured,
+         otherwise composes a pre-filled mail draft so the demo works.
+     --------------------------------------------------------- */
+  $$('[data-contact]').forEach(form => {
+    const status = $('[data-form-status]', form);
+    const say = (msg, state) => {
+      if (!status) return;
+      status.textContent = msg;
+      if (state) status.dataset.state = state; else delete status.dataset.state;
+    };
+
+    const fieldOf = el => el.closest('.field');
+    form.addEventListener('input', e => {
+      const f = fieldOf(e.target);
+      if (f && f.hasAttribute('data-invalid') && e.target.checkValidity()) f.removeAttribute('data-invalid');
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const required = $$('[required]', form);
+      let firstBad = null;
+      required.forEach(el => {
+        const f = fieldOf(el);
+        if (!el.checkValidity()) { f && f.setAttribute('data-invalid', ''); firstBad = firstBad || el; }
+        else f && f.removeAttribute('data-invalid');
+      });
+      if (firstBad) { say('Please check the highlighted fields.', 'error'); firstBad.focus(); return; }
+
+      const data = Object.fromEntries(new FormData(form).entries());
+      const endpoint = form.dataset.endpoint;
+
+      if (endpoint) {
+        say('Sending…');
+        try {
+          const res = await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            body: new FormData(form),
+          });
+          if (!res.ok) throw new Error(res.status);
+          form.reset();
+          say('Thank you — we\u2019ll be in touch shortly.', 'ok');
+        } catch (err) {
+          say('That didn\u2019t send. Please email us directly.', 'error');
+        }
+        return;
+      }
+
+      // No endpoint wired yet: hand the visitor a pre-filled draft.
+      const body = [
+        `Name: ${data.name || ''}`,
+        `Business: ${data.business || ''}`,
+        `Email: ${data.email || ''}`,
+        `Telephone: ${data.phone || ''}`,
+        `Needs: ${data.kind || ''}`,
+        '',
+        data.message || '',
+      ].join('\n');
+      const href = `mailto:hello@601digital.com?subject=${encodeURIComponent('New project enquiry — ' + (data.business || data.name || ''))}&body=${encodeURIComponent(body)}`;
+      // Status first: the mail handoff can take a moment, or be blocked entirely.
+      say('Opening your email app…', 'ok');
+      form.dataset.lastDraft = href;
+      location.href = href;
+    });
+  });
 
   const year = $('[data-year]');
   if (year) year.textContent = new Date().getFullYear();
