@@ -1585,3 +1585,9 @@ body.menu-open { overflow: hidden; }
         var(--white) 100%);
   }
 }
+
+/* The hero's emphasised word picks up the blossom in the photograph behind it.
+   Uses --blossom-deep rather than --blossom: at display size over the pale
+   scrim the lighter tint measures around 2:1, which fails even the 3:1 bar for
+   large text. This one clears it with margin and still reads as blossom. */
+.hero__title .ital { color: var(--blossom-deep); }
