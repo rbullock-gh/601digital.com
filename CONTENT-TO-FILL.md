@@ -62,8 +62,19 @@ change. Then check one thing:
   contrast. If it still fights, deepen the white stops in `.hero__art::after`
   rather than darkening the image.
 
-Export around 2400px wide and compress it; the stand-in is about 77KB and the
-real one should not be much heavier, since it is preloaded.
+The hero is served responsively, so there are three files to replace, not one:
+
+| File | Width | Served to |
+|---|---|---|
+| `assets/img/hero-800.jpg` | 800px | phones |
+| `assets/img/hero-1280.jpg` | 1280px | tablets and laptops |
+| `assets/img/hero.jpg` | 2400px | large desktops |
+
+Export your photograph at each width, compress, and keep the same filenames.
+The browser picks one; it never downloads all three. Skipping the smaller two
+still works — the browser falls back to the 2400px file — but a phone would
+then download roughly six times more than it needs for the largest element on
+the page.
 
 ## 2. Claims that rest on your word
 
