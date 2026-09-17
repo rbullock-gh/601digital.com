@@ -47,22 +47,9 @@ results you plan to quote.
 
 ### The hero artwork
 
-`assets/img/hero.jpg` is a stand-in I generated to match your photograph's
-composition and light — backlit flare, blossom mass, green foliage at the
-edges, road along the bottom. It is not your photograph, and the site's whole
-palette is now drawn from it.
-
-Save your image over that file, same name, and it takes over with no code
-change. Then check one thing:
-
-- **`object-position`** on `.hero__art img` (currently `33% 46%`). This decides
-  which slice of the photograph sits behind the headline. Aim to keep the
-  bright flare and blossom behind the words and the dark foliage out at the
-  right edge — dark values under the display type is the only thing that breaks
-  contrast. If it still fights, deepen the white stops in `.hero__art::after`
-  rather than darkening the image.
-
-The hero is served responsively, so there are three files to replace, not one:
+The hero image is whatever file sits at `assets/img/hero.jpg`. Right now that is
+a generated stand-in. **To use your own photograph, overwrite these three files
+and change nothing else:**
 
 | File | Width | Served to |
 |---|---|---|
@@ -70,11 +57,29 @@ The hero is served responsively, so there are three files to replace, not one:
 | `assets/img/hero-1280.jpg` | 1280px | tablets and laptops |
 | `assets/img/hero.jpg` | 2400px | large desktops |
 
-Export your photograph at each width, compress, and keep the same filenames.
-The browser picks one; it never downloads all three. Skipping the smaller two
-still works — the browser falls back to the 2400px file — but a phone would
-then download roughly six times more than it needs for the largest element on
-the page.
+Keep the filenames exactly. The browser picks one and downloads only that one.
+Supplying just the 2400px file works — the browser falls back to it — but a
+phone then pulls roughly six times more than it needs.
+
+**This project has no build step and no `public/` directory.** The repository
+root is the web root, so the browser path for that file is
+`/assets/img/hero.jpg`. Do not add a `public/` folder; a file there would be
+served at `/public/...`.
+
+Easiest route if you would rather not use git: on GitHub, open `assets/img/`,
+choose **Add file → Upload files**, drag the images in, and commit. That is the
+whole job.
+
+**The image is displayed exactly as supplied.** There is deliberately no CSS
+filter on it — no recolouring, no darkening, no blur — and the source file is
+never cropped. Composition is controlled only by `object-position` on
+`.hero__art img` (currently `33% 46%`, and `40% 42%` under 900px). If the tree
+sits wrong, change that value, not the file.
+
+The one thing to watch: the headline sits on the left over an ivory scrim. Keep
+bright values behind the words and dark foliage out at the right edge. If the
+type ever looks like it is fighting the picture, deepen the white stops in
+`.hero__art::after` rather than darkening the photograph.
 
 ## 2. Claims that rest on your word
 
