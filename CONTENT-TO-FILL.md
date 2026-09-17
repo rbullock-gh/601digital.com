@@ -47,25 +47,23 @@ results you plan to quote.
 
 ### The hero artwork
 
-`assets/img/hero.jpg` is a stand-in I generated — sky, light, treeline and
-meadow only. It is there so the treatment could be judged; it is not your
-painting, and CSS could not render the magnolia convincingly, so the tree is
-omitted from it.
+`assets/img/hero.jpg` is a stand-in I generated to match your photograph's
+composition and light — backlit flare, blossom mass, green foliage at the
+edges, road along the bottom. It is not your photograph, and the site's whole
+palette is now drawn from it.
 
-Save your painting over that file, same name, and it takes over with no code
-change. Then check two things:
+Save your image over that file, same name, and it takes over with no code
+change. Then check one thing:
 
-- **`object-position`** on `.hero__art img` (currently `74% 44%`). This is the
-  dial that decides which part of the painting sits behind the headline. Your
-  magnolia canopy is dark and sits on the left — the same side as the display
-  type. Push this value left or right until pale sky, not dark foliage, falls
-  behind the words.
-- **The left scrim stop** in `.hero__art::after`. If the headline ever looks
-  like it is fighting the art, deepen the ivory stops rather than darkening the
-  image.
+- **`object-position`** on `.hero__art img` (currently `33% 46%`). This decides
+  which slice of the photograph sits behind the headline. Aim to keep the
+  bright flare and blossom behind the words and the dark foliage out at the
+  right edge — dark values under the display type is the only thing that breaks
+  contrast. If it still fights, deepen the white stops in `.hero__art::after`
+  rather than darkening the image.
 
-Export it around 2400px wide and run it through an image compressor; the
-stand-in is about 100KB, and the real one should not be much larger.
+Export around 2400px wide and compress it; the stand-in is about 77KB and the
+real one should not be much heavier, since it is preloaded.
 
 ## 2. Claims that rest on your word
 

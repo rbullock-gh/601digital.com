@@ -56,7 +56,7 @@
         return {
           top: r.top + scrollY, bottom: r.bottom + scrollY,
           dark: el.classList.contains('inverted'),
-          charcoal: el.classList.contains('inverted--charcoal'),
+          charcoal: el.classList.contains('inverted--slate'),
         };
       });
     };
@@ -79,7 +79,7 @@
       const probe = y + nav.offsetHeight * 0.55;
       const hit = surfaces.find(s => probe >= s.top && probe < s.bottom);
       nav.classList.toggle('nav--dark', !!(hit && hit.dark));
-      nav.classList.toggle('nav--charcoal', !!(hit && hit.charcoal));
+      nav.classList.toggle('nav--slate', !!(hit && hit.charcoal));
     });
   }
 

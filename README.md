@@ -31,14 +31,22 @@ CONTENT-TO-FILL.md                      Placeholders + unverified claims — rea
 
 Defined as custom properties at the top of `main.css`.
 
-- **Charcoal** `#121212` · **Deep forest** `#173C2E` · **Rich green** `#2F6B4B` ·
-  **Sage** `#91A99A` · **Warm ivory** `#F5F1E8` · **Champagne** `#C8A96B`
-- Green carries structure (buttons, focus, active states). Champagne is the
-  *expensive detail* only — the logo mark, hairline rules, numerals, the scan
-  line, the "after" tag. Never a large fill. Keep it that way.
-- Dark sections get `class="inverted"` (deep forest). Add `inverted--charcoal`
-  for the deepest sections. The nav detects which surface is under it and flips
-  its own color and pinned background to match.
+- **White** `#F8FAF8` (a green-leaning white, not a cool grey) ·
+  **Deep forest** `#1C3A2B` · **Green** `#2E6E4C` · **Sage** `#9BB6A4` ·
+  **Slate** `#2B3033` · **Stone** `#8B9295` · **Blossom** `#DE8AA6`
+- The palette is drawn from the hero photograph: foliage, blossom, road. Green
+  and white carry almost everything. Blossom pink is the *detail* colour only —
+  the logo mark, checkmarks, the "Most popular" badge, the featured CTA, the
+  scan line, small numerals. Never a large surface. Slate grey is structural:
+  borders, muted text, and the single darkest section.
+- Dark sections get `class="inverted"` (deep forest). Add `inverted--slate` for
+  road grey — currently only the closing contact section, so green dominates.
+  The nav detects which of the three surfaces is under it and matches its own
+  colour and pinned background.
+- `.inverted` sets `color` as well as the tokens, so it works on a standalone
+  element (the featured pricing card) and not only on a `.surface` section.
+  Without that, children with no explicit colour inherit the *surrounding*
+  surface's text colour and vanish.
 - Type: Cormorant Garamond for all display headings, with the *same face turned
   italic* for the emphasised phrase — that restraint is the signature. Geist
   carries body, UI, and the letterspaced uppercase micro-labels. Genuine
