@@ -13,6 +13,7 @@ rather than something I could verify.
 | Before/After slider | Demonstration builds both sides | Real before/after screenshots, once approved |
 | Work item 02 | "Slot open" card | A second project, or delete the block |
 | Contact form | No `data-endpoint` set | A form endpoint — see `DEPLOY.md` step 3 |
+| Hero artwork | A generated stand-in at `assets/img/hero.jpg` | Your real painting, same filename |
 
 Search the repo for `is-placeholder` to find the testimonial and slot markers.
 
@@ -43,6 +44,28 @@ Once a client signs off in writing:
 Get the permission in writing, and be specific about what it covers: the
 business name, screenshots of the old site, screenshots of the new one, and any
 results you plan to quote.
+
+### The hero artwork
+
+`assets/img/hero.jpg` is a stand-in I generated — sky, light, treeline and
+meadow only. It is there so the treatment could be judged; it is not your
+painting, and CSS could not render the magnolia convincingly, so the tree is
+omitted from it.
+
+Save your painting over that file, same name, and it takes over with no code
+change. Then check two things:
+
+- **`object-position`** on `.hero__art img` (currently `74% 44%`). This is the
+  dial that decides which part of the painting sits behind the headline. Your
+  magnolia canopy is dark and sits on the left — the same side as the display
+  type. Push this value left or right until pale sky, not dark foliage, falls
+  behind the words.
+- **The left scrim stop** in `.hero__art::after`. If the headline ever looks
+  like it is fighting the art, deepen the ivory stops rather than darkening the
+  image.
+
+Export it around 2400px wide and run it through an image compressor; the
+stand-in is about 100KB, and the real one should not be much larger.
 
 ## 2. Claims that rest on your word
 
