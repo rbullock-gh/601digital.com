@@ -1545,8 +1545,10 @@ body.menu-open { overflow: hidden; }
 .hero__art img {
   width: 100%; height: 100%;
   object-fit: cover; object-position: 33% 46%;
-  /* pulled back so the artwork sits under the palette rather than competing */
-  filter: saturate(.8) contrast(1.02);
+  /* Deliberately no filter. Whatever file sits in this slot is shown exactly as
+     delivered — the generated fallback has its tone baked in instead, so a real
+     photograph dropped here is never recoloured. Composition is tuned with
+     object-position, never by touching the source file. */
 }
 .hero__art::after {
   content: ''; position: absolute; inset: 0;
