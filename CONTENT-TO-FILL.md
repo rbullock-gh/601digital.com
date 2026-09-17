@@ -13,7 +13,6 @@ rather than something I could verify.
 | Before/After slider | Demonstration builds both sides | Real before/after screenshots, once approved |
 | Work item 02 | "Slot open" card | A second project, or delete the block |
 | Contact form | No `data-endpoint` set | A form endpoint — see `DEPLOY.md` step 3 |
-| Hero artwork | A generated stand-in at `assets/img/hero.jpg` | Your real painting, same filename |
 
 Search the repo for `is-placeholder` to find the testimonial and slot markers.
 
@@ -45,41 +44,32 @@ Get the permission in writing, and be specific about what it covers: the
 business name, screenshots of the old site, screenshots of the new one, and any
 results you plan to quote.
 
-### The hero artwork
+### The hero artwork — done
 
-The hero image is whatever file sits at `assets/img/hero.jpg`. Right now that is
-a generated stand-in. **To use your own photograph, overwrite these three files
-and change nothing else:**
+The real photograph is in place. It arrived as three identical PNGs committed
+to the repository root with their original filenames, so nothing referenced it.
+It is now:
 
-| File | Width | Served to |
+| File | Size | Served to |
 |---|---|---|
-| `assets/img/hero-800.jpg` | 800px | phones |
-| `assets/img/hero-1280.jpg` | 1280px | tablets and laptops |
-| `assets/img/hero.jpg` | 2400px | large desktops |
+| `assets/img/hero-800.jpg` | 800×427, 101 KB | phones |
+| `assets/img/hero-1280.jpg` | 1280×683, 224 KB | tablets and laptops |
+| `assets/img/hero.jpg` | 1700×907, 330 KB | large desktops |
+| `assets/img/hero-source.png` | 1717×916, 3 MB | nothing — kept as the master |
 
-Keep the filenames exactly. The browser picks one and downloads only that one.
-Supplying just the 2400px file works — the browser falls back to it — but a
-phone then pulls roughly six times more than it needs.
+The master is not referenced by any page; it is there so the crops can be
+regenerated without re-uploading. Delete it if you would rather not carry 3 MB
+in the repository.
 
-**This project has no build step and no `public/` directory.** The repository
-root is the web root, so the browser path for that file is
-`/assets/img/hero.jpg`. Do not add a `public/` folder; a file there would be
-served at `/public/...`.
+**The photograph is shown exactly as supplied** — no CSS filter, no recolouring,
+no crop of the source file. Composition is controlled only by `object-position`
+on `.hero__art img`: `50% 44%` on desktop (the picture already places the tree
+right and the flare left, so the frame is held centred) and `64% 46%` under
+900px, which crops to the tree rather than squeezing the whole scene.
 
-Easiest route if you would rather not use git: on GitHub, open `assets/img/`,
-choose **Add file → Upload files**, drag the images in, and commit. That is the
-whole job.
-
-**The image is displayed exactly as supplied.** There is deliberately no CSS
-filter on it — no recolouring, no darkening, no blur — and the source file is
-never cropped. Composition is controlled only by `object-position` on
-`.hero__art img` (currently `33% 46%`, and `40% 42%` under 900px). If the tree
-sits wrong, change that value, not the file.
-
-The one thing to watch: the headline sits on the left over an ivory scrim. Keep
-bright values behind the words and dark foliage out at the right edge. If the
-type ever looks like it is fighting the picture, deepen the white stops in
-`.hero__art::after` rather than darkening the photograph.
+If you replace it, keep those three filenames and widths. WebP was measured and
+only saved about 13% here — the foliage detail is real, not compression waste —
+so it is not worth the extra markup.
 
 ## 2. Claims that rest on your word
 
