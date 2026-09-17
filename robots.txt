@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /work/demo-preview.html
+
+Sitemap: https://601digital.com/sitemap.xml
