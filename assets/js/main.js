@@ -509,7 +509,6 @@
       const href = `mailto:601digital@gmail.com?subject=${encodeURIComponent('New project enquiry — ' + (data.business || data.name || ''))}&body=${encodeURIComponent(body)}`;
       // Status first: the mail handoff can take a moment, or be blocked entirely.
       say('Opening your email app…', 'ok');
-      form.dataset.lastDraft = href;
       location.href = href;
     });
   });

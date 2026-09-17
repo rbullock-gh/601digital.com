@@ -1,5 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /work/columbia-animal-hospital-preview.html
 
 Sitemap: https://601digital.com/sitemap.xml

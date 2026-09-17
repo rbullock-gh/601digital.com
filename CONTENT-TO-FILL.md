@@ -61,6 +61,25 @@ files that are not there yet.
 redesign's hero is a warm gradient placeholder. If you have that image, it is
 worth adding to the case study regardless of the slider.
 
+### Structured data — fields deliberately left out
+
+`index.html` now carries a JSON-LD `@graph` (ProfessionalService + six Service
+nodes + WebSite + WebPage). Several recommended properties are **omitted rather
+than guessed**, because a wrong answer in structured data is worse than a missing
+one. Each needs you:
+
+| Property | Needs | Why it matters |
+|---|---|---|
+| `sameAs` | Your Google Business Profile URL, plus any Facebook / Instagram / LinkedIn | The main way the site corroborates your GBP. **If no GBP exists yet, creating and verifying one outranks every other item in this file.** |
+| `address` | Home city + ZIP, or a decision to stay address-less | Without a `streetAddress` the site is not eligible for LocalBusiness rich results. Don't invent one to get them. |
+| `founder.name` | Your name | The site's entire pitch is "the person who designs it is the person who builds it" — and that person is currently never named anywhere on the page. |
+| `openingHoursSpecification` | Business hours | Standard local-business signal. |
+| `priceRange` | Depends on the pricing decision below | Recommended LocalBusiness property; unfillable while nothing is published. |
+
+`aggregateRating` is **intentionally absent and should stay that way** — Google
+prohibits self-serving review markup (an entity rating itself). Reviews belong on
+the Google Business Profile.
+
 ## 2. Claims that rest on your word
 
 If any of these is wrong, change the copy rather than leaving it:

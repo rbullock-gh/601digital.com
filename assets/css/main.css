@@ -46,10 +46,13 @@
   --bg-sunk:   var(--ivory-sunk);
   --fg:        var(--charcoal);
   --fg-muted:  #54594F;
-  --fg-faint:  #8A8F84;
+  --fg-faint:  #656A60;
   --line:      var(--ivory-line);
   --accent:    var(--green);
   --accent-fg: var(--ivory);
+  --focus:     var(--green);       /* 5.60:1 on ivory */
+  --error:      #C97A5A;
+  --error-soft: #E0A183;
   --gold:      var(--champagne);
 
   /* Type families */
@@ -99,6 +102,7 @@
   --fg-faint: var(--sage);
   --line:     var(--forest-line);
   --accent-fg: var(--forest);
+  --focus:    var(--champagne);   /* 5.43:1 on forest; green is 1.93:1 */
   color-scheme: dark;
 }
 .inverted--charcoal {
@@ -106,9 +110,10 @@
   --bg-sunk:  #0C0C0C;
   --fg:       var(--ivory);
   --fg-muted: #A8ADA5;
-  --fg-faint: #757A72;
+  --fg-faint: #8A8F84;
   --line:     var(--charcoal-line);
   --accent-fg: var(--charcoal);
+  --focus:    var(--champagne);   /* 8.34:1 on charcoal; green is 2.97:1 */
 }
 
 /* ---------- Reset & base ---------- */
@@ -143,7 +148,7 @@ ul, ol { list-style: none; padding: 0; }
 a { color: inherit; text-decoration: none; }
 
 :focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--focus);
   outline-offset: 3px;
   border-radius: 1px;
 }
@@ -306,22 +311,29 @@ a { color: inherit; text-decoration: none; }
   background-position: 0 100%;
   transition: background-size .45s var(--ease-out), color var(--dur-fast) ease;
 }
-.link-u:hover, .link-u:focus-visible { background-size: 100% 1px; color: var(--accent); }
+.link-u:hover, .link-u:focus-visible { background-size: 100% 1px; color: var(--focus); }
 
 /* ---------- Motion primitives ---------- */
-[data-reveal] { opacity: 0; transform: translate3d(0, 1.75rem, 0); }
+/* Every hidden-then-revealed state below is scoped to .js, which the inline
+   script at the top of <head> sets. If main.js never runs — blocked, failed
+   fetch, a throw before the observer binds — none of these rules apply and the
+   page renders fully visible instead of 66 elements stuck at opacity:0. */
+.js [data-reveal] { opacity: 0; transform: translate3d(0, 1.75rem, 0); }
 [data-reveal].is-in {
   opacity: 1; transform: none;
   transition: opacity .8s var(--ease-soft), transform .9s var(--ease-out);
   transition-delay: var(--reveal-delay, 0ms);
 }
-[data-reveal='fade'] { transform: none; }
-[data-reveal='scale'] { transform: translate3d(0, 2rem, 0) scale(.97); }
-[data-reveal='left'] { transform: translate3d(-1.75rem, 0, 0); }
+.js [data-reveal='fade'] { transform: none; }
+.js [data-reveal='scale'] { transform: translate3d(0, 2rem, 0) scale(.97); }
+.js [data-reveal='left'] { transform: translate3d(-1.75rem, 0, 0); }
 
-/* Per-line/word text reveal (built by JS) */
+/* Per-line text reveal. Authored by hand in the HTML, NOT built by JS:
+   wrap each line in .rt__line > .rt__inner and set style="--i:N" for the
+   stagger. See the <h1> in index.html. */
 .rt__line { display: block; overflow: hidden; padding-bottom: 0.16em; margin-bottom: -0.16em; }
-.rt__inner { display: block; transform: translate3d(0, 110%, 0); }
+.rt__inner { display: block; }
+.js .rt__inner { transform: translate3d(0, 110%, 0); }
 .is-in .rt__inner {
   transform: none;
   transition: transform 1.05s var(--ease-out);
@@ -562,7 +574,8 @@ a { color: inherit; text-decoration: none; }
   animation: marquee 44s linear infinite;
   will-change: transform;
 }
-.marquee:hover .marquee__track { animation-play-state: paused; }
+.marquee:hover .marquee__track,
+.marquee:focus-within .marquee__track { animation-play-state: paused; }
 @keyframes marquee { to { transform: translate3d(-100%, 0, 0); } }
 .marquee__item {
   display: inline-flex; align-items: center; gap: clamp(1.5rem, 3vw, 3rem);
@@ -993,7 +1006,7 @@ a { color: inherit; text-decoration: none; }
   display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1rem;
   padding: 1.0625rem 0; border-bottom: 1px solid var(--line);
   align-items: baseline;
-  opacity: .32;
+  opacity: .72;
   transition: opacity .6s var(--ease-soft);
 }
 .xform__row.is-lit { opacity: 1; }
@@ -1188,7 +1201,7 @@ a { color: inherit; text-decoration: none; }
 }
 .roots__list { display: grid; gap: 1.5rem; margin-top: 2rem; }
 @media (min-width: 560px) { .roots__list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-.roots__list h4 { font-size: var(--t-body); font-weight: 500; letter-spacing: -0.025em; margin-bottom: .375rem; }
+.roots__list h3 { font-size: var(--t-body); font-weight: 500; letter-spacing: -0.025em; margin-bottom: .375rem; }
 .roots__list p { font-size: var(--t-small); color: var(--fg-muted); line-height: 1.6; }
 
 /* ==========================================================================
@@ -1238,7 +1251,7 @@ a { color: inherit; text-decoration: none; }
 .foot__top { display: grid; gap: 2.5rem; }
 @media (min-width: 900px) { .foot__top { grid-template-columns: minmax(0, 1.4fr) repeat(2, minmax(0, 1fr)); gap: var(--gutter); } }
 .foot__brand { display: grid; gap: 1.25rem; align-content: start; max-width: 34ch; }
-.foot h4 { font: 500 var(--t-micro)/1 var(--font-sans); letter-spacing: .18em; text-transform: uppercase; color: var(--fg-faint); margin-bottom: 1.25rem; }
+.foot h3 { font: 500 var(--t-micro)/1 var(--font-sans); letter-spacing: .18em; text-transform: uppercase; color: var(--fg-faint); margin-bottom: 1.25rem; }
 .foot__list { display: grid; gap: .8125rem; }
 .foot__list a, .foot__list span { font-size: var(--t-small); color: var(--fg-muted); transition: color .3s ease; }
 .foot__list a:hover, .foot__list a:focus-visible { color: var(--fg); }
@@ -1365,12 +1378,14 @@ body.menu-open { overflow: hidden; }
   -webkit-appearance: none; appearance: none;
 }
 .field textarea { resize: vertical; min-height: 6.5rem; line-height: 1.6; }
-.field input::placeholder, .field textarea::placeholder { color: var(--fg-faint); opacity: .75; }
+.field input::placeholder, .field textarea::placeholder { color: var(--fg-faint); }
 .field input:hover, .field select:hover, .field textarea:hover { border-color: color-mix(in oklab, var(--fg) 40%, var(--line)); }
 .field input:focus, .field select:focus, .field textarea:focus {
   outline: none; border-color: var(--champagne);
 }
-.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible { outline: none; }
+.field input:focus-visible, .field select:focus-visible, .field textarea:focus-visible {
+  outline: 2px solid var(--focus); outline-offset: 2px;
+}
 /* a hairline that draws in on focus — the premium detail */
 .field::after {
   content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
@@ -1380,7 +1395,9 @@ body.menu-open { overflow: hidden; }
   pointer-events: none;
 }
 .field:focus-within::after { transform: scaleX(1); }
-.field[data-invalid] input, .field[data-invalid] textarea { border-color: #C97A5A; }
+.field__err:empty { display: none; }
+.field__err { margin-top: .375rem; font-size: var(--t-micro); color: var(--error-soft); }
+.field[data-invalid] input, .field[data-invalid] textarea { border-color: var(--error); }
 
 .field__select { position: relative; display: grid; }
 .field__select select { padding-right: 2rem; cursor: pointer; }
@@ -1396,7 +1413,7 @@ body.menu-open { overflow: hidden; }
   border-top: 1px solid var(--line);
 }
 .form__status { color: var(--fg-faint); letter-spacing: .14em; margin: 0; }
-.form__status[data-state='error'] { color: #E0A183; }
+.form__status[data-state='error'] { color: var(--error-soft); }
 .form__status[data-state='ok'] { color: var(--champagne); }
 
 /* icon glyph sizing inside the premium render */

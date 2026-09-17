@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>601 Digital — Refined Web Design for Businesses Ready to Look the Part</title>
-<meta name="description" content="601 Digital designs and builds refined, high-performance websites for businesses ready to look the part. Boutique attention, big-agency execution, based in South Mississippi.">
+<script>document.documentElement.classList.add('js')</script>
+<title>South Mississippi Web Design &amp; Local SEO | 601 Digital</title>
+<meta name="description" content="Custom web design and local SEO for South Mississippi businesses. One person designs, builds and answers the phone. Free project call — (769) 313-6636.">
 <meta name="theme-color" content="#F5F1E8" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
 <link rel="canonical" href="https://601digital.com/">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="author" content="601 Digital">
+<meta name="geo.region" content="US-MS">
 
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="601 Digital">
@@ -18,10 +22,13 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="601 Digital — web design and local search, South Mississippi.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image:type" content="image/png">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="601 Digital — Presence worthy of the reputation you’ve earned.">
 <meta name="twitter:description" content="Refined, high-performance websites for businesses ready to look the part.">
 <meta name="twitter:image" content="https://601digital.com/assets/img/og.png">
+<meta name="twitter:image:alt" content="601 Digital — web design and local search, South Mississippi.">
 
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/img/apple-touch-icon.png">
@@ -34,27 +41,208 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  "name": "601 Digital",
-  "description": "Custom web design, development, local search and SEO for businesses in South Mississippi.",
-  "url": "https://601digital.com/",
-  "image": "https://601digital.com/assets/img/og.png",
-  "areaServed": [
-    { "@type": "AdministrativeArea", "name": "South Mississippi" },
-    { "@type": "State", "name": "Mississippi" }
-  ],
-  "knowsAbout": ["Web Design", "Web Development", "Local SEO", "Google Business Profile", "Website Management"],
-  "hasOfferCatalog": {
-    "@type": "OfferCatalog",
-    "name": "Services",
-    "itemListElement": [
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Design & Development" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Local Search & Google Presence" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "SEO" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Google Business Profile Optimization" } },
-      { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Website Management & Hosting" } }
-    ]
-  }
+  "@graph": [
+    {
+      "@type": "ProfessionalService",
+      "@id": "https://601digital.com/#business",
+      "name": "601 Digital",
+      "description": "Custom web design, development, local search and SEO for businesses in South Mississippi. Designed and built by one person, start to launch.",
+      "url": "https://601digital.com/",
+      "telephone": "+1-769-313-6636",
+      "email": "601digital@gmail.com",
+      "currenciesAccepted": "USD",
+      "image": {
+        "@id": "https://601digital.com/#logo"
+      },
+      "areaServed": [
+        {
+          "@type": "AdministrativeArea",
+          "name": "South Mississippi"
+        },
+        {
+          "@type": "State",
+          "name": "Mississippi"
+        }
+      ],
+      "knowsAbout": [
+        "Web Design",
+        "Web Development",
+        "Local SEO",
+        "Search Engine Optimization",
+        "Google Business Profile",
+        "Conversion Rate Optimization",
+        "Website Maintenance",
+        "Web Accessibility",
+        "Core Web Vitals"
+      ],
+      "makesOffer": [
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@id": "https://601digital.com/#svc-web-design"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@id": "https://601digital.com/#svc-brand"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@id": "https://601digital.com/#svc-seo"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@id": "https://601digital.com/#svc-gbp"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@id": "https://601digital.com/#svc-cro"
+          }
+        },
+        {
+          "@type": "Offer",
+          "itemOffered": {
+            "@id": "https://601digital.com/#svc-care"
+          }
+        }
+      ],
+      "logo": {
+        "@id": "https://601digital.com/#logo"
+      }
+    },
+    {
+      "@type": "ImageObject",
+      "@id": "https://601digital.com/#logo",
+      "url": "https://601digital.com/assets/img/og.png",
+      "width": 1200,
+      "height": 630,
+      "caption": "601 Digital"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://601digital.com/#svc-web-design",
+      "name": "Website Design & Development",
+      "serviceType": "Web design and development",
+      "description": "A custom site designed around how your business actually works — not your business bent to fit a template someone else bought. Designed, built, and shipped by the same person.",
+      "provider": {
+        "@id": "https://601digital.com/#business"
+      },
+      "areaServed": {
+        "@type": "State",
+        "name": "Mississippi"
+      },
+      "url": "https://601digital.com/#services"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://601digital.com/#svc-brand",
+      "name": "Brand Presentation",
+      "serviceType": "Brand identity and presentation",
+      "description": "Type, colour, imagery and tone pulled into one coherent system — so every page looks deliberate, and every touchpoint looks like it came from the same company.",
+      "provider": {
+        "@id": "https://601digital.com/#business"
+      },
+      "areaServed": {
+        "@type": "State",
+        "name": "Mississippi"
+      },
+      "url": "https://601digital.com/#services"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://601digital.com/#svc-seo",
+      "name": "Search Visibility",
+      "serviceType": "Local search engine optimization",
+      "description": "Site architecture, content, technical fundamentals, and a local strategy — the unglamorous work that decides whether anything else you do gets seen.",
+      "provider": {
+        "@id": "https://601digital.com/#business"
+      },
+      "areaServed": {
+        "@type": "State",
+        "name": "Mississippi"
+      },
+      "url": "https://601digital.com/#services"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://601digital.com/#svc-gbp",
+      "name": "Google Business Profile",
+      "serviceType": "Google Business Profile management",
+      "description": "Claimed, optimized, and wired into the rest of your presence — so hours, photos, directions, and reviews all say the same thing and point back to your site.",
+      "provider": {
+        "@id": "https://601digital.com/#business"
+      },
+      "areaServed": {
+        "@type": "State",
+        "name": "Mississippi"
+      },
+      "url": "https://601digital.com/#services"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://601digital.com/#svc-cro",
+      "name": "Conversion-Focused Design",
+      "serviceType": "Conversion rate optimization",
+      "description": "Beautiful is the baseline. Layouts are built around the decision you want a visitor to make, with one obvious next step on every screen.",
+      "provider": {
+        "@id": "https://601digital.com/#business"
+      },
+      "areaServed": {
+        "@type": "State",
+        "name": "Mississippi"
+      },
+      "url": "https://601digital.com/#services"
+    },
+    {
+      "@type": "Service",
+      "@id": "https://601digital.com/#svc-care",
+      "name": "Website Care",
+      "serviceType": "Website maintenance and hosting",
+      "description": "Hosting, security, backups, updates, monitoring and the edits you’d otherwise put off for six months — so the site keeps improving after launch instead of quietly ageing.",
+      "provider": {
+        "@id": "https://601digital.com/#business"
+      },
+      "areaServed": {
+        "@type": "State",
+        "name": "Mississippi"
+      },
+      "url": "https://601digital.com/#services"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://601digital.com/#website",
+      "url": "https://601digital.com/",
+      "name": "601 Digital",
+      "description": "Web design and local search for South Mississippi businesses.",
+      "publisher": {
+        "@id": "https://601digital.com/#business"
+      },
+      "inLanguage": "en-US"
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://601digital.com/#webpage",
+      "url": "https://601digital.com/",
+      "name": "South Mississippi Web Design & Local SEO | 601 Digital",
+      "isPartOf": {
+        "@id": "https://601digital.com/#website"
+      },
+      "about": {
+        "@id": "https://601digital.com/#business"
+      },
+      "primaryImageOfPage": {
+        "@id": "https://601digital.com/#logo"
+      },
+      "inLanguage": "en-US"
+    }
+  ]
 }
 </script>
 </head>
@@ -106,7 +294,7 @@
   </div>
 </div>
 
-<main id="main">
+<main id="main" tabindex="-1">
 
 <!-- ================= HERO ================= -->
 <section class="surface hero" aria-labelledby="hero-h">
@@ -153,7 +341,7 @@
         </div>
       </div>
 
-      <div class="stack__item stack__item--front">
+      <div class="stack__item stack__item--front" aria-hidden="true">
         <div class="browser">
           <div class="browser__bar"><span class="browser__dots"><i></i><i></i><i></i></span><span class="browser__url">columbiaanimalhospital.net — design preview</span></div>
           <div class="browser__body" style="height:clamp(15rem,11rem+22vw,28rem)">
@@ -387,7 +575,7 @@
           </span>
         </div>
 
-        <input class="ba__range" type="range" min="0" max="100" value="50" step="0.1"
+        <input class="ba__range" type="range" min="0" max="100" value="50" step="1"
                aria-label="Reveal the previous design or the 601 Digital redesign" data-ba-range>
       </div>
 
@@ -616,10 +804,10 @@
       <h2 class="display-l" id="roots-h" data-reveal style="margin-top:1.25rem">From the 601. <span class="ital">Built for anywhere.</span></h2>
       <p class="lede" data-reveal style="--reveal-delay:120ms;margin-top:1.25rem">We know what a Saturday morning looks like for a shop on Main Street, why the phone matters more than the contact form, and how word gets around a town this size. That context doesn’t come from a discovery call with an agency four states away.</p>
       <div class="roots__list">
-        <div data-reveal="fade"><h4>We know the customer</h4><p>Your buyer is a neighbor on a phone with one bar, not a procurement team with a spreadsheet.</p></div>
-        <div data-reveal="fade"><h4>We know the competition</h4><p>Usually a Facebook page, a template from 2014, and one very good word-of-mouth reputation.</p></div>
-        <div data-reveal="fade"><h4>We answer the phone</h4><p>Same time zone, same corner of Mississippi, same person who built the thing you’re calling about.</p></div>
-        <div data-reveal="fade"><h4>We don’t do small-town work</h4><p>Local scope, national standard. The site should hold up next to anyone's, anywhere.</p></div>
+        <div data-reveal="fade"><h3>We know the customer</h3><p>Your buyer is a neighbor on a phone with one bar, not a procurement team with a spreadsheet.</p></div>
+        <div data-reveal="fade"><h3>We know the competition</h3><p>Usually a Facebook page, a template from 2014, and one very good word-of-mouth reputation.</p></div>
+        <div data-reveal="fade"><h3>We answer the phone</h3><p>Same time zone, same corner of Mississippi, same person who built the thing you’re calling about.</p></div>
+        <div data-reveal="fade"><h3>We don’t do small-town work</h3><p>Local scope, national standard. The site should hold up next to anyone's, anywhere.</p></div>
       </div>
     </div>
 
@@ -638,7 +826,7 @@
 </section>
 
 <!-- ================= TESTIMONIALS ================= -->
-<section class="surface section--tight section" aria-labelledby="say-h">
+<section class="surface section--tight section" id="testimonials" aria-labelledby="say-h">
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow" data-reveal="fade">In their words</p>
@@ -686,20 +874,24 @@
           <div class="field">
             <label for="f-name">Name <abbr title="required" aria-label="required">*</abbr></label>
             <input id="f-name" name="name" type="text" autocomplete="name" required>
+            <p class="field__err" id="f-name-err"></p>
           </div>
           <div class="field">
             <label for="f-biz">Business</label>
             <input id="f-biz" name="business" type="text" autocomplete="organization">
+            <p class="field__err" id="f-biz-err"></p>
           </div>
         </div>
         <div class="form__row">
           <div class="field">
             <label for="f-email">Email <abbr title="required" aria-label="required">*</abbr></label>
             <input id="f-email" name="email" type="email" autocomplete="email" required>
+            <p class="field__err" id="f-email-err"></p>
           </div>
           <div class="field">
             <label for="f-phone">Telephone</label>
             <input id="f-phone" name="phone" type="tel" autocomplete="tel">
+            <p class="field__err" id="f-phone-err"></p>
           </div>
         </div>
         <div class="field">
@@ -718,6 +910,7 @@
         <div class="field">
           <label for="f-msg">Tell us about the project</label>
           <textarea id="f-msg" name="message" rows="4" placeholder="What the business does, what’s not working, and what you’d like it to become."></textarea>
+            <p class="field__err" id="f-msg-err"></p>
         </div>
         <div class="form__foot">
           <button class="btn btn--accent" type="submit">Send the enquiry
@@ -729,6 +922,7 @@
     </div>
   </div>
 </section>
+</main>
 
 <!-- ================= FOOTER ================= -->
 <footer class="surface inverted">
@@ -742,17 +936,20 @@
         <p class="body-copy" style="font-size:var(--t-small)">Custom websites and local search for South Mississippi businesses. Designed and built by the person who answers your call.</p>
       </div>
       <div>
-        <h4>Explore</h4>
+        <h3>Explore</h3>
         <ul class="foot__list">
           <li><a href="#work">Work</a></li>
+          <li><a href="#transformation">The 601 Transformation</a></li>
           <li><a href="#services">Services</a></li>
           <li><a href="#difference">About</a></li>
           <li><a href="#process">Process</a></li>
+          <li><a href="#roots">Local Roots</a></li>
+          <li><a href="#testimonials">Testimonials</a></li>
           <li><a href="#contact">Contact</a></li>
         </ul>
       </div>
       <div>
-        <h4>Get in touch</h4>
+        <h3>Get in touch</h3>
         <ul class="foot__list">
           <li><a href="mailto:601digital@gmail.com">601digital@gmail.com</a></li>
           <li><a href="tel:+17693136636">(769) 313-6636</a></li>
