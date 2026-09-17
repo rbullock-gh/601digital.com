@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Demonstration build — 601 Digital</title>
+<link rel="preload" href="../assets/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../assets/fonts/cormorant-garamond-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:'Geist';src:url('../assets/fonts/geist-latin-wght-normal.woff2') format('woff2-variations');font-weight:100 900;font-display:swap}
+@font-face{font-family:'Cormorant';src:url('../assets/fonts/cormorant-garamond-latin-wght-normal.woff2') format('woff2-variations');font-weight:300 700;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant';src:url('../assets/fonts/cormorant-garamond-latin-wght-italic.woff2') format('woff2-variations');font-weight:300 700;font-style:italic;font-display:swap}
+:root{
+  --deep:#1B3A4B; --deep-2:#2E6076; --cream:#FBFAF7; --sand:#EEEAE2;
+  --ink:#141A1E; --muted:#5F6B71; --line:#E3DED4; --amber:#C08A3E;
+}
+*{box-sizing:border-box;margin:0}
+body{font-family:'Geist',system-ui,sans-serif;background:var(--cream);color:var(--ink);line-height:1.6;letter-spacing:-0.012em;-webkit-font-smoothing:antialiased;font-size:15px}
+img,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+ul{list-style:none;padding:0}
+.w{max-width:1080px;margin-inline:auto;padding-inline:clamp(1rem,4vw,2.5rem)}
+.mono{font-family:'Geist',sans-serif;font-weight:500;font-size:.6875rem;letter-spacing:.2em;text-transform:uppercase}
+.ital{font-family:'Cormorant',Georgia,serif;font-style:italic;font-weight:500}
+.serif{font-family:'Cormorant',Georgia,serif;font-weight:500;letter-spacing:-.018em}
+
+.util{background:var(--deep);color:#CBDDE5;font-size:.75rem}
+.util .w{display:flex;justify-content:space-between;gap:1rem;padding-block:.5rem;flex-wrap:wrap}
+.util b{color:#fff;font-weight:500}
+header{position:sticky;top:0;z-index:9;background:rgba(251,250,247,.9);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header .w{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.875rem}
+.brand{display:flex;align-items:center;gap:.625rem}
+.brand i{width:30px;height:30px;border-radius:8px;background:var(--deep);display:grid;place-items:center;flex:none;color:#fff;font-style:normal;font-family:'Cormorant',serif;font-size:1rem;font-weight:600}
+.brand em{font-style:normal;display:block;font-family:'Cormorant',Georgia,serif;font-size:1.0625rem;font-weight:600;letter-spacing:-.02em;line-height:1.15}
+.brand span{display:block;font-size:.625rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+nav ul{display:flex;gap:1.375rem;font-size:.8125rem;color:#3E4A50}
+@media(max-width:720px){nav{display:none}}
+.cta{background:var(--deep);color:#fff;padding:.625rem 1.125rem;border-radius:999px;font-size:.8125rem;font-weight:500;white-space:nowrap}
+
+.hero{padding-block:clamp(2.5rem,6vw,4.5rem) clamp(2rem,5vw,3.5rem)}
+.hero .w{display:grid;gap:clamp(1.75rem,4vw,3rem);align-items:center}
+@media(min-width:800px){.hero .w{grid-template-columns:1.05fr .95fr}}
+.hero h1{font-family:'Cormorant',Georgia,serif;font-size:clamp(2.5rem,1.3rem+4.2vw,4.25rem);line-height:1;letter-spacing:-.02em;font-weight:500;margin-bottom:1rem;text-wrap:balance}
+.hero h1 i{font-style:italic;color:var(--deep-2)}
+.hero p{color:var(--muted);max-width:42ch;margin-bottom:1.5rem;font-size:1.0625rem}
+.row{display:flex;gap:.625rem;flex-wrap:wrap}
+.btn{padding:.8125rem 1.375rem;border-radius:999px;font-size:.875rem;font-weight:500;display:inline-flex;align-items:center;gap:.5rem}
+.btn-p{background:var(--deep);color:#fff}
+.btn-g{border:1px solid var(--line);color:var(--ink)}
+.shot{border-radius:14px;overflow:hidden;aspect-ratio:5/4;position:relative;background:linear-gradient(155deg,#DCE6EA,#9FB6C0 40%,var(--deep-2));box-shadow:0 24px 60px -24px rgba(20,26,30,.4)}
+.shot::after{content:'';position:absolute;inset:auto 0 0 0;height:52%;background:linear-gradient(transparent,rgba(20,26,30,.5))}
+.shot figcaption{position:absolute;z-index:2;left:1rem;right:1rem;bottom:1rem;color:#fff;font-size:.75rem;opacity:.9}
+
+.strip{border-block:1px solid var(--line);background:var(--sand)}
+.strip .w{display:grid;gap:1rem;padding-block:1.25rem;grid-template-columns:repeat(2,1fr)}
+@media(min-width:760px){.strip .w{grid-template-columns:repeat(4,1fr)}}
+.strip div b{display:block;font-size:.9375rem;font-weight:550;letter-spacing:-.02em}
+.strip div span{font-size:.75rem;color:var(--muted)}
+
+section{padding-block:clamp(2.5rem,6vw,4.5rem)}
+.head{margin-bottom:2rem;max-width:52ch}
+.head .mono{color:var(--deep-2);display:block;margin-bottom:.75rem}
+.head h2{font-family:'Cormorant',Georgia,serif;font-size:clamp(1.875rem,1.2rem+2.4vw,3rem);line-height:1.06;letter-spacing:-.018em;font-weight:500;text-wrap:balance}
+.cards{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:1.375rem}
+.card i{display:grid;place-items:center;width:2.25rem;height:2.25rem;border-radius:50%;background:var(--sand);color:var(--deep);margin-bottom:.875rem}
+.card i svg{width:16px;height:16px}
+.card b{display:block;font-size:1rem;font-weight:550;letter-spacing:-.025em;margin-bottom:.375rem}
+.card p{font-size:.8125rem;color:var(--muted);line-height:1.6}
+
+.split{background:var(--deep);color:#DCE9EE}
+.split .w{display:grid;gap:clamp(1.75rem,4vw,3rem);padding-block:clamp(2.5rem,6vw,4rem)}
+@media(min-width:800px){.split .w{grid-template-columns:1fr 1fr}}
+.split h2{font-family:'Cormorant',Georgia,serif;font-size:clamp(1.875rem,1.2rem+2.4vw,3rem);line-height:1.04;letter-spacing:-.018em;font-weight:500;color:#fff;margin-bottom:.875rem}
+.split h2 i{font-style:italic;color:#9EC6D6}
+.split p{color:#AFC7D0;max-width:40ch;margin-bottom:1.5rem}
+.hours{border-top:1px solid rgba(255,255,255,.16)}
+.hours li{display:flex;justify-content:space-between;gap:1rem;padding:.8125rem 0;border-bottom:1px solid rgba(255,255,255,.16);font-size:.875rem}
+.hours li b{font-weight:500;color:#fff}
+.hours li span{color:#9EB6C0;font-size:.8125rem}
+.alert{margin-top:1.25rem;display:flex;gap:.75rem;align-items:flex-start;background:rgba(192,138,62,.16);border:1px solid rgba(192,138,62,.4);border-radius:10px;padding:.875rem 1rem;font-size:.8125rem;color:#EEDCBE}
+.alert svg{width:16px;height:16px;flex:none;margin-top:.15rem;color:var(--amber)}
+
+footer{background:var(--ink);color:#A5B3B9;font-size:.8125rem}
+footer .w{padding-block:2rem}
+.frow{display:grid;gap:1.5rem;grid-template-columns:repeat(auto-fit,minmax(min(100%,190px),1fr));margin-bottom:1.75rem}
+footer h5{color:#fff;font-size:.625rem;font-weight:500;letter-spacing:.16em;text-transform:uppercase;margin-bottom:.75rem}
+footer li{padding:.25rem 0}
+.fbot{border-top:1px solid rgba(255,255,255,.12);padding-top:1.25rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.6875rem;color:#6E7C82}
+</style>
+</head>
+<body>
+
+<div class="util"><div class="w">
+  <span>A demonstration build by 601 Digital — not a real practice</span>
+  <span>Same-week appointments · <b>Now accepting new patients</b></span>
+</div></div>
+
+<header><div class="w">
+  <a class="brand" href="#">
+    <i>B</i>
+    <span style="font-family:inherit"><em>Brightwater Dental</em><span>Sample project</span></span>
+  </a>
+  <nav><ul><li>Services</li><li>Our Team</li><li>New Patients</li><li>Pricing</li><li>Contact</li></ul></nav>
+  <a class="cta" href="#">Book an Appointment</a>
+</div></header>
+
+<div class="hero"><div class="w">
+  <div>
+    <h1>Dentistry that doesn&rsquo;t make you <i>dread the chair.</i></h1>
+    <p>Preventive, restorative and cosmetic care for the whole family — with same-week appointments and pricing explained before anything starts.</p>
+    <div class="row">
+      <a class="btn btn-p" href="#">Book an Appointment</a>
+      <a class="btn btn-g" href="#">See our pricing</a>
+    </div>
+  </div>
+  <figure class="shot">
+    <figcaption>Photography slot — replaced with the client&rsquo;s own images on a real build.</figcaption>
+  </figure>
+</div></div>
+
+<div class="strip"><div class="w">
+  <div><b>Mon–Thu</b><span>8:00a – 5:00p</span></div>
+  <div><b>Friday</b><span>8:00a – 1:00p</span></div>
+  <div><b>Same-week</b><span>Appointments available</span></div>
+  <div><b>(601) 555-0142</b><span>Call or text to book</span></div>
+</div></div>
+
+<section><div class="w">
+  <div class="head">
+    <span class="mono">What we do</span>
+    <h2>Care that covers the whole family, in one place.</h2>
+  </div>
+  <div class="cards">
+    <div class="card"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.6-7-9.6A4.4 4.4 0 0 1 12 8a4.4 4.4 0 0 1 7 3.4C19 16.4 12 21 12 21Z"/></svg></i><b>Preventive Care</b><p>Cleanings, exams and early detection that keep small problems from becoming expensive ones.</p></div>
+    <div class="card"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 4l6 6-9 9H5v-6l9-9Z"/></svg></i><b>Restorative</b><p>Fillings, crowns and bridges matched to your natural shade, placed in as few visits as possible.</p></div>
+    <div class="card"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l2.5 2.5"/></svg></i><b>Cosmetic</b><p>Whitening, veneers and alignment, with a clear picture of the result before you commit.</p></div>
+    <div class="card"><i><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h4l2 5 4-10 2 5h4"/></svg></i><b>Urgent Visits</b><p>Broken tooth or sudden pain? Call before noon and we will find you a slot the same day.</p></div>
+  </div>
+</div></section>
+
+<div class="split"><div class="w">
+  <div>
+    <h2>Know the cost <i>before</i> you sit down.</h2>
+    <p>Every treatment plan comes with the price written out, what insurance covers, and what it would look like spread across payments.</p>
+    <div class="row">
+      <a class="btn" style="background:#fff;color:var(--deep)" href="#">View pricing</a>
+      <a class="btn" style="border:1px solid rgba(255,255,255,.3);color:#fff" href="#">New patient forms</a>
+    </div>
+  </div>
+  <div>
+    <ul class="hours">
+      <li><b>Monday – Thursday</b><span>8:00 AM – 5:00 PM</span></li>
+      <li><b>Friday</b><span>8:00 AM – 1:00 PM</span></li>
+      <li><b>Saturday – Sunday</b><span>Closed</span></li>
+      <li><b>Urgent visits</b><span>Call before noon</span></li>
+    </ul>
+    <div class="alert">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 9v4M12 17h.01M10.3 3.9 2.6 17.2A2 2 0 0 0 4.3 20h15.4a2 2 0 0 0 1.7-2.8L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg>
+      <span><b style="color:#fff;font-weight:550">In pain today?</b> Call (601) 555-0142 and we will fit you in.</span>
+    </div>
+  </div>
+</div></div>
+
+<section><div class="w">
+  <div class="head">
+    <span class="mono">Before your first visit</span>
+    <h2>New here? We&rsquo;ll make it easy.</h2>
+  </div>
+  <div class="cards">
+    <div class="card"><b>1 — Book online or call</b><p>Tell us what is going on and we will get you the first slot that fits your schedule.</p></div>
+    <div class="card"><b>2 — Send records ahead</b><p>Have your previous dentist forward X-rays so we start with the full picture.</p></div>
+    <div class="card"><b>3 — Arrive a few minutes early</b><p>New-patient paperwork takes about five minutes, or fill it in before you come.</p></div>
+  </div>
+</div></section>
+
+<footer><div class="w">
+  <div class="frow">
+    <div><h5>Brightwater Dental</h5><ul><li>Sample project</li><li>(601) 555-0142</li></ul></div>
+    <div><h5>Hours</h5><ul><li>Mon–Thu 8:00a – 5:00p</li><li>Fri 8:00a – 1:00p</li><li>Sat–Sun Closed</li></ul></div>
+    <div><h5>Care</h5><ul><li>Preventive</li><li>Restorative</li><li>Cosmetic</li><li>Urgent visits</li></ul></div>
+    <div><h5>Visit</h5><ul><li>Book an appointment</li><li>New patient forms</li><li>Pricing</li></ul></div>
+  </div>
+  <div class="fbot"><span>Demonstration build — 601 Digital</span><span>Not a real practice. No client data shown.</span></div>
+</div></footer>
+
+</body>
+</html>

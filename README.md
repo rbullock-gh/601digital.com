@@ -23,7 +23,7 @@ assets/css/main.css                     Design system + every section
 assets/js/main.js                       Interaction layer (vanilla, no deps)
 assets/fonts/                           Self-hosted woff2 (Cormorant Garamond, Geist)
 assets/img/og.png                       1200×630 social card
-work/columbia-animal-hospital-preview.html   Scrollable client render shown in the portfolio frame
+work/demo-preview.html                  Scrollable demonstration build shown in the portfolio frame
 CONTENT-TO-FILL.md                      Placeholders + unverified claims — read before launch
 ```
 
@@ -78,9 +78,9 @@ All motion lives in `main.js` and degrades safely:
 - **Mini renders** (`.mini--dated` / `.mini--premium`) — miniature website
   layouts sized entirely in `cqw` container units, so one markup block scales
   correctly whether it's a 340px thumbnail or a 1300px split-screen panel.
-  `.mini--dated` recreates the template the client is on today (gold monogram
-  masthead, sawtooth divider, pill nav over a photo carousel, three bordered
-  thumbnails with gradient buttons) rather than a generic "old site" pastiche.
+  `.mini--dated` reproduces the dated-template pattern local businesses are
+  typically on (monogram masthead, sawtooth divider, pill nav over a photo
+  carousel, three bordered thumbnails with gradient buttons).
 - **Pricing** (`.pricing`) — the featured tier carries `.inverted` alongside
   `.price--featured`, so its entire token set flips to forest and every child
   (muted text, hairlines, checkmarks) follows without per-element overrides.

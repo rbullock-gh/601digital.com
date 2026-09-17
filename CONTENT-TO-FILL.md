@@ -9,57 +9,40 @@ rather than something I could verify.
 | Where | State now | Needs |
 |---|---|---|
 | Testimonials section | Two quotes marked `PLACEHOLDER` | Real client quotes, with written permission |
-| Work item 02 | "Slot open" card | A second real project, or delete the block |
-| Contact form | No `data-endpoint` set | A form endpoint (Formspree, Basin, your own handler) |
-| Before/After panels | CSS recreations of both real sites | Optional: the real screenshots, for pixel-exactness |
+| Featured work | A demonstration build ("Brightwater Dental") | Real case studies, once clients approve |
+| Before/After slider | Demonstration builds both sides | Real before/after screenshots, once approved |
+| Work item 02 | "Slot open" card | A second project, or delete the block |
+| Contact form | No `data-endpoint` set | A form endpoint — see `DEPLOY.md` step 3 |
 
-Search the repo for `is-placeholder` to find the first two.
+Search the repo for `is-placeholder` to find the testimonial and slot markers.
 
-### Wiring the contact form
+## 1a. Client work is currently removed
 
-Add the endpoint to the form tag in `index.html`:
+All references to the veterinary practice — name, address, telephone, domain,
+their service copy and their monogram — were taken out because permission to
+publish has not been given yet. Nothing identifying them remains in the repo.
 
-```html
-<form class="form" data-contact data-endpoint="https://formspree.io/f/YOUR_ID" novalidate ...>
-```
+In their place the portfolio shows a **demonstration build**: a fictional
+practice ("Brightwater Dental"), a reserved `555` telephone number, no real
+address, and a browser frame reading `demo.601digital.com`. It is labelled as a
+demonstration in three places — the project heading, the case-study column, and
+the strip inside the preview itself — so nobody can mistake it for client work.
 
-With no endpoint the form validates, then composes a pre-filled draft to
-`601digital@gmail.com`. It is never a dead end, but a real endpoint means
-enquiries land in an inbox without the visitor's mail app cooperating.
+### Putting real work back
 
-### Using the real screenshots
+Once a client signs off in writing:
 
-Both panels are CSS recreations of real sites: on the left, the template live at
-columbiaanimalhospital.net today (CAH monogram masthead, sawtooth divider, pill
-nav, photo carousel, Surgery / Digital Radiography / Grooming panel). On the
-right, the shipped 601 Digital redesign (serif display with the amber italic
-accent, badge pill, three-button hero, four-column practical strip). Both use
-the client's own copy, so the comparison is like for like and honest as it
-stands.
+1. Replace the demonstration content in the featured work block with theirs.
+2. Save real screenshots to `assets/img/`, then uncomment the two `ba__shot`
+   tags in the before/after block so the photographs take over.
+3. Change the project heading from "Demonstration build — not client work" to
+   the real project line, and rewrite the three case-study columns.
+4. Update `work/demo-preview.html`, or add a new preview file beside it and
+   point the portfolio `<iframe>` at it.
 
-I could not add the actual screenshots myself — pasted images in a chat are not
-files I can write to disk. To swap them in:
-
-1. Save the two captures as:
-   - `assets/img/cah-before.png`
-   - `assets/img/cah-after.png`
-
-   Full-page, roughly 1440px wide, PNG or JPG.
-
-2. In `index.html`, find the two `REAL SCREENSHOT` comments inside the
-   before/after block and remove the comment wrappers so each `<img class="ba__shot">`
-   tag is live.
-
-3. Delete the explanatory paragraph directly under the slider.
-
-Each image fades in over its recreation once loaded, and removes itself if the
-file is missing — so a typo in a filename degrades to the recreation rather than
-a broken image. The tags ship commented out purely so the site does not request
-files that are not there yet.
-
-**One thing the recreation cannot supply:** the three-dog photograph in the
-redesign's hero is a warm gradient placeholder. If you have that image, it is
-worth adding to the case study regardless of the slider.
+Get the permission in writing, and be specific about what it covers: the
+business name, screenshots of the old site, screenshots of the new one, and any
+results you plan to quote.
 
 ## 2. Claims that rest on your word
 
@@ -69,8 +52,9 @@ If any of these is wrong, change the copy rather than leaving it:
   the 601 Difference section, and the footer. It is the spine of the boutique
   positioning and only works if 601 Digital is genuinely solo or near-solo.
 - **"1 — Person, start to launch"** and **"0 — Templates used"** (hero stats).
-- **Columbia Animal Hospital is a 601 Digital project.** The featured case study
-  rests on this.
+- **Any client project you put back.** The portfolio currently claims nothing, so
+  nothing here rests on an unverified client relationship. Keep it that way:
+  publish a case study only once the client has approved it in writing.
 - **Services** — Website Design & Development, Brand Presentation, Search
   Visibility, Google Business Profile, Conversion-Focused Design, Website Care.
   Remove any you do not actually offer.
