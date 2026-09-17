@@ -1579,9 +1579,11 @@ body.menu-open { overflow: hidden; }
         color-mix(in oklab, var(--white) 74%, transparent) 46%,
         color-mix(in oklab, var(--white) 44%, transparent) 100%),
       linear-gradient(to bottom,
-        color-mix(in oklab, var(--white) 56%, transparent) 0%,
-        color-mix(in oklab, var(--white) 14%, transparent) 26%,
-        color-mix(in oklab, var(--white) 66%, transparent) 70%,
+        color-mix(in oklab, var(--white) 80%, transparent) 0%,
+        color-mix(in oklab, var(--white) 66%, transparent) 22%,
+        color-mix(in oklab, var(--white) 34%, transparent) 36%,
+        color-mix(in oklab, var(--white) 16%, transparent) 48%,
+        color-mix(in oklab, var(--white) 66%, transparent) 74%,
         var(--white) 100%);
   }
 }
@@ -1591,3 +1593,9 @@ body.menu-open { overflow: hidden; }
    scrim the lighter tint measures around 2:1, which fails even the 3:1 bar for
    large text. This one clears it with margin and still reads as blossom. */
 .hero__title .ital { color: var(--blossom-deep); }
+
+/* Section eyebrows carry the brand green on light surfaces. On dark surfaces
+   the same green sits at about 2:1 against deep forest, so those keep the sage
+   tone they already had. */
+.eyebrow { color: var(--accent); }
+.inverted .eyebrow { color: var(--fg-faint); }
