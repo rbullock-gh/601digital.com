@@ -38,7 +38,7 @@ Defined as custom properties at the top of `main.css`.
   line, the "after" tag. Never a large fill. Keep it that way.
 - Dark sections get `class="inverted"` (deep forest). Add `inverted--charcoal`
   for the deepest sections. The nav detects which surface is under it and flips
-  its own colour and pinned background to match.
+  its own color and pinned background to match.
 - Type: Cormorant Garamond for all display headings, with the *same face turned
   italic* for the emphasised phrase — that restraint is the signature. Geist
   carries body, UI, and the letterspaced uppercase micro-labels. Genuine
@@ -81,6 +81,10 @@ All motion lives in `main.js` and degrades safely:
   `.mini--dated` recreates the template the client is on today (gold monogram
   masthead, sawtooth divider, pill nav over a photo carousel, three bordered
   thumbnails with gradient buttons) rather than a generic "old site" pastiche.
+- **Pricing** (`.pricing`) — the featured tier carries `.inverted` alongside
+  `.price--featured`, so its entire token set flips to forest and every child
+  (muted text, hairlines, checkmarks) follows without per-element overrides.
+  Champagne is used for its badge, checkmarks and CTA only.
 - **Contact form** (`[data-contact]`) — inline validation with a drawn-in
   champagne hairline on focus. Set `data-endpoint="…"` on the form to POST to a
   form service (Formspree, Basin, your own handler); with no endpoint it

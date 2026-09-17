@@ -44,6 +44,17 @@
     { "@type": "State", "name": "Mississippi" }
   ],
   "knowsAbout": ["Web Design", "Web Development", "Local SEO", "Google Business Profile", "Website Management"],
+  "makesOffer": [
+    { "@type": "Offer", "name": "Launch — Basic Website", "category": "Website design and hosting",
+      "description": "Clean responsive website of roughly 1–5 pages, mobile optimization, contact form, basic SEO, SSL, hosting and maintenance. From $999 setup plus $49 per month.",
+      "priceSpecification": { "@type": "PriceSpecification", "minPrice": "999", "priceCurrency": "USD", "description": "One-time setup, starting price" } },
+    { "@type": "Offer", "name": "Growth — Advanced Website", "category": "Website design, SEO and lead generation",
+      "description": "Everything in Launch plus roughly 5–10 pages, custom design, advanced SEO, Google Business Profile integration, analytics, lead-generation forms, review integration and priority support. From $2,499 setup plus $99 per month.",
+      "priceSpecification": { "@type": "PriceSpecification", "minPrice": "2499", "priceCurrency": "USD", "description": "One-time setup, starting price" } },
+    { "@type": "Offer", "name": "Authority — Premium Website", "category": "Bespoke website design and ongoing optimization",
+      "description": "Everything in Growth plus a fully bespoke build, advanced interaction, custom functionality, conversion optimization, integrations and automations, priority maintenance and premium support. From $4,999 setup plus $249 per month.",
+      "priceSpecification": { "@type": "PriceSpecification", "minPrice": "4999", "priceCurrency": "USD", "description": "One-time setup, starting price" } }
+  ],
   "hasOfferCatalog": {
     "@type": "OfferCatalog",
     "name": "Services",
@@ -72,6 +83,7 @@
     <nav class="nav__links" aria-label="Primary">
       <a class="nav__link" href="#work">Work</a>
       <a class="nav__link" href="#services">Services</a>
+      <a class="nav__link" href="#pricing">Pricing</a>
       <a class="nav__link" href="#difference">About</a>
       <a class="nav__link" href="#process">Process</a>
       <a class="nav__link" href="#contact">Contact</a>
@@ -93,9 +105,10 @@
     <ul class="menu__list">
       <li class="menu__item"><a class="menu__link" style="--i:0" href="#work"><span>Work</span><em>01</em></a></li>
       <li class="menu__item"><a class="menu__link" style="--i:1" href="#services"><span>Services</span><em>02</em></a></li>
-      <li class="menu__item"><a class="menu__link" style="--i:2" href="#difference"><span>About</span><em>03</em></a></li>
-      <li class="menu__item"><a class="menu__link" style="--i:3" href="#process"><span>Process</span><em>04</em></a></li>
-      <li class="menu__item"><a class="menu__link" style="--i:4" href="#contact"><span>Contact</span><em>05</em></a></li>
+      <li class="menu__item"><a class="menu__link" style="--i:2" href="#pricing"><span>Pricing</span><em>03</em></a></li>
+      <li class="menu__item"><a class="menu__link" style="--i:3" href="#difference"><span>About</span><em>04</em></a></li>
+      <li class="menu__item"><a class="menu__link" style="--i:4" href="#process"><span>Process</span><em>05</em></a></li>
+      <li class="menu__item"><a class="menu__link" style="--i:5" href="#contact"><span>Contact</span><em>06</em></a></li>
     </ul>
   </nav>
   <div class="menu__foot">
@@ -462,7 +475,7 @@
             <div class="mini__ic"><s><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M5 3h3l1.5 4-2 1.5a10 10 0 0 0 5 5L14 11l4 1.5v3a1.5 1.5 0 0 1-1.7 1.5A14 14 0 0 1 3.5 4.7 1.5 1.5 0 0 1 5 3Z"/></svg></s><u><b>Call the office</b><em>(601) 000-0000</em><i>Tap to call from your phone</i></u></div>
             <div class="mini__ic"><s><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2a5.5 5.5 0 0 1 5.5 5.5C15.5 12 10 18 10 18S4.5 12 4.5 7.5A5.5 5.5 0 0 1 10 2Z"/><circle cx="10" cy="7.4" r="1.9" fill="#fff"/></svg></s><u><b>Find us</b><em>123 Main Street</em><i>Columbia, MS 39429</i></u></div>
             <div class="mini__ic"><s><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><circle cx="10" cy="10" r="7.4"/><path d="M10 5.9v4.3l2.8 1.9"/></svg></s><u><b>Opening hours</b><em>8:00 AM – 5:00 PM</em><i>Monday to Friday</i></u></div>
-            <div class="mini__ic"><s><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2.5 12 7.6l5.5.4-4.2 3.5 1.3 5.3L10 13.9l-4.6 2.9 1.3-5.3L2.5 8l5.5-.4z"/></svg></s><u><b>Local reviews</b><em>Rated by neighbours</em><i>Straight from your Google profile</i></u></div>
+            <div class="mini__ic"><s><svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 2.5 12 7.6l5.5.4-4.2 3.5 1.3 5.3L10 13.9l-4.6 2.9 1.3-5.3L2.5 8l5.5-.4z"/></svg></s><u><b>Local reviews</b><em>Rated by neighbors</em><i>Straight from your Google profile</i></u></div>
           </div>
         </div>
 
@@ -501,7 +514,7 @@
       <a class="svc__row" href="#contact" data-reveal="fade">
         <span class="svc__no">02</span>
         <h3 class="svc__name">Brand Presentation</h3>
-        <p class="svc__desc">Type, colour, imagery and tone pulled into one coherent system — so every page looks deliberate, and every touchpoint looks like it came from the same company.</p>
+        <p class="svc__desc">Type, color, imagery and tone pulled into one coherent system — so every page looks deliberate, and every touchpoint looks like it came from the same company.</p>
         <span class="svc__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M2.5 9.5 9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </a>
       <a class="svc__row" href="#contact" data-reveal="fade">
@@ -525,9 +538,119 @@
       <a class="svc__row" href="#contact" data-reveal="fade">
         <span class="svc__no">06</span>
         <h3 class="svc__name">Website Care</h3>
-        <p class="svc__desc">Hosting, security, backups, updates, monitoring and the edits you’d otherwise put off for six months — so the site keeps improving after launch instead of quietly ageing.</p>
+        <p class="svc__desc">Hosting, security, backups, updates, monitoring and the edits you’d otherwise put off for six months — so the site keeps improving after launch instead of quietly aging.</p>
         <span class="svc__arrow" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 12 12" fill="none"><path d="M2.5 9.5 9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
       </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING ================= -->
+<section class="surface section section--sunk" id="pricing" aria-labelledby="price-h">
+  <div class="wrap">
+    <div class="sec-head sec-head--split">
+      <p class="eyebrow" data-reveal="fade">Investment</p>
+      <h2 class="display-l" id="price-h" data-reveal>Three ways to <span class="ital">begin.</span></h2>
+      <p class="lede" data-reveal style="--reveal-delay:120ms">Every project is quoted after we talk. These are the shapes most of them take, and where they typically start.</p>
+    </div>
+
+    <div class="pricing">
+
+      <article class="price" data-reveal="fade">
+        <div class="price__head">
+          <p class="price__kind">Basic website</p>
+          <h3 class="price__name">Launch</h3>
+          <p class="price__for">For small businesses that need a simple, professional presence online — done properly.</p>
+        </div>
+        <div class="price__cost">
+          <p class="price__from">Starting at</p>
+          <p class="price__amount"><b>$999</b><span>setup</span></p>
+          <p class="price__mo">then <b>$49</b> / month</p>
+        </div>
+        <a class="btn btn--ghost" href="#contact">Get Started
+          <svg class="btn__arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 9.5 9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <p class="price__inc">What&rsquo;s included</p>
+        <ul class="price__list">
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Clean, responsive website — 1–5 pages</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Mobile-first design, not a squeezed desktop</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Contact form</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Basic SEO setup</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Google-friendly structure</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>SSL &amp; security</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Hosting &amp; maintenance</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Minor ongoing updates</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Email support</span></li>
+        </ul>
+      </article>
+
+      <article class="price price--featured inverted" data-reveal="fade" style="--reveal-delay:90ms">
+        <span class="price__tag">Most popular</span>
+        <div class="price__head">
+          <p class="price__kind">Advanced website</p>
+          <h3 class="price__name">Growth</h3>
+          <p class="price__for">For businesses that want a site that actively brings in work, not one that just sits there looking tidy.</p>
+        </div>
+        <div class="price__cost">
+          <p class="price__from">Starting at</p>
+          <p class="price__amount"><b>$2,499</b><span>setup</span></p>
+          <p class="price__mo">then <b>$99</b> / month</p>
+        </div>
+        <a class="btn btn--accent" href="#contact">Build My Website
+          <svg class="btn__arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 9.5 9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <p class="price__inc">Everything in Launch, plus</p>
+        <ul class="price__list">
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>5–10 pages</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Custom design built around the business</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Advanced SEO setup</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Google Business Profile integration</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Analytics &amp; plain-English reporting</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Lead-generation forms &amp; calls-to-action</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Review integration</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Performance optimization</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Expanded monthly edits</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Priority support</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Advanced functionality to suit the business</span></li>
+        </ul>
+      </article>
+
+      <article class="price" data-reveal="fade" style="--reveal-delay:180ms">
+        <div class="price__head">
+          <p class="price__kind">Premium website</p>
+          <h3 class="price__name">Authority</h3>
+          <p class="price__for">For businesses that want a fully custom, high-end digital presence — and intend to lead their market.</p>
+        </div>
+        <div class="price__cost">
+          <p class="price__from">Starting at</p>
+          <p class="price__amount"><b>$4,999</b><span>setup</span></p>
+          <p class="price__mo">then <b>$249</b> / month</p>
+        </div>
+        <a class="btn btn--ghost" href="#contact">Request a Quote
+          <svg class="btn__arrow" width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2.5 9.5 9.5 2.5M9.5 2.5H4M9.5 2.5V8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <p class="price__inc">Everything in Growth, plus</p>
+        <ul class="price__list">
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Fully bespoke design &amp; build</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Advanced animation &amp; interaction</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Custom functionality</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Larger or more complex sites</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Advanced conversion optimization</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Stronger local SEO features</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Integrations &amp; automations</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Ongoing website improvements</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Priority maintenance</span></li>
+          <li><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.4 6.2 11.6 13 4.8"/></svg><span>Premium support &amp; continued optimization</span></li>
+        </ul>
+      </article>
+
+    </div>
+
+    <p class="price-note" data-reveal="fade">These are starting points, not rigid tiers. Final pricing depends on page count, custom features, integrations, e-commerce, booking systems, automation, and how much content needs writing. You&rsquo;ll get a fixed number in writing before anything begins.</p>
+
+    <div class="price-statement" data-reveal>
+      <p>Every site is <span class="ital">designed around the business</span> — never a template with your logo dropped into it.</p>
+      <p class="lede">That is the whole reason these numbers look the way they do, and the reason the work holds up next to agencies charging several times more.</p>
     </div>
   </div>
 </section>
@@ -746,6 +869,7 @@
         <ul class="foot__list">
           <li><a href="#work">Work</a></li>
           <li><a href="#services">Services</a></li>
+          <li><a href="#pricing">Pricing</a></li>
           <li><a href="#difference">About</a></li>
           <li><a href="#process">Process</a></li>
           <li><a href="#contact">Contact</a></li>

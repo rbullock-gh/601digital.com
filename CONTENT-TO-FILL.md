@@ -74,6 +74,13 @@ If any of these is wrong, change the copy rather than leaving it:
 - **Services** — Website Design & Development, Brand Presentation, Search
   Visibility, Google Business Profile, Conversion-Focused Design, Website Care.
   Remove any you do not actually offer.
+- **Pricing** — Launch $999 + $49/mo, Growth $2,499 + $99/mo, Authority
+  $4,999 + $249/mo, all framed as "Starting at". Every feature listed in a tier
+  is a commitment you are making in public, so read the three lists once more
+  before launch — particularly "Expanded monthly edits", "Priority support" and
+  "Priority maintenance", which are promises about your time. The prices are
+  also published in the page's structured data, so they can surface in search
+  results; update both if they change.
 
 ## 3. Deliberately left open
 

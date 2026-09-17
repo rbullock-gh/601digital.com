@@ -1281,7 +1281,7 @@ body.menu-open { overflow: hidden; }
 /* Keep the decorative frame clear of the stat row. */
 .stack__item--back { inset: -3.5% -6% auto auto; }
 .hero__stage { margin-top: clamp(3.5rem, 2rem + 6vw, 7rem); }
-/* Multi-line eyebrows: align the rule to the first line, not the block centre. */
+/* Multi-line eyebrows: align the rule to the first line, not the block center. */
 .eyebrow { align-items: flex-start; }
 .eyebrow::before { margin-top: .62em; }
 /* Give the stat row room so labels never collide with the stack. */
@@ -1298,13 +1298,13 @@ body.menu-open { overflow: hidden; }
 /* A hero image should support the headline, not swallow the page. */
 .mini--premium .mini__shot { aspect-ratio: 3 / 2; }
 
-/* In the split view the divider sits centre-screen, so mirror the "after" hero:
+/* In the split view the divider sits center-screen, so mirror the "after" hero:
    image left, headline right — the redesigned message stays readable at rest. */
 .ba__layer .mini--premium .mini__hero { grid-template-columns: minmax(0, .95fr) minmax(0, 1.05fr); }
 .ba__layer .mini--premium .mini__hero > div:not(.mini__shot) { order: 2; }
 .ba__layer .mini--premium .mini__hero > .mini__shot { order: 1; }
 
-/* Keep the 601 numeral and its caption together at the dial's centre. */
+/* Keep the 601 numeral and its caption together at the dial's center. */
 .roots__dial { align-content: center; }
 .roots__caption { margin-top: .75rem; }
 
@@ -1405,3 +1405,120 @@ body.menu-open { overflow: hidden; }
 .mini--premium .mini__ic s svg, .mini--premium .mini__badge s svg { width: 56%; height: auto; }
 .mini--premium .mini__ic:nth-child(2) s, .mini--premium .mini__ic:nth-child(4) s { color: #3F6B52; }
 .mini--premium .mini__badge s { color: #B4762A; }
+
+/* ==========================================================================
+   PRICING
+   Light cards on a sunk ivory ground; the featured tier borrows `.inverted`
+   so its whole token set flips to forest, and takes champagne for its accents.
+   ========================================================================== */
+.section--sunk { background: var(--bg-sunk); }
+
+.pricing { display: grid; gap: var(--gutter); align-items: start; }
+@media (min-width: 940px) {
+  .pricing { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(1rem, 1.6vw, 1.75rem); }
+}
+
+.price {
+  position: relative;
+  background: #FFFDF8;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+  display: grid; gap: 1.5rem; align-content: start;
+  transition: transform .6s var(--ease-out), border-color .45s ease, box-shadow .6s var(--ease-out);
+  will-change: transform;
+}
+.price:hover, .price:focus-within {
+  border-color: color-mix(in oklab, var(--accent) 45%, var(--line));
+  box-shadow: 0 18px 50px -26px rgba(18,20,18,.3);
+}
+@media (min-width: 940px) { .price:hover, .price:focus-within { transform: translateY(-6px); } }
+
+.price--featured {
+  background: var(--bg);
+  border-color: transparent;
+  box-shadow: 0 28px 72px -32px rgba(18,20,18,.6);
+}
+@media (min-width: 940px) {
+  .price--featured { transform: translateY(-1.5rem); }
+  .price--featured:hover, .price--featured:focus-within { transform: translateY(-2.1rem); }
+}
+
+.price__tag {
+  position: absolute; top: -.8125rem; left: 50%;
+  transform: translateX(-50%);
+  background: var(--champagne); color: var(--forest);
+  padding: .4375rem .9375rem; border-radius: 999px;
+  font-family: var(--font-sans); font-size: var(--t-micro); font-weight: 600;
+  letter-spacing: .2em; text-transform: uppercase; white-space: nowrap;
+  box-shadow: 0 8px 20px -8px rgba(18,20,18,.55);
+}
+
+.price__head { display: grid; gap: .625rem; }
+.price__kind {
+  font-family: var(--font-sans); font-size: var(--t-micro); font-weight: 500;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--fg-faint);
+}
+.price__name {
+  font-family: var(--font-display);
+  font-size: var(--t-display-s); font-weight: 500;
+  line-height: 1; letter-spacing: -0.012em;
+}
+.price__for { font-size: var(--t-small); line-height: 1.6; color: var(--fg-muted); text-wrap: pretty; }
+
+.price__cost {
+  border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  padding-block: 1.5rem; display: grid; gap: .625rem;
+}
+.price__from {
+  font-family: var(--font-sans); font-size: var(--t-micro); font-weight: 500;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--fg-faint);
+}
+.price__amount { display: flex; align-items: baseline; gap: .5rem; flex-wrap: wrap; }
+.price__amount b {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 1.8rem + 2.2vw, 3.625rem);
+  font-weight: 500; line-height: .88; letter-spacing: -0.022em;
+}
+.price__amount span { font-size: var(--t-small); color: var(--fg-faint); }
+.price__mo { font-size: var(--t-small); color: var(--fg-muted); }
+.price__mo b { font-weight: 550; color: var(--fg); }
+
+.price__inc {
+  font-family: var(--font-sans); font-size: var(--t-micro); font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--fg-faint);
+  line-height: 1.5;
+}
+.price__list { display: grid; gap: .8125rem; }
+.price__list li {
+  display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .75rem;
+  align-items: start;
+  font-size: var(--t-small); line-height: 1.55; color: var(--fg-muted);
+}
+.price__list svg { width: 14px; height: 14px; margin-top: .3em; color: var(--accent); flex: none; }
+.price--featured .price__list svg { color: var(--champagne); }
+.price .btn { width: 100%; }
+
+/* champagne CTA reads louder than green on the forest card */
+.price--featured .btn--accent { --btn-bg: var(--champagne); --btn-fg: var(--forest); }
+.price--featured .btn--accent::after { background: var(--ivory); }
+.price--featured .btn--accent:hover, .price--featured .btn--accent:focus-visible { color: var(--forest); }
+
+.price-note {
+  margin: clamp(2.25rem, 1.5rem + 2.4vw, 3.5rem) auto 0;
+  max-width: 72ch; text-align: center;
+  font-size: var(--t-small); line-height: 1.7; color: var(--fg-muted); text-wrap: pretty;
+}
+.price-statement {
+  margin-top: clamp(3rem, 2rem + 3vw, 5rem);
+  padding-top: clamp(2.5rem, 1.8rem + 2.4vw, 4rem);
+  border-top: 1px solid var(--line);
+  display: grid; justify-items: center; gap: 1.25rem; text-align: center;
+}
+/* the display treatment is for the statement itself, not the supporting line */
+.price-statement > p:not(.lede) {
+  font-family: var(--font-display);
+  font-size: var(--t-display-m); line-height: 1.14; letter-spacing: -0.014em;
+  max-width: 22ch; text-wrap: balance;
+}
+.price-statement .lede { max-width: 54ch; margin: 0; }
