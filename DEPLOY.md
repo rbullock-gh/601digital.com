@@ -94,19 +94,55 @@ set up, and you will lose enquiries.
 
 ---
 
-## Step 4 — After it is live
+## Step 4 — Getting found when someone searches "601digital.com"
 
-- **Google Search Console** — add `601digital.com`, verify with the DNS record
-  it gives you, and submit `https://601digital.com/sitemap.xml`.
-- **Google Business Profile** — create or claim one for 601 Digital. You sell
-  local search; not having your own profile is the first thing a sharp prospect
-  will notice.
-- **Check the social card** — paste the URL into a message to yourself and
-  confirm `assets/img/og.png` renders.
+Publishing the site does not put it in Google. Nothing indexes a brand-new
+domain on its own for a while, so this step is what actually answers the
+question.
+
+1. **Google Search Console** — <https://search.google.com/search-console>.
+   Add a **Domain** property for `601digital.com` (not the URL-prefix option;
+   the domain property covers both `www` and non-`www`, http and https). It
+   gives you a TXT record to add at your registrar. Verification usually
+   completes within minutes of the DNS record propagating.
+
+2. **Submit the sitemap** — in Search Console, Sitemaps → enter `sitemap.xml`.
+   The file is already at `https://601digital.com/sitemap.xml` and `robots.txt`
+   already points at it.
+
+3. **Request indexing** — URL Inspection → paste `https://601digital.com/` →
+   Request Indexing. This is the part that actually hurries it along.
+
+4. **Bing Webmaster Tools** — <https://www.bing.com/webmasters>. You can import
+   straight from Search Console, so it takes about a minute. Bing feeds
+   DuckDuckGo and Copilot.
+
+**What to expect.** Searching the literal string `601digital.com` is the
+easiest possible query to rank for — it is your exact domain and there is no
+competition for it. Once the page is indexed it should come up first. Typical
+timeline after requesting indexing is a few days; it can be same-day or it can
+take two weeks. Nothing is wrong if it does not appear immediately.
+
+You can check progress at any time by searching `site:601digital.com` in
+Google. No results means it is not indexed yet; one result means you are done.
+
+5. **Google Business Profile** — <https://business.google.com>. Create or claim
+   one for 601 Digital. You sell local search; not having your own profile is
+   the first thing a sharp prospect notices. It is also the single biggest
+   factor in showing up for "web design near me" style searches.
+
+6. **Check the social card** — paste the URL into a message to yourself and
+   confirm `assets/img/og.png` renders.
+
+## Step 5 — Before you call it finished
+
+- **Wire the contact form** (step 3). Until then every enquiry depends on the
+  visitor having a mail app configured.
 - **Re-read the pricing lists.** Every feature named in a tier is a public
   commitment, particularly the support and maintenance promises.
-
----
+- Two sections are commented out in `index.html` and should come back when you
+  have the content: a second work slot, and testimonials. Both are marked with
+  comment banners explaining how to restore them.
 
 ## Making changes later
 
