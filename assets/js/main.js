@@ -402,6 +402,18 @@
   }
 
   /* ---------------------------------------------------------
+     11b. Hero artwork — gentle parallax so the art settles as you scroll
+     --------------------------------------------------------- */
+  const heroArt = $('[data-hero-art]');
+  if (heroArt && !reduced()) {
+    onScroll(() => {
+      const y = scrollY;
+      if (y > innerHeight * 1.4) return;
+      heroArt.style.transform = `translate3d(0, ${(y * 0.16).toFixed(1)}px, 0)`;
+    });
+  }
+
+  /* ---------------------------------------------------------
      12. CTA glow parallax
      --------------------------------------------------------- */
   const glow = $('[data-glow]');
