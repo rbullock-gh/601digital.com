@@ -8,9 +8,9 @@
 <link rel="preload" href="../assets/fonts/geist-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="../assets/fonts/cormorant-garamond-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-@font-face{font-family:'Geist';src:url('../assets/fonts/geist-latin-wght-normal.woff2') format('woff2-variations');font-weight:100 900;font-display:swap}
-@font-face{font-family:'Cormorant';src:url('../assets/fonts/cormorant-garamond-latin-wght-normal.woff2') format('woff2-variations');font-weight:300 700;font-style:normal;font-display:swap}
-@font-face{font-family:'Cormorant';src:url('../assets/fonts/cormorant-garamond-latin-wght-italic.woff2') format('woff2-variations');font-weight:300 700;font-style:italic;font-display:swap}
+@font-face{font-family:'Geist';src:url('../assets/fonts/geist-latin-wght-normal.woff2') format('woff2');font-weight:100 900;font-display:swap}
+@font-face{font-family:'Cormorant';src:url('../assets/fonts/cormorant-garamond-latin-wght-normal.woff2') format('woff2');font-weight:300 700;font-style:normal;font-display:swap}
+@font-face{font-family:'Cormorant';src:url('../assets/fonts/cormorant-garamond-latin-wght-italic.woff2') format('woff2');font-weight:300 700;font-style:italic;font-display:swap}
 :root{
   --pine:#173C2E; --pine-2:#2F6B4B; --cream:#FAF8F1; --sand:#EDE8DB;
   --bark:#121A16; --muted:#63736D; --line:#E4DFD1; --gold:#C8A96B;
@@ -28,11 +28,11 @@ ul{list-style:none;padding:0}
 .util{background:var(--pine);color:#CFE0D8;font-size:.75rem}
 .util .w{display:flex;justify-content:space-between;gap:1rem;padding-block:.5rem;flex-wrap:wrap}
 .util b{color:#fff;font-weight:500}
-header{position:sticky;top:0;z-index:9;background:rgba(251,249,244,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+header{position:sticky;top:0;z-index:9;background:rgba(251,249,244,.88);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
 header .w{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding-block:.875rem}
 .brand{display:flex;align-items:center;gap:.625rem;font-weight:600;font-size:1rem;letter-spacing:-.03em;line-height:1.15}
 .brand svg{width:30px;height:30px;flex:none}
-.brand span{display:block;font-size:.625rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);ui-monospace,Menlo,monospace}
+.brand span{display:block;font-size:.625rem;font-weight:400;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-family:ui-monospace,Menlo,monospace}
 nav ul{display:flex;gap:1.375rem;font-size:.8125rem;color:#41524C}
 @media(max-width:720px){nav{display:none}}
 .cta{background:var(--pine);color:#fff;padding:.625rem 1.125rem;border-radius:999px;font-size:.8125rem;font-weight:500;white-space:nowrap}

@@ -218,7 +218,7 @@
       fromEvent(e);
     });
     frame.addEventListener('pointermove', e => { if (dragging) fromEvent(e); });
-    const stop = e => { dragging = false; frame.releasePointerCapture?.(e.pointerId); };
+    const stop = e => { dragging = false; if (frame.hasPointerCapture?.(e.pointerId)) frame.releasePointerCapture(e.pointerId); };
     frame.addEventListener('pointerup', stop);
     frame.addEventListener('pointercancel', stop);
     frame.addEventListener('lostpointercapture', () => { dragging = false; });
