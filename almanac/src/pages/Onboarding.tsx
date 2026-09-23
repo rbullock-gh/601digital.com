@@ -52,7 +52,7 @@ export function Onboarding() {
           <div className="form-grid">
             <div className="field span-2">
               <label htmlFor="ob-name">What should Almanac call you?</label>
-              <input id="ob-name" className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Chris" autoFocus />
+              <input id="ob-name" className="input" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ryan" autoFocus />
             </div>
             <div className="field">
               <label htmlFor="ob-rate">Default hourly rate</label>

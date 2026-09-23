@@ -48,7 +48,7 @@ export function generateSample(db: Database.Database, photosDir: string, root: s
   db.transaction(() => {
     // ── Settings ──
     const settings: Record<string, unknown> = {
-      name: 'Chris', defaultRateCents: 3500, currency: 'USD', weekStart: 1, dateFormat: 'MDY', timeFormat: '12',
+      name: 'Ryan', defaultRateCents: 3500, currency: 'USD', weekStart: 1, dateFormat: 'MDY', timeFormat: '12',
       weightUnit: 'lb', lengthUnit: 'in', photoDay: 1, onboarded: true, weeklyWorkoutTarget: 4,
     };
     for (const [k, v] of Object.entries(settings)) ins('INSERT INTO settings (key, value) VALUES (?, ?)', k, JSON.stringify(v));

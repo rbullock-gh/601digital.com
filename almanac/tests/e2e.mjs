@@ -85,10 +85,10 @@ const toast = (text) => page.locator('.toast', { hasText: text }).first().waitFo
 
 await step('Onboarding: start fresh with real data', async () => {
   await page.goto(BASE);
-  await page.getByLabel('What should Almanac call you?').fill('Chris');
+  await page.getByLabel('What should Almanac call you?').fill('Ryan');
   await page.getByRole('button', { name: /Start fresh/ }).click();
   await page.locator('.greeting h1').waitFor();
-  assert.match(await page.locator('.greeting h1').innerText(), /Chris/);
+  assert.match(await page.locator('.greeting h1').innerText(), /Ryan/);
   const b = await api('/bootstrap');
   assert.equal(b.mode, 'real');
 });
@@ -454,7 +454,7 @@ await step('Application restart keeps all data', async () => {
   assert.equal(after.today.minutes, before.today.minutes);
   assert.equal(after.month.totals.workouts, 2);
   await page.goto(BASE + '/');
-  await page.locator('.greeting h1', { hasText: 'Chris' }).waitFor();
+  await page.locator('.greeting h1', { hasText: 'Ryan' }).waitFor();
 });
 
 await browser.close();
