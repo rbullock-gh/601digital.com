@@ -1,0 +1,223 @@
+/* ── Year at a glance ─────────────────────────────────────────────────────── */
+
+.year-grid {
+  --cell-gap: 3px;
+  --month-w: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--cell-gap);
+  width: 100%;
+  user-select: none;
+}
+.yg-row {
+  display: grid;
+  grid-template-columns: var(--month-w) repeat(31, minmax(0, 1fr));
+  gap: var(--cell-gap);
+  align-items: center;
+  animation: rise-in 520ms var(--ease-out) backwards;
+}
+.yg-head {
+  animation: none;
+  margin-bottom: 2px;
+}
+.yg-month {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--text-3);
+}
+.yg-daynum {
+  font-size: 10px;
+  color: var(--text-4);
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.yg-cell {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 4px;
+  background: var(--unrated);
+  transition:
+    transform var(--t-fast) var(--ease),
+    background-color var(--t) var(--ease),
+    box-shadow var(--t-fast);
+}
+button.yg-cell {
+  cursor: pointer;
+}
+button.yg-cell:hover {
+  transform: scale(1.22);
+  z-index: 2;
+  box-shadow: 0 0 0 2px var(--surface), var(--shadow-md);
+}
+button.yg-cell:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 1px;
+  z-index: 3;
+}
+.yg-cell.none {
+  background: transparent;
+}
+.yg-cell.future {
+  background: var(--future);
+  box-shadow: inset 0 0 0 1px var(--future-border);
+}
+.yg-cell.r3 {
+  background: var(--good);
+}
+.yg-cell.r2 {
+  background: var(--okay);
+}
+.yg-cell.r1 {
+  background: var(--bad);
+}
+.yg-cell.today {
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 3.5px var(--text);
+  z-index: 1;
+}
+:root[data-theme='tiffany'] .yg-cell.today {
+  box-shadow:
+    0 0 0 2px var(--bg),
+    0 0 0 3.5px var(--accent);
+}
+.yg-cell.selected {
+  box-shadow:
+    0 0 0 2px var(--surface),
+    0 0 0 3.5px var(--focus);
+  z-index: 2;
+}
+.yg-mark {
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 52%;
+  height: 52%;
+  color: #fff;
+  opacity: 0;
+  transition: opacity var(--t-fast);
+}
+.show-gym .yg-mark {
+  opacity: 0.8;
+}
+.show-gym .yg-cell:not(.r1):not(.r2):not(.r3) .yg-mark {
+  color: var(--text-2);
+}
+
+.year-grid.compact {
+  --cell-gap: 2px;
+  --month-w: 12px;
+}
+.year-grid.compact .yg-row {
+  animation: none;
+}
+.year-grid.compact .yg-cell {
+  border-radius: 2px;
+}
+.year-grid.compact .yg-month {
+  font-size: 9px;
+  letter-spacing: 0;
+}
+.year-grid.compact .yg-cell.today {
+  box-shadow: 0 0 0 1.5px var(--text);
+}
+
+@media (max-width: 640px) {
+  .year-grid {
+    --cell-gap: 2px;
+    --month-w: 30px;
+  }
+  .yg-cell {
+    border-radius: 2.5px;
+  }
+  .yg-month {
+    font-size: 9.5px;
+    letter-spacing: 0.04em;
+  }
+  .yg-daynum {
+    font-size: 8.5px;
+  }
+  button.yg-cell:hover {
+    transform: none;
+    box-shadow: none;
+  }
+}
+
+.year-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+.year-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+.year-stat .n {
+  font-size: var(--fs-30);
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.year-stat .l {
+  font-size: var(--fs-12);
+  color: var(--text-3);
+}
+.year-stat .p {
+  font-size: var(--fs-13);
+  color: var(--text-2);
+  font-variant-numeric: tabular-nums;
+}
+.swatch-lg {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  flex: none;
+}
+
+.day-panel {
+  margin-top: 14px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  animation: rise-in var(--t) var(--ease-out);
+}
+.day-panel .tip-row {
+  font-size: var(--fs-13);
+}
+
+.years-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 16px;
+}
+.year-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: border-color var(--t-fast);
+}
+.year-card:hover {
+  border-color: var(--border-strong);
+}
+.year-card h3 {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: var(--fs-30);
+  letter-spacing: 0;
+  line-height: 1;
+}
