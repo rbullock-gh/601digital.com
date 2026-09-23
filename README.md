@@ -25,6 +25,7 @@ assets/fonts/                           Self-hosted woff2 (Cormorant Garamond, G
 assets/img/og.png                       1200×630 social card
 work/demo-preview.html                  Scrollable demonstration build shown in the portfolio frame
 CONTENT-TO-FILL.md                      Placeholders + unverified claims — read before launch
+almanac/                                Separate private app (not part of the site) — see almanac/README.md
 ```
 
 ## Design system

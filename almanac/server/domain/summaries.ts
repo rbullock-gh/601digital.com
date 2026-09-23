@@ -37,7 +37,7 @@ function comparable(r: Range, today: ISODate, shift: (d: ISODate) => ISODate): R
 function projection(earned: number, r: Range, today: ISODate) {
   const total = diffDays(r.start, r.end) + 1;
   const elapsed = Math.min(total, diffDays(r.start, today) + 1);
-  if (elapsed < 3 || elapsed >= total) return null;
+  if (earned <= 0 || elapsed < 3 || elapsed >= total) return null;
   const perDay = earned / elapsed;
   return { projectedCents: Math.round(perDay * total), perDayCents: Math.round(perDay), elapsedDays: elapsed, totalDays: total };
 }

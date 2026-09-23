@@ -68,7 +68,7 @@ const prevMonth = (() => {
 
 console.log(`Almanac e2e — data in ${DATA}`);
 await startServer();
-const browser = await chromium.launch({ executablePath: process.env.CHROME ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const browser = await chromium.launch({ executablePath: process.env.CHROME || undefined });
 const ctx = await browser.newContext({ viewport: { width: 1360, height: 900 }, acceptDownloads: true });
 const page = await ctx.newPage();
 const errors = [];

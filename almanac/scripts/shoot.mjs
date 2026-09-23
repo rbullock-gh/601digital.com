@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
 const [outDir, theme = 'light', width = '1440', ...paths] = process.argv.slice(2);
 const base = process.env.BASE ?? 'http://127.0.0.1:4321';
 const w = Number(width);
-const browser = await chromium.launch({ executablePath: process.env.CHROME ?? '/opt/pw-browsers/chromium-1194/chrome-linux/chrome' });
+const browser = await chromium.launch({ executablePath: process.env.CHROME || undefined });
 const ctx = await browser.newContext({ viewport: { width: w, height: w < 600 ? 860 : 900 }, deviceScaleFactor: w < 600 ? 2 : 1, hasTouch: w < 600, isMobile: w < 600 });
 await ctx.addInitScript((t) => localStorage.setItem('almanac-theme', t), theme);
 const page = await ctx.newPage();

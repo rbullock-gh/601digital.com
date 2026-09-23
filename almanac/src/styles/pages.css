@@ -3025,3 +3025,65 @@ button.goal-check:hover {
 .danger-card {
   border-color: color-mix(in srgb, var(--bad) 30%, var(--border));
 }
+
+/* ── Mobile refinements ──────────────────────────────────────────────────── */
+
+.reminder > .grow {
+  min-width: 200px;
+}
+.card-head {
+  flex-wrap: wrap;
+  row-gap: 8px;
+}
+.card-head h2 {
+  white-space: nowrap;
+}
+.mini-cal {
+  max-width: 380px;
+}
+@media (max-width: 640px) {
+  .reminder-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+  .photo-timeline {
+    grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+    gap: 8px;
+  }
+  .card-head .sub {
+    flex-basis: 100%;
+    order: 3;
+    margin-top: -6px;
+  }
+  .card-head .actions {
+    margin-left: auto;
+  }
+  .card {
+    padding: 16px;
+  }
+  .greeting h1 {
+    font-size: 2.25rem;
+  }
+}
+@media (max-width: 760px) {
+  .grid-12 > .span-6.keep {
+    grid-column: span 12;
+  }
+}
+.photo-banner > .grow {
+  min-width: 190px;
+}
+@media (max-width: 520px) {
+  .qa-tile {
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 12px;
+  }
+  .qa-tile .qa-sub {
+    display: none;
+  }
+  .template-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
