@@ -256,7 +256,8 @@ export function recomputePRs(exerciseId: number) {
   const bucket = (kg: number) => Math.round(kg * 4) / 4;
   const maxRepsAtOrAbove = (kg: number) => {
     let best = 0;
-    for (const [w, r] of repsAt) if (w >= kg - KG_EPSILON && r > best) best = r;
+    const b = bucket(kg);
+    for (const [w, r] of repsAt) if (w >= b - KG_EPSILON && r > best) best = r;
     return best;
   };
 

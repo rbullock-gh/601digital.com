@@ -97,8 +97,9 @@ export default function ProjectDetail() {
               ariaLabel="Project hours by month"
               data={monthly.map((m) => ({ key: m.month, label: monthName(m.month, true), value: m.minutes }))}
               format={(v) => duration(v)}
-              axisFormat={(v) => `${Math.round(v / 60)}h`}
+              axisFormat={(v) => `${+(v / 60).toFixed(1)}h`}
             tickUnit={60}
+            minMax={60}
               color={p.color ?? 'var(--work)'}
               tooltip={(d) => {
                 const m = monthly.find((x) => x.month === d.key)!;

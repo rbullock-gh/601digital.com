@@ -98,8 +98,9 @@ export default function Work() {
             ariaLabel="Hours worked per week"
             data={w.weeks.map((x) => ({ key: x.start, label: shortDate(x.start).replace(/,.*/, ''), value: x.minutes }))}
             format={(v) => duration(v)}
-            axisFormat={(v) => `${Math.round(v / 60)}h`}
+            axisFormat={(v) => `${+(v / 60).toFixed(1)}h`}
             tickUnit={60}
+            minMax={60}
             highlight={w.weeks[w.weeks.length - 1]?.start}
             color="var(--work)"
             tooltip={(d) => (
@@ -119,6 +120,7 @@ export default function Work() {
             format={(v) => duration(v)}
             axisFormat={(v) => `${Math.round((v / 60) * 10) / 10}h`}
             tickUnit={60}
+            minMax={60}
             color="var(--work)"
             labelEvery={1}
             tooltip={(d) => (
@@ -295,7 +297,7 @@ function SessionsList() {
                 </Link>
                 {ss.map((s) => (
                   <button key={s.id} className="session-row" onClick={() => setEditing(s)}>
-                    <span className="sr-time num">{s.startTime ? `${clock(s.startTime)} – ${clock(s.endTime)}` : 'Duration'}</span>
+                    <span className="sr-time num">{s.startTime ? `${clock(s.startTime)} – ${clock(s.endTime)}` : '—'}</span>
                     <span className="sr-main">
                       <span className="title truncate">{s.description || 'Work session'}</span>
                       <span className="sr-meta">

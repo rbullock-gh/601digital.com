@@ -67,6 +67,7 @@ export function Combobox({ value, onChange, options, placeholder, allowCreate = 
         aria-controls={listId}
         aria-autocomplete="list"
         onFocus={() => setOpen(true)}
+        onBlur={() => window.setTimeout(() => setOpen(false), 120)}
         onChange={(e) => {
           const text = e.target.value;
           const match = options.find((o) => o.label.toLowerCase() === text.trim().toLowerCase()) ?? null;

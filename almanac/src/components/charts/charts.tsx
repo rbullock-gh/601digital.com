@@ -68,13 +68,15 @@ interface BarProps {
   tickUnit?: number;
   /** Counts: only whole-number ticks. */
   integer?: boolean;
+  /** Smallest axis maximum, so tiny values don't produce a meaningless scale. */
+  minMax?: number;
 }
 
-export function BarChart({ data, color = 'var(--work)', height = 200, format, axisFormat, highlight, onSelect, tooltip, labelEvery, target, ariaLabel, tickUnit = 1, integer }: BarProps) {
+export function BarChart({ data, color = 'var(--work)', height = 200, format, axisFormat, highlight, onSelect, tooltip, labelEvery, target, ariaLabel, tickUnit = 1, integer, minMax = 1 }: BarProps) {
   const [ref, width] = useElementWidth<HTMLDivElement>();
   const tip = useTooltip();
   const [hover, setHover] = useState<number | null>(null);
-  const max = Math.max(1, ...data.map((d) => d.value), target?.value ?? 0);
+  const max = Math.max(minMax, ...data.map((d) => d.value), target?.value ?? 0);
   const ticks = niceTicks(max / tickUnit, 3, integer).map((t) => t * tickUnit);
   const top = ticks[ticks.length - 1];
   const fmtAxis = axisFormat ?? format;

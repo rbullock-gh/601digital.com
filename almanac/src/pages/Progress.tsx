@@ -100,8 +100,9 @@ function TabBody({ tab, d, span }: { tab: Tab; d: ProgressData; span: Span }) {
       ariaLabel="Hours worked"
       data={series(d, 'minutes')}
       format={(v) => duration(v)}
-      axisFormat={(v) => `${Math.round(v / 60)}h`}
+      axisFormat={(v) => `${+(v / 60).toFixed(1)}h`}
       tickUnit={60}
+            minMax={60}
       color="var(--work)"
       tooltip={(x) => (
         <>

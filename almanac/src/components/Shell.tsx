@@ -104,7 +104,7 @@ export function Shell({ children }: { children: ReactNode }) {
         ui.setCmdOpen(!ui.cmdOpen);
         return;
       }
-      if (isTyping(e) || e.metaKey || e.ctrlKey || e.altKey || document.querySelector('.dialog')) return;
+      if (isTyping(e) || e.metaKey || e.ctrlKey || e.altKey || document.querySelector('.dialog-scrim:not(.closing)')) return;
       if (e.key === '/') {
         e.preventDefault();
         ui.setCmdOpen(true);

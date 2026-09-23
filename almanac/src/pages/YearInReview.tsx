@@ -188,7 +188,8 @@ export default function YearInReview() {
               </Reveal>
               <Reveal delay={160}>
                 <div className="wrapped-chart">
-                  <BarChart ariaLabel="Hours per month" data={r.months.map((m) => ({ key: m.month, label: monthName(m.month, true), value: m.minutes }))} format={(v) => duration(v)} axisFormat={(v) => `${Math.round(v / 60)}h`} tickUnit={60} color="var(--work)" height={200} />
+                  <BarChart ariaLabel="Hours per month" data={r.months.map((m) => ({ key: m.month, label: monthName(m.month, true), value: m.minutes }))} format={(v) => duration(v)} axisFormat={(v) => `${+(v / 60).toFixed(1)}h`} tickUnit={60}
+            minMax={60} color="var(--work)" height={200} />
                 </div>
               </Reveal>
               {r.projects.length > 0 && (
