@@ -202,7 +202,7 @@ interface PhotoRow {
   height: number | null;
 }
 
-function photoUrl(rel: string, id: number) {
+export function photoUrl(rel: string, id: number) {
   return `/media/${rel.split(path.sep).join('/')}?v=${id}`;
 }
 
@@ -284,6 +284,25 @@ export function mimeFromExt(file: string): string {
   const ext = path.extname(file).slice(1).toLowerCase();
   const found = Object.entries(EXT).find(([, e]) => e === ext || (ext === 'jpeg' && e === 'jpg'));
   return found ? found[0] : 'application/octet-stream';
+}
+
+/** Write an image (and optional thumbnail) under photos/<subdir>, untouched. Returns paths relative to the dataset root. */
+export function writeMedia(subdir: string, stem: string, data: Buffer, mime: string, thumb?: Buffer | null) {
+  const ext = EXT[mime];
+  if (!ext) throw badRequest('Unsupported image type');
+  const store = getStore();
+  const dir = path.join(store.photosDir, subdir);
+  fs.mkdirSync(dir, { recursive: true });
+  const name = `${stem}-${crypto.randomBytes(4).toString('hex')}`;
+  const fileAbs = path.join(dir, `${name}.${ext}`);
+  fs.writeFileSync(fileAbs, data);
+  let thumbRel: string | null = null;
+  if (thumb?.length) {
+    const t = path.join(dir, `${name}.thumb.jpg`);
+    fs.writeFileSync(t, thumb);
+    thumbRel = path.relative(store.root, t);
+  }
+  return { file: path.relative(store.root, fileAbs), thumb: thumbRel };
 }
 
 /**

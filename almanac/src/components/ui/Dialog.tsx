@@ -57,6 +57,8 @@ export function Dialog({ open, onClose, title, subtitle, children, footer, width
     const t = window.setTimeout(() => {
       const el = panel.current;
       if (!el) return;
+      // Someone already moved focus into the dialog: don't yank it away.
+      if (document.activeElement && document.activeElement !== el && el.contains(document.activeElement)) return;
       const target =
         (initialFocus && el.querySelector<HTMLElement>(initialFocus)) ||
         el.querySelector<HTMLElement>('[data-autofocus]') ||

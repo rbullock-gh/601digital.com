@@ -29,6 +29,7 @@ export function Combobox({ value, onChange, options, placeholder, allowCreate = 
   const [active, setActive] = useState(0);
   const listId = useId();
   const wrap = useRef<HTMLDivElement>(null);
+  const blurTimer = useRef(0);
   const q = value.trim().toLowerCase();
   const filtered = useMemo(() => {
     const f = q ? options.filter((o) => o.label.toLowerCase().includes(q)) : options;
@@ -66,8 +67,11 @@ export function Combobox({ value, onChange, options, placeholder, allowCreate = 
         aria-expanded={open && total > 0}
         aria-controls={listId}
         aria-autocomplete="list"
-        onFocus={() => setOpen(true)}
-        onBlur={() => window.setTimeout(() => setOpen(false), 120)}
+        onFocus={() => {
+          window.clearTimeout(blurTimer.current);
+          setOpen(true);
+        }}
+        onBlur={() => (blurTimer.current = window.setTimeout(() => setOpen(false), 120))}
         onChange={(e) => {
           const text = e.target.value;
           const match = options.find((o) => o.label.toLowerCase() === text.trim().toLowerCase()) ?? null;

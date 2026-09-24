@@ -97,6 +97,7 @@ function OneYear({ year }: { year: number }) {
                 { value: 'work', label: 'Work' },
                 { value: 'money', label: 'Money' },
                 { value: 'gym', label: 'Gym' },
+                { value: 'travel', label: 'Travel' },
               ]}
             />
           </>

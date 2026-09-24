@@ -26,12 +26,21 @@ export function goalValue(g: Pick<GoalProgress, 'metric'>, v: number): string {
       return weight(v);
     case 'waist':
       return length(v);
+    case 'screen_time':
+      return duration(v);
     default:
       return num(v, 1);
   }
 }
 
 const PERIOD_LABEL: Record<string, string> = { day: 'Today', week: 'This week', month: 'This month', year: 'This year', custom: 'Custom', target: 'Target' };
+
+/** "current / target", "current → target" for levels, "avg · under target" for limits. */
+export function goalNumbers(g: GoalProgress): [string, string] {
+  if (g.metric === 'screen_time') return [g.current ? `${goalValue(g, g.current)} avg` : 'No data', ` · under ${goalValue(g, g.target)}`];
+  const level = ['weight', 'waist', 'exercise_weight', 'exercise_e1rm'].includes(g.metric);
+  return [goalValue(g, g.current), `${level ? ' → ' : ' / '}${goalValue(g, g.target)}`];
+}
 
 export function goalPeriodLabel(g: GoalProgress): string {
   if (g.period === 'target') return g.endDate ? `By ${shortDate(g.endDate)}` : 'Target';
@@ -61,7 +70,6 @@ export function GoalRow({ g, compact }: { g: GoalProgress; compact?: boolean }) 
       ui.error(e);
     }
   };
-  const level = ['weight', 'waist', 'exercise_weight', 'exercise_e1rm'].includes(g.metric);
   return (
     <div className={`goal-row ${g.done ? 'done' : ''} ${compact ? 'compact' : ''}`} id={`goal-${g.id}`}>
       <div className="goal-top">
@@ -77,7 +85,7 @@ export function GoalRow({ g, compact }: { g: GoalProgress; compact?: boolean }) 
         <span className="goal-title truncate">{g.title}</span>
         {!compact && <span className="goal-period">{goalPeriodLabel(g)}</span>}
         <span className="goal-num num">
-          {manualDaily ? (g.done ? 'Done' : '') : level ? `${goalValue(g, g.current)} → ${goalValue(g, g.target)}` : `${goalValue(g, g.current)} / ${goalValue(g, g.target)}`}
+          {manualDaily ? (g.done ? 'Done' : '') : goalNumbers(g).join('')}
         </span>
         {g.metric === 'manual' && !manualDaily && (
           <button className="btn btn-ghost btn-sm" onClick={add} aria-label="Add one">

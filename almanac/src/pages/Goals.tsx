@@ -9,7 +9,7 @@ import { lFromDisplay, lVal, shortDate, wFromDisplay, wVal } from '../lib/format
 import { Card, Empty, ErrorBox, Meter, PageHead, PageSkeleton } from '../components/ui/primitives.tsx';
 import { Dialog } from '../components/ui/Dialog.tsx';
 import { Field, toCents } from '../features/forms.tsx';
-import { goalPeriodLabel, goalValue } from '../features/shared.tsx';
+import { goalNumbers, goalPeriodLabel } from '../features/shared.tsx';
 import type { GoalProgress } from '../../shared/types.ts';
 
 const GROUPS: { key: string; label: string; match: (g: GoalProgress) => boolean }[] = [
@@ -84,7 +84,6 @@ function GoalCard({ g }: { g: GoalProgress }) {
   const [editing, setEditing] = useState(false);
   const ref = useClickOutside<HTMLDivElement>(() => setMenu(false), menu);
   const manualDaily = g.metric === 'manual' && g.period === 'day';
-  const level = ['weight', 'waist', 'exercise_weight', 'exercise_e1rm'].includes(g.metric);
 
   const act = async (fn: () => Promise<unknown>, msg?: string) => {
     setMenu(false);
@@ -150,11 +149,8 @@ function GoalCard({ g }: { g: GoalProgress }) {
       {!manualDaily && (
         <>
           <div className="gc-value">
-            <span className="num">{goalValue(g, g.current)}</span>
-            <span className="faint num">
-              {level ? ' → ' : ' / '}
-              {goalValue(g, g.target)}
-            </span>
+            <span className="num">{goalNumbers(g)[0]}</span>
+            <span className="faint num">{goalNumbers(g)[1]}</span>
             {g.done ? (
               <span className="badge badge-good" style={{ marginLeft: 'auto' }}>
                 <Check /> {g.completedOn ? `Reached ${shortDate(g.completedOn)}` : 'Done'}
@@ -203,10 +199,10 @@ function GoalCard({ g }: { g: GoalProgress }) {
 function EditGoal({ g, onDone }: { g: GoalProgress; onDone: () => void }) {
   const ui = useUI();
   const toDisplay = (v: number) =>
-    g.metric === 'earnings' ? String(v / 100) : g.metric === 'hours' || g.metric === 'gym_hours' ? String(v / 60) : ['weight', 'exercise_weight', 'exercise_e1rm'].includes(g.metric) ? String(wVal(v)) : g.metric === 'waist' ? String(lVal(v)) : String(v);
+    g.metric === 'earnings' ? String(v / 100) : g.metric === 'hours' || g.metric === 'gym_hours' || g.metric === 'screen_time' ? String(v / 60) : ['weight', 'exercise_weight', 'exercise_e1rm'].includes(g.metric) ? String(wVal(v)) : g.metric === 'waist' ? String(lVal(v)) : String(v);
   const fromDisplay = (s: string) => {
     const n = Number(s);
-    return g.metric === 'earnings' ? toCents(s) ?? 0 : g.metric === 'hours' || g.metric === 'gym_hours' ? n * 60 : ['weight', 'exercise_weight', 'exercise_e1rm'].includes(g.metric) ? wFromDisplay(n) : g.metric === 'waist' ? lFromDisplay(n) : n;
+    return g.metric === 'earnings' ? toCents(s) ?? 0 : g.metric === 'hours' || g.metric === 'gym_hours' || g.metric === 'screen_time' ? n * 60 : ['weight', 'exercise_weight', 'exercise_e1rm'].includes(g.metric) ? wFromDisplay(n) : g.metric === 'waist' ? lFromDisplay(n) : n;
   };
   const [title, setTitle] = useState(g.title);
   const [target, setTarget] = useState(toDisplay(g.target));

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, NotebookPen, Search, Trophy } from 'lucide-react';
+import { ChevronLeft, ChevronRight, MapPin, NotebookPen, Search, Trophy } from 'lucide-react';
 import { api } from '../lib/api.ts';
 import { useBoot } from '../lib/boot.ts';
 import { useUI } from '../lib/ui.tsx';
@@ -136,6 +136,12 @@ export default function Calendar() {
                           {d.prs > 0 && <Trophy className="cal-ico pr" />}
                         </span>
                       )}
+                      {d.travel && (
+                        <span className="cal-line truncate">
+                          <MapPin className="cal-ico travel" />
+                          <span className="truncate">{d.travel}</span>
+                        </span>
+                      )}
                       <span className="cal-foot">
                         {d.goalsTotal > 0 && (
                           <span className={d.goalsDone === d.goalsTotal ? 'pos' : ''}>
@@ -151,6 +157,7 @@ export default function Calendar() {
                       {d.minutes > 0 && <span className="dot" style={{ '--c': 'var(--work)', width: 5, height: 5 } as React.CSSProperties} />}
                       {d.workout && <span className="dot" style={{ '--c': 'var(--fitness)', width: 5, height: 5 } as React.CSSProperties} />}
                       {d.hasJournal && <span className="dot" style={{ '--c': 'var(--text-3)', width: 5, height: 5 } as React.CSSProperties} />}
+                      {d.travel && <span className="dot" style={{ '--c': 'var(--travel)', width: 5, height: 5 } as React.CSSProperties} />}
                     </span>
                   )}
                 </button>

@@ -144,6 +144,22 @@ export default function Dashboard() {
               />
               <Stat size="sm" label="Good days" value={d.week.totals.good} foot={`${d.week.totals.rated} rated`} />
               <Stat size="sm" label="Goals completed" value={d.week.goalsCompleted} />
+              <Link to="/screen-time" className="stat-link">
+                <Stat
+                  size="sm"
+                  label="Screen time"
+                  value={d.week.screen.avg != null ? duration(d.week.screen.avg) : '—'}
+                  foot={
+                    d.week.screen.avg != null && d.week.screenPrev.avg != null ? (
+                      <Delta current={d.week.screen.avg} previous={d.week.screenPrev.avg} goodWhenUp={false} />
+                    ) : d.week.screen.avg != null ? (
+                      'daily average'
+                    ) : (
+                      'Not logged'
+                    )
+                  }
+                />
+              </Link>
             </div>
             <div className="faint" style={{ fontSize: 11, marginTop: 14 }}>Changes compare with the same days of last week.</div>
             <WeekStrip days={weekDays} today={boot.today} />

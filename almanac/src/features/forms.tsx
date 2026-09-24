@@ -786,6 +786,9 @@ export const GOAL_TEMPLATES: Template[] = [
   { label: 'Estimated 1RM', metric: 'exercise_e1rm', period: 'target', target: 250, unit: 'weight', title: (t) => `${t} estimated max` },
   { label: 'Body weight', metric: 'weight', period: 'target', target: 170, unit: 'weight', title: (t) => `Reach ${t}` },
   { label: 'Waist', metric: 'waist', period: 'target', target: 32, unit: 'length', title: (t) => `Waist ${t}` },
+  { label: 'Screen time', metric: 'screen_time', period: 'week', target: 3, unit: 'hours', title: (t) => `Screen time under ${t} hours a day` },
+  { label: 'Trips', metric: 'trips', period: 'year', target: 4, unit: 'count', title: (t, p) => `Take ${t} trips ${p}` },
+  { label: 'New places', metric: 'new_places', period: 'year', target: 3, unit: 'count', title: (t, p) => `Visit ${t} new places ${p}` },
   { label: 'Custom habit', metric: 'manual', period: 'day', target: 1, unit: 'count', title: () => '' },
 ];
 
@@ -920,7 +923,7 @@ export function GoalForm({ onDone }: { onDone: () => void }) {
           <Combobox id="g-proj" value={project} onChange={(t) => setProject(t)} options={projects} allowCreate={false} placeholder="All work" />
         </Field>
       )}
-      <Field label="Name" htmlFor="g-title" hint={tpl.metric !== 'manual' ? 'Progress updates automatically from your data.' : 'You’ll check this off yourself.'}>
+      <Field label="Name" htmlFor="g-title" hint={tpl.metric === 'screen_time' ? 'Your average over the days you log. Lower is better — the period passes when the average stays under the target.' : tpl.metric !== 'manual' ? 'Progress updates automatically from your data.' : 'You’ll check this off yourself.'}>
         <input id="g-title" className="input" value={title} onChange={(e) => setTitle(e.target.value)} placeholder={tpl.metric === 'manual' ? 'Read 20 pages' : suggested} />
       </Field>
       {err && <div className="field-error">{err}</div>}

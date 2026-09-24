@@ -185,6 +185,16 @@ export function metricByDay(
                AND (SELECT COUNT(DISTINCT angle) FROM photos p WHERE p.set_id = ps.id AND p.deleted_at IS NULL
                      AND p.angle IN ('front', 'side', 'back')) = 3`;
       break;
+    case 'screen_time':
+      sql = 'SELECT date, minutes v FROM screen_time WHERE date >= ? AND date <= ?';
+      break;
+    case 'trips':
+      sql = 'SELECT start_date date, COUNT(*) v FROM visits WHERE deleted_at IS NULL AND start_date >= ? AND start_date <= ? GROUP BY start_date';
+      break;
+    case 'new_places':
+      sql = `SELECT first date, COUNT(*) v FROM (SELECT v.place_id, MIN(v.start_date) first FROM visits v JOIN places p ON p.id = v.place_id
+               WHERE v.deleted_at IS NULL AND p.deleted_at IS NULL GROUP BY v.place_id) WHERE first >= ? AND first <= ? GROUP BY first`;
+      break;
     case 'manual':
       sql = 'SELECT date, SUM(value) v FROM goal_checkins WHERE date >= ? AND date <= ? AND goal_id = ? GROUP BY date';
       args.push(opts.goalId ?? -1);

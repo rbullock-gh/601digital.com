@@ -93,6 +93,12 @@ export function yearInReview(year: number, today: ISODate) {
         WHERE w.deleted_at IS NULL AND w.date >= ? AND w.date <= ? GROUP BY e.id ORDER BY sessions DESC, sets DESC LIMIT 1`,
     )
     .get(r.start, r.end) as { name: string; sessions: number; sets: number } | undefined;
+  const screenMonths = db()
+    .prepare('SELECT substr(date, 1, 7) month, AVG(minutes) avg, COUNT(*) logged FROM screen_time WHERE date >= ? AND date <= ? GROUP BY month ORDER BY month')
+    .all(r.start, r.end) as { month: string; avg: number; logged: number }[];
+  const visionAchieved = db()
+    .prepare('SELECT id, title, body, achieved_on achievedOn FROM vision_items WHERE deleted_at IS NULL AND achieved_on >= ? AND achieved_on <= ? ORDER BY achieved_on')
+    .all(r.start, r.end) as { id: number; title: string | null; body: string | null; achievedOn: string }[];
 
   return {
     kind: 'year' as const,
@@ -109,6 +115,8 @@ export function yearInReview(year: number, today: ISODate) {
     lastPhotos,
     grid: yearGrid(year, today),
     longestStreak: longestGoodStreak(r),
+    screenMonths,
+    visionAchieved,
     answers: getAnswers('year', r.start),
   };
 }

@@ -34,6 +34,9 @@ const WeeklyReview = lazy(() => import('./pages/WeeklyReview.tsx'));
 const MonthlyReview = lazy(() => import('./pages/MonthlyReview.tsx'));
 const YearInReview = lazy(() => import('./pages/YearInReview.tsx'));
 const Settings = lazy(() => import('./pages/Settings.tsx'));
+const Vision = lazy(() => import('./pages/Vision.tsx'));
+const Travel = lazy(() => import('./pages/Travel.tsx'));
+const ScreenTime = lazy(() => import('./pages/ScreenTime.tsx'));
 
 function Splash() {
   return (
@@ -111,6 +114,9 @@ export function App() {
                 <Route path="/reviews/week/:date" element={<WeeklyReview />} />
                 <Route path="/reviews/month/:month" element={<MonthlyReview />} />
                 <Route path="/wrapped/:year" element={<YearInReview />} />
+                <Route path="/vision" element={<Vision />} />
+                <Route path="/travel" element={<Travel />} />
+                <Route path="/screen-time" element={<ScreenTime />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

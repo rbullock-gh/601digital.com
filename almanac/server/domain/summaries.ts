@@ -8,6 +8,8 @@ import { currentGoodStreak, ratingStats } from './days.ts';
 import { listPRs, listWorkouts, strengthChanges, topExercises, workoutExerciseNames } from './fitness.ts';
 import { bodyChanges, bodySeries, latestBody, monthPhotoStatus, BODY_FIELDS } from './body.ts';
 import { getSettings } from './settings.ts';
+import { screenAverage } from './screentime.ts';
+import { travelStats, visitsIn } from './travel.ts';
 import { listAccomplishments } from './days.ts';
 import {
   addDays,
@@ -87,6 +89,8 @@ export function dashboard(today: ISODate) {
       previous: wPrev,
       goalsCompleted: goalsCompleted(week, today, s.weekStart).length,
       workoutTarget: s.weeklyWorkoutTarget,
+      screen: screenAverage({ start: week.start, end: today }),
+      screenPrev: screenAverage(comparable(week, today, (d) => addDays(d, -7))),
     },
     month: {
       range: month,
@@ -413,6 +417,10 @@ export function periodReport(r: Range, today: ISODate) {
     strength: strengthChanges(r.start, end, 5),
     avgRate: t.minutes ? Math.round((t.earnedCents * 60) / t.minutes) : null,
     daysInPeriod: diffDays(r.start, r.end) + 1,
+    screen: screenAverage({ start: r.start, end: end }),
+    screenPrev: screenAverage({ start: addDays(r.start, -(diffDays(r.start, r.end) + 1)), end: addDays(r.start, -1) }),
+    travel: visitsIn(r),
+    travelStats: travelStats(today, r),
   };
 }
 

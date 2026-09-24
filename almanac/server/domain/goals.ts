@@ -22,8 +22,10 @@ import {
 import type { Goal, GoalInput, GoalMetric, GoalPeriod, GoalProgress } from '../../shared/types.ts';
 
 const SUMMABLE: GoalMetric[] = [
-  'earnings', 'hours', 'workouts', 'work_days', 'good_days', 'gym_hours', 'prs', 'projects_completed', 'photos', 'manual',
+  'earnings', 'hours', 'workouts', 'work_days', 'good_days', 'gym_hours', 'prs', 'projects_completed', 'photos', 'trips', 'new_places', 'manual',
 ];
+/** "Stay under" goals: the daily average over logged days must not exceed the target. */
+const UNDER: GoalMetric[] = ['screen_time'];
 const LEVEL: GoalMetric[] = ['weight', 'waist', 'exercise_weight', 'exercise_e1rm'];
 const HISTORY: Record<PeriodKind, number> = { day: 14, week: 12, month: 12, year: 5 };
 
@@ -146,7 +148,49 @@ function clip(r: Range, w: Range): Range | null {
   return start <= end ? { start, end } : null;
 }
 
+/** Average of logged days in a range, and whether it stays under the target. */
+function underInstance(g: Goal, r: Range | null): { current: number; logged: number; done: boolean; pct: number } {
+  if (!r) return { current: 0, logged: 0, done: false, pct: 0 };
+  const m = sumOver(g, r);
+  const logged = m.size;
+  const current = logged ? sumMap(m) / logged : 0;
+  const done = logged > 0 && current <= g.target;
+  return { current, logged, done, pct: logged ? Math.min(1, g.target / Math.max(1, current)) : 0 };
+}
+
+function evaluateUnder(g: Goal, today: ISODate, weekStart: number, withHistory: boolean): GoalProgress {
+  if (!g.recurring || g.period === 'custom' || g.period === 'target') {
+    const w = clip({ start: g.startDate ?? '0000-01-01', end: g.endDate ?? '9999-12-31' }, { start: '0000-01-01', end: today });
+    const x = underInstance(g, w);
+    return { ...g, current: x.current, pct: x.pct, done: x.done, periodStart: g.startDate, periodEnd: g.endDate, completedOn: null };
+  }
+  const kind = g.period as PeriodKind;
+  const win = activeWindow(g, today);
+  const cur = periodRange(kind, today, weekStart);
+  const x = underInstance(g, clip({ start: cur.start, end: minDate(cur.end, today) }, win));
+  const out: GoalProgress = { ...g, current: x.current, pct: x.pct, done: x.done, periodStart: cur.start, periodEnd: cur.end };
+  if (withHistory) {
+    const history: { start: ISODate; done: boolean }[] = [];
+    for (let i = HISTORY[kind] - 1; i >= 0; i--) {
+      const r = periodRange(kind, shiftPeriod(kind, today, -i), weekStart);
+      const c = clip({ start: r.start, end: minDate(r.end, today) }, win);
+      if (!c) continue;
+      history.push({ start: r.start, done: underInstance(g, c).done });
+    }
+    out.history = history;
+    let streak = 0;
+    for (let i = history.length - 1; i >= 0; i--) {
+      if (i === history.length - 1 && !history[i].done) continue;
+      if (history[i].done) streak++;
+      else break;
+    }
+    out.streak = streak;
+  }
+  return out;
+}
+
 export function evaluate(g: Goal, today: ISODate, weekStart: number, withHistory = true): GoalProgress {
+  if (UNDER.includes(g.metric)) return evaluateUnder(g, today, weekStart, withHistory);
   // Level goals: reach a value (bodyweight, waist, a lift).
   if (LEVEL.includes(g.metric)) {
     const current = levelAt(g, today) ?? g.baseline ?? 0;
@@ -249,12 +293,14 @@ export function goalsForDay(date: ISODate, today: ISODate, _weekStart?: number):
   ).map(mapGoal);
   if (date > today) return [];
   return rows.map((g) => {
-    const v = sumMap(sumOver(g, { start: date, end: date }));
+    const m = sumOver(g, { start: date, end: date });
+    const v = sumMap(m);
+    const under = UNDER.includes(g.metric);
     return {
       ...g,
       current: v,
-      pct: g.target > 0 ? Math.min(1, v / g.target) : 0,
-      done: v >= g.target,
+      pct: under ? (m.size ? Math.min(1, g.target / Math.max(1, v)) : 0) : g.target > 0 ? Math.min(1, v / g.target) : 0,
+      done: under ? m.size > 0 && v <= g.target : v >= g.target,
       periodStart: date,
       periodEnd: date,
       checkedToday: g.metric === 'manual' ? v > 0 : undefined,
@@ -277,7 +323,8 @@ export function dailyGoalCounts(r: Range, today: ISODate): Map<string, { done: n
     for (const d of eachDay(w.start, w.end)) {
       const c = out.get(d) ?? { done: 0, total: 0 };
       c.total++;
-      if ((m.get(d) ?? 0) >= g.target) c.done++;
+      const v = m.get(d);
+      if (UNDER.includes(g.metric) ? v != null && v <= g.target : (v ?? 0) >= g.target) c.done++;
       out.set(d, c);
     }
   }
@@ -306,6 +353,16 @@ export function goalsCompleted(r: Range, today: ISODate, weekStart: number): Com
       const win = activeWindow(g, today);
       const span = clip({ start: periodRange(kind, r.start, weekStart).start, end: minDate(r.end, today) }, win);
       if (!span) continue;
+      if (UNDER.includes(g.metric)) {
+        // An "under" goal is only met once its period is over.
+        let cur = periodRange(kind, r.start, weekStart);
+        while (cur.start <= r.end && cur.end < today) {
+          const c = cur.start >= r.start ? clip(cur, win) : null;
+          if (c && underInstance(g, c).done) out.push({ id: g.id, title: g.title, metric: g.metric, period: g.period, date: cur.end });
+          cur = periodRange(kind, addDays(cur.end, 1), weekStart);
+        }
+        continue;
+      }
       const m = sumOver(g, span);
       let cursor = periodRange(kind, r.start, weekStart);
       while (cursor.start <= r.end && cursor.start <= today) {
@@ -337,7 +394,7 @@ export function goalsCompleted(r: Range, today: ISODate, weekStart: number): Com
 function validate(input: GoalInput) {
   if (!input.title?.trim()) throw badRequest('Give the goal a name');
   if (!(input.target > 0)) throw badRequest('Set a target');
-  const metrics: GoalMetric[] = [...SUMMABLE, ...LEVEL];
+  const metrics: GoalMetric[] = [...SUMMABLE, ...LEVEL, ...UNDER];
   if (!metrics.includes(input.metric)) throw badRequest('Unknown goal type');
   if (!['day', 'week', 'month', 'year', 'custom', 'target'].includes(input.period)) throw badRequest('Unknown period');
   if (LEVEL.includes(input.metric) && input.period !== 'target') throw badRequest('That goal is a target, not a period');

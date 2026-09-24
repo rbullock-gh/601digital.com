@@ -108,6 +108,16 @@ export function search(q: string, today: ISODate): SearchResult[] {
   for (const e of db().prepare('SELECT id, name FROM exercises WHERE name LIKE ? LIMIT 6').all(like) as { id: number; name: string }[])
     out.push({ kind: 'exercise', title: e.name, subtitle: 'Exercise history', href: `/gym/exercises/${e.id}` });
 
+  for (const p of db()
+    .prepare("SELECT id, name, region, country, status FROM places WHERE deleted_at IS NULL AND (name LIKE ? OR region LIKE ? OR country LIKE ?) LIMIT 6")
+    .all(like, like, like) as { id: number; name: string; region: string | null; country: string | null; status: string }[])
+    out.push({ kind: 'page', title: p.name, subtitle: [p.status === 'want' ? 'Bucket list' : p.status === 'home' ? 'Home' : 'Travel', p.region, p.country].filter(Boolean).join(' · '), href: `/travel?place=${p.id}` });
+
+  for (const v of db()
+    .prepare('SELECT id, title, body FROM vision_items WHERE deleted_at IS NULL AND (title LIKE ? OR body LIKE ?) LIMIT 4')
+    .all(like, like) as { id: number; title: string | null; body: string | null }[])
+    out.push({ kind: 'goal', title: v.title ?? snippet(v.body ?? '', query), subtitle: 'Vision board', href: `/vision#card-${v.id}` });
+
   for (const g of db().prepare('SELECT id, title FROM goals WHERE deleted_at IS NULL AND title LIKE ? LIMIT 4').all(like) as { id: number; title: string }[])
     out.push({ kind: 'goal', title: g.title, subtitle: 'Goal', href: `/goals#goal-${g.id}` });
 
@@ -164,12 +174,20 @@ const TRASH: { table: string; kind: string; label: string }[] = [
   { table: 'notes', kind: 'Note', label: 'substr(body, 1, 80)' },
   { table: 'accomplishments', kind: 'Win', label: 'text' },
   { table: 'photos', kind: 'Photo', label: "angle || ' photo'" },
+  { table: 'vision_items', kind: 'Vision card', label: "COALESCE(title, substr(body, 1, 60), 'Card')" },
+  { table: 'places', kind: 'Place', label: 'name' },
+  { table: 'visits', kind: 'Trip', label: "COALESCE(title, (SELECT name FROM places WHERE id = place_id))" },
 ];
 
 export function trash() {
   const out: { table: string; id: number; kind: string; label: string; date: string | null; deletedAt: string }[] = [];
   for (const t of TRASH) {
-    const dateCol = t.table === 'goals' ? 'start_date' : t.table === 'photos' ? '(SELECT month FROM photo_sets WHERE id = set_id)' : 'date';
+    const dateCol =
+      t.table === 'goals' ? 'start_date'
+      : t.table === 'photos' ? '(SELECT month FROM photo_sets WHERE id = set_id)'
+      : t.table === 'visits' ? 'start_date'
+      : t.table === 'vision_items' || t.table === 'places' ? 'NULL'
+      : 'date';
     const rows = db()
       .prepare(`SELECT id, ${t.label} AS label, ${dateCol} AS date, deleted_at FROM ${t.table} WHERE deleted_at IS NOT NULL ORDER BY deleted_at DESC LIMIT 100`)
       .all() as { id: number; label: string; date: string | null; deleted_at: string }[];

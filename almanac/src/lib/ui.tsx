@@ -4,7 +4,7 @@ import { AlertCircle, Check } from 'lucide-react';
 import { Dialog } from '../components/ui/Dialog.tsx';
 import { api, refreshAll } from './api.ts';
 
-export type AddKind = 'menu' | 'work' | 'income' | 'workout' | 'body' | 'weight' | 'photos' | 'day' | 'goal' | 'note' | 'win' | 'project';
+export type AddKind = 'menu' | 'work' | 'income' | 'workout' | 'body' | 'weight' | 'photos' | 'day' | 'goal' | 'note' | 'win' | 'project' | 'screen' | 'trip' | 'vision';
 
 interface Toast {
   id: number;

@@ -31,7 +31,7 @@ export async function uploadPhoto(file: Blob, opts: { month: string; date: ISODa
   return api.upload<PhotoSet>('/photos', form);
 }
 
-async function makeThumb(bmp: ImageBitmap, max: number): Promise<Blob | null> {
+export async function makeThumb(bmp: ImageBitmap, max: number): Promise<Blob | null> {
   const scale = Math.min(1, max / Math.max(bmp.width, bmp.height));
   const w = Math.round(bmp.width * scale);
   const h = Math.round(bmp.height * scale);

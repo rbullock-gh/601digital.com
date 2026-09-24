@@ -15,6 +15,9 @@ import * as goals from '../domain/goals.ts';
 import * as sum from '../domain/summaries.ts';
 import * as rev from '../domain/reviews.ts';
 import * as data from '../domain/data.ts';
+import * as travel from '../domain/travel.ts';
+import * as screen from '../domain/screentime.ts';
+import * as vision from '../domain/vision.ts';
 import { insights } from '../domain/insights.ts';
 import { search, trash, softDelete, restore, TRASH_TABLES } from '../domain/search.ts';
 import { dailySeries, monthlySeries, totals, firstActivityDate } from '../domain/stats.ts';
@@ -254,6 +257,64 @@ export function registerApi(app: FastifyInstance, passcode: boolean) {
       width: fields.width ? Number(fields.width) : null,
       height: fields.height ? Number(fields.height) : null,
     });
+  });
+
+  // ── Vision board ──
+  get('/api/vision', (req) => ({ items: vision.listVision(todayOf(req)), areas: vision.VISION_AREAS }));
+  post('/api/vision', async (req) => {
+    const t = todayOf(req);
+    if (!req.isMultipart()) return vision.createVision(body_(req), t);
+    const fields: Record<string, string> = {};
+    let file: { data: Buffer; mime: string } | null = null;
+    let thumb: Buffer | null = null;
+    for await (const part of (req as unknown as { parts: () => AsyncIterable<Record<string, unknown>> }).parts()) {
+      if (part.type === 'file') {
+        const buf = await (part as unknown as { toBuffer: () => Promise<Buffer> }).toBuffer();
+        if (part.fieldname === 'thumb') thumb = buf;
+        else file = { data: buf, mime: String(part.mimetype) };
+      } else fields[String(part.fieldname)] = String(part.value);
+    }
+    const num = (v: string | undefined) => (v ? Number(v) || null : null);
+    return vision.createVision(
+      {
+        title: fields.title,
+        body: fields.body,
+        area: fields.area,
+        tone: fields.tone || null,
+        goalId: num(fields.goalId),
+        placeId: num(fields.placeId),
+        targetDate: fields.targetDate || null,
+        image: file ? { ...file, thumb, width: num(fields.width), height: num(fields.height) } : undefined,
+      },
+      t,
+    );
+  });
+  put('/api/vision/:id', (req) => vision.updateVision(id(req), body_(req), todayOf(req)));
+  del('/api/vision/:id', (req) => (softDelete('vision_items', id(req)), { ok: true }));
+  post('/api/vision/reorder', (req) => (vision.reorderVision(body_<{ ids: number[] }>(req).ids), { ok: true }));
+
+  // ── Travel ──
+  get('/api/cities/near', (req) => travel.nearestCity(Number(req.query.lat), Number(req.query.lng)));
+  get('/api/cities', (req) => travel.searchCities(req.query.q ?? '', Math.min(20, Number(req.query.limit) || 8)));
+  get('/api/travel', (req) => {
+    const t = todayOf(req);
+    const year = Number(req.query.year) || Number(t.slice(0, 4));
+    return { places: travel.listPlaces(), year: travel.travelStats(t, { start: `${year}-01-01`, end: `${year}-12-31` }), allTime: travel.travelStats(t) };
+  });
+  post('/api/places', (req) => travel.createPlace(body_(req)));
+  put('/api/places/:id', (req) => travel.updatePlace(id(req), body_(req)));
+  del('/api/places/:id', (req) => (softDelete('places', id(req)), { ok: true }));
+  post('/api/visits', (req) => travel.createVisit(body_(req)));
+  put('/api/visits/:id', (req) => travel.updateVisit(id(req), body_(req)));
+  del('/api/visits/:id', (req) => (softDelete('visits', id(req)), { ok: true }));
+
+  // ── Screen time ──
+  get('/api/screen', (req) => screen.screenSummary(todayOf(req)));
+  put('/api/screen/:date', (req) => screen.setScreenDay(req.params.date, body_(req), todayOf(req)));
+  del('/api/screen/:date', (req) => {
+    if (!isISODate(req.params.date)) throw badRequest('Invalid date');
+    screen.deleteScreenDay(req.params.date);
+    return { ok: true };
   });
 
   // ── Goals ──

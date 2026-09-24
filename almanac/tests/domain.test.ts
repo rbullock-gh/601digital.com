@@ -19,6 +19,9 @@ const sum = await import('../server/domain/summaries.ts');
 const reviews = await import('../server/domain/reviews.ts');
 const search = await import('../server/domain/search.ts');
 const dates = await import('../shared/dates.ts');
+const travel = await import('../server/domain/travel.ts');
+const screen = await import('../server/domain/screentime.ts');
+const vision = await import('../server/domain/vision.ts');
 const { estimate1RM } = await import('../shared/fitness.ts');
 
 const TODAY = '2026-09-23';
@@ -283,6 +286,97 @@ describe('reviews & search', () => {
     expect(search.search('HVAC', TODAY).some((r) => r.kind === 'project')).toBe(true);
     expect(search.search('$500', TODAY).some((r) => r.title.includes('$500'))).toBe(true);
     expect(search.search('Bench Press', TODAY).some((r) => r.kind === 'exercise')).toBe(true);
+  });
+});
+
+describe('screen time', () => {
+  it('logs one number a day, updates in place and refuses the future', () => {
+    screen.setScreenDay('2026-09-21', { minutes: 200, pickups: 80, categories: { Social: 90, Games: 0 } }, TODAY);
+    screen.setScreenDay('2026-09-22', { minutes: 140 }, TODAY);
+    screen.setScreenDay('2026-09-22', { minutes: 160 }, TODAY);
+    expect(screen.getScreenDay('2026-09-22')!.minutes).toBe(160);
+    expect(screen.getScreenDay('2026-09-21')!.categories).toEqual({ Social: 90 });
+    expect(() => screen.setScreenDay('2026-09-30', { minutes: 60 }, TODAY)).toThrow();
+    expect(() => screen.setScreenDay('2026-09-20', { minutes: 1500 }, TODAY)).toThrow();
+    // Averages only count days that were logged.
+    expect(screen.screenAverage({ start: '2026-09-21', end: '2026-09-27' })).toEqual({ avg: 180, logged: 2, total: 360 });
+    expect(days.dayView('2026-09-21', TODAY, 1).screen?.minutes).toBe(200);
+  });
+  it('treats a screen-time goal as a limit: under the line passes', () => {
+    const g = goals.createGoal({ title: 'Under 3h', metric: 'screen_time', period: 'week', target: 180 }, TODAY, 1);
+    expect(g.current).toBe(180);
+    expect(g.done).toBe(true);
+    screen.setScreenDay(TODAY, { minutes: 300 }, TODAY);
+    const after = goals.goalsWithProgress(TODAY, 1).find((x) => x.id === g.id)!;
+    expect(after.current).toBeCloseTo(220);
+    expect(after.done).toBe(false);
+    expect(after.pct).toBeCloseTo(180 / 220);
+    // A day with nothing logged is not a pass.
+    const daily = goals.createGoal({ title: 'Daily limit', metric: 'screen_time', period: 'day', target: 120 }, TODAY, 1);
+    expect(goals.goalsForDay('2026-09-19', TODAY, 1).find((x) => x.id === daily.id)?.done ?? false).toBe(false);
+    screen.deleteScreenDay(TODAY);
+  });
+});
+
+describe('travel', () => {
+  it('searches the offline city list, with a state or country qualifier', () => {
+    expect(travel.searchCities('Hattiesburg')[0]).toMatchObject({ name: 'Hattiesburg', region: 'Mississippi', countryCode: 'US' });
+    expect(travel.searchCities('Paris, FR')[0].countryCode).toBe('FR');
+    expect(travel.searchCities('Jackson MS')[0].region).toBe('Mississippi');
+    expect(travel.nearestCity(29.95, -90.07)?.name).toBe('New Orleans');
+  });
+  it('turns trips into places, days away, states and countries', () => {
+    const home = travel.createPlace({ name: 'Hattiesburg', region: 'Mississippi', country: 'United States', countryCode: 'US', lat: 31.33, lng: -89.29, status: 'home' });
+    const tokyo = travel.createPlace({ name: 'Tokyo', country: 'Japan', countryCode: 'JP', lat: 35.68, lng: 139.65, status: 'want' });
+    expect(travel.travelStats(TODAY).bucketList).toBe(1);
+    travel.createVisit({ place: { name: 'New Orleans', region: 'Louisiana', country: 'United States', countryCode: 'US', lat: 29.95, lng: -90.07 }, startDate: '2026-09-04', endDate: '2026-09-06', title: 'Jazz weekend' });
+    // Logging a second trip to the same city reuses the place.
+    travel.createVisit({ place: { name: 'New Orleans', region: 'Louisiana', country: 'United States', countryCode: 'US', lat: 29.951, lng: -90.071 }, startDate: '2026-06-01', endDate: '2026-06-01' });
+    travel.createVisit({ placeId: tokyo.id, startDate: '2026-04-01', endDate: '2026-04-07', title: 'Japan' });
+    expect(() => travel.createVisit({ placeId: tokyo.id, startDate: '2026-04-07', endDate: '2026-04-01' })).toThrow();
+    const places = travel.listPlaces();
+    expect(places.filter((p) => p.name === 'New Orleans')).toHaveLength(1);
+    expect(places.find((p) => p.id === tokyo.id)!.status).toBe('visited'); // off the bucket list
+    const s = travel.travelStats(TODAY, dates.yearRange(2026));
+    expect(s.trips).toBe(3);
+    expect(s.tripDays).toBe(3 + 1 + 7);
+    expect(s.places).toBe(2);
+    expect(s.countries).toBe(2);
+    expect(s.farthest?.name).toBe('Tokyo');
+    expect(s.home?.name).toBe(home.name);
+    // Home counts toward all-time states and countries, never as a trip.
+    const all = travel.travelStats(TODAY);
+    expect(all.states).toBe(2);
+    expect(days.dayView('2026-09-05', TODAY, 1).travel[0].placeName).toBe('New Orleans');
+    expect(days.daySummaries({ start: '2026-09-04', end: '2026-09-07' }, TODAY, 1).map((d) => d.travel)).toEqual(['New Orleans', 'New Orleans', 'New Orleans', null]);
+  });
+  it('counts trips and new places toward goals', () => {
+    const g = goals.createGoal({ title: 'New places', metric: 'new_places', period: 'year', target: 2 }, TODAY, 1);
+    expect(g.current).toBe(2);
+    expect(g.done).toBe(true);
+    const t = goals.createGoal({ title: 'Trips', metric: 'trips', period: 'year', target: 5 }, TODAY, 1);
+    expect(t.current).toBe(3);
+  });
+});
+
+describe('vision board', () => {
+  it('shows live goal progress and checks itself off from goals and trips', () => {
+    const goal = goals.goalsWithProgress(TODAY, 1).find((g) => g.title === 'Bench 225')!;
+    const a = vision.createVision({ title: 'Bench 225', goalId: goal.id, area: 'Fitness', body: 'Two plates' }, TODAY);
+    expect(a.kind).toBe('quote');
+    expect(a.goal?.done).toBe(true);
+    const lisbon = travel.createPlace({ name: 'Lisbon', country: 'Portugal', countryCode: 'PT', lat: 38.72, lng: -9.14, status: 'want' });
+    const b = vision.createVision({ title: 'Lisbon', placeId: lisbon.id, body: 'Pastéis de nata' }, TODAY);
+    expect(b.placeStatus).toBe('want');
+    travel.createVisit({ placeId: lisbon.id, startDate: '2026-05-01', endDate: '2026-05-03' });
+    expect(vision.getVision(b.id, TODAY)).toMatchObject({ placeStatus: 'visited', placeVisitedOn: '2026-05-01' });
+    // New cards go first; reorder is saved.
+    expect(vision.listVision(TODAY)[0].id).toBe(b.id);
+    vision.reorderVision([a.id, b.id]);
+    expect(vision.listVision(TODAY).map((v) => v.id)).toEqual([a.id, b.id]);
+    expect(vision.updateVision(a.id, { achievedOn: TODAY, title: null }, TODAY)).toMatchObject({ achievedOn: TODAY, title: null });
+    expect(() => vision.createVision({ area: 'Fun' }, TODAY)).toThrow();
+    expect(search.search('Lisbon', TODAY).some((r) => r.href.startsWith('/travel'))).toBe(true);
   });
 });
 

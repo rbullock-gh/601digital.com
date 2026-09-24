@@ -8,6 +8,8 @@ import { strengthChanges } from './fitness.ts';
 import { bodyChanges } from './body.ts';
 import { currentGoodStreak, longestGoodStreak } from './days.ts';
 import { dailySeries, monthlySeries } from './stats.ts';
+import { screenAverage } from './screentime.ts';
+import { travelStats } from './travel.ts';
 import {
   addDays,
   addMonths,
@@ -302,6 +304,76 @@ const streaks: Gen = (today) => {
   return null;
 };
 
+// ── Screen time (lower is better) ───────────────────────────────────────────
+
+const screenTrend: Gen = (today, f) => {
+  const cur = screenAverage({ start: addDays(today, -29), end: today });
+  const prev = screenAverage({ start: addDays(today, -59), end: addDays(today, -30) });
+  if (cur.avg == null || prev.avg == null || cur.logged < 10 || prev.logged < 10) return null;
+  const change = (cur.avg - prev.avg) / prev.avg;
+  if (Math.abs(change) < 0.03) return null;
+  return {
+    id: 'screen-trend',
+    domain: 'screen',
+    text: `Your screen time averaged ${f.dur(cur.avg)} a day over the last 30 days — ${f.pct(Math.abs(change))} ${change < 0 ? 'less' : 'more'} than the 30 days before.`,
+    detail: `${f.dur(prev.avg)} a day previously · ${cur.logged} and ${prev.logged} days logged`,
+    weight: 8,
+  };
+};
+
+const screenWeekday: Gen = (today, f) => {
+  const rows = db()
+    .prepare('SELECT date, minutes FROM screen_time WHERE date > ? AND date <= ?')
+    .all(addDays(today, -91), today) as { date: string; minutes: number }[];
+  if (rows.length < 40) return null;
+  const by = Array.from({ length: 7 }, () => ({ t: 0, n: 0 }));
+  for (const r of rows) {
+    const wd = new Date(`${r.date}T12:00:00`).getDay();
+    by[wd].t += r.minutes;
+    by[wd].n++;
+  }
+  const avgs = by.map((x, wd) => ({ wd, avg: x.n >= 4 ? x.t / x.n : null })).filter((x) => x.avg != null) as { wd: number; avg: number }[];
+  if (avgs.length < 7) return null;
+  const hi = avgs.reduce((a, b) => (b.avg > a.avg ? b : a));
+  const lo = avgs.reduce((a, b) => (b.avg < a.avg ? b : a));
+  if (hi.avg - lo.avg < 30) return null;
+  return {
+    id: 'screen-weekday',
+    domain: 'screen',
+    text: `${WEEKDAYS[hi.wd]}s are your heaviest screen day at ${f.dur(hi.avg)} on average; ${WEEKDAYS[lo.wd]}s are the lightest at ${f.dur(lo.avg)}.`,
+    detail: 'Last 13 weeks',
+    weight: 5,
+  };
+};
+
+// ── Travel ──────────────────────────────────────────────────────────────────
+
+const travelYear: Gen = (today) => {
+  const s = travelStats(today, { start: `${today.slice(0, 4)}-01-01`, end: today });
+  const all = travelStats(today);
+  const out: Insight[] = [];
+  if (all.places >= 2) {
+    const where = [all.countries > 1 ? `${all.countries} countries` : null, all.states > 1 ? `${all.states} US states` : null].filter(Boolean).join(' and ');
+    out.push({
+      id: 'travel-places',
+      domain: 'travel',
+      text: `You’ve logged ${all.places} places${where ? ` across ${where}` : ''}.`,
+      detail: all.farthest ? `Farthest from home: ${all.farthest.name}, ${all.farthest.miles.toLocaleString('en-US')} miles` : undefined,
+      weight: 6,
+    });
+  }
+  if (s.tripDays > 0) {
+    out.push({
+      id: 'travel-year',
+      domain: 'travel',
+      text: `${s.trips} ${s.trips === 1 ? 'trip' : 'trips'} so far this year, ${s.tripDays} ${s.tripDays === 1 ? 'day' : 'days'} away from home.`,
+      detail: s.newPlaces.length ? `New this year: ${s.newPlaces.slice(0, 4).join(', ')}${s.newPlaces.length > 4 ? '…' : ''}` : undefined,
+      weight: 5,
+    });
+  }
+  return out;
+};
+
 // ── Relationships (correlations, never causes) ──────────────────────────────
 
 function ratedDays(today: ISODate) {
@@ -393,10 +465,55 @@ const busyMonthsGood: Gen = (today, f) => {
   };
 };
 
+const screenByRating: Gen = (today, f) => {
+  const rows = db()
+    .prepare(
+      `SELECT d.rating, s.minutes FROM days d JOIN screen_time s ON s.date = d.date
+        WHERE d.rating IS NOT NULL AND d.date > ? AND d.date <= ?`,
+    )
+    .all(addDays(today, -365), today) as { rating: number; minutes: number }[];
+  const good = rows.filter((r) => r.rating === 3);
+  const bad = rows.filter((r) => r.rating === 1);
+  if (good.length < 5 || bad.length < 5) return null;
+  const avg = (xs: typeof rows) => xs.reduce((a, b) => a + b.minutes, 0) / xs.length;
+  if (Math.abs(avg(good) - avg(bad)) < 15) return null;
+  return {
+    id: 'link-screen-rating',
+    domain: 'links',
+    correlation: true,
+    text: `On Good days your screen time averaged ${f.dur(avg(good))}; on Bad days, ${f.dur(avg(bad))}.`,
+    detail: `${good.length} Good and ${bad.length} Bad days with screen time logged`,
+    weight: 8,
+  };
+};
+
+const screenByWorkout: Gen = (today, f) => {
+  const rows = db()
+    .prepare(
+      `SELECT s.minutes, EXISTS (SELECT 1 FROM workouts w WHERE w.date = s.date AND w.deleted_at IS NULL) AS worked_out
+         FROM screen_time s WHERE s.date > ? AND s.date <= ?`,
+    )
+    .all(addDays(today, -365), today) as { minutes: number; worked_out: number }[];
+  const w = rows.filter((r) => r.worked_out);
+  const n = rows.filter((r) => !r.worked_out);
+  if (w.length < 10 || n.length < 10) return null;
+  const avg = (xs: typeof rows) => xs.reduce((a, b) => a + b.minutes, 0) / xs.length;
+  if (Math.abs(avg(w) - avg(n)) < 15) return null;
+  return {
+    id: 'link-screen-workout',
+    domain: 'links',
+    correlation: true,
+    text: `Days you trained averaged ${f.dur(avg(w))} of screen time, compared with ${f.dur(avg(n))} on rest days.`,
+    detail: `${w.length} workout days, ${n.length} rest days`,
+    weight: 6,
+  };
+};
+
 const GENERATORS: Gen[] = [
   moneyPace, moneyMonthOverMonth, bestWeek, bestWeekday, avgSession, daysWorked, topProjectShare,
   strength3m, strengthYear, workoutsMonth, weightTrend, last30Good, bestGoodMonth, streaks,
   workoutGood, workByRating, workedGood, busyMonthsGood,
+  screenTrend, screenWeekday, travelYear, screenByRating, screenByWorkout,
 ];
 
 export function insights(today: ISODate): Insight[] {
