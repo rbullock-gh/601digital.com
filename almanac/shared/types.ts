@@ -302,6 +302,9 @@ export type GoalMetric =
   | 'waist'
   | 'exercise_weight'
   | 'exercise_e1rm'
+  | 'screen_time'
+  | 'trips'
+  | 'new_places'
   | 'manual';
 
 export type GoalPeriod = 'day' | 'week' | 'month' | 'year' | 'custom' | 'target';
@@ -376,6 +379,8 @@ export interface DaySummary {
   hasBody: boolean;
   hasPhotos: boolean;
   noteCount: number;
+  screenMinutes: number | null;
+  travel: string | null;
 }
 
 export interface DayView {
@@ -393,13 +398,15 @@ export interface DayView {
   notes: Note[];
   accomplishments: Accomplishment[];
   goals: GoalProgress[];
+  screen: ScreenDay | null;
+  travel: (Visit & { placeName: string; region: string | null; country: string | null })[];
   prev: ISODate;
   next: ISODate;
 }
 
 export interface Insight {
   id: string;
-  domain: 'work' | 'money' | 'fitness' | 'body' | 'life' | 'links';
+  domain: 'work' | 'money' | 'fitness' | 'body' | 'life' | 'screen' | 'travel' | 'links';
   text: string;
   detail?: string;
   /** Correlations are labelled so they are never read as causes. */
@@ -408,9 +415,77 @@ export interface Insight {
 }
 
 export interface SearchResult {
-  kind: 'page' | 'action' | 'day' | 'month' | 'session' | 'income' | 'project' | 'exercise' | 'workout' | 'note' | 'journal' | 'accomplishment' | 'goal';
+  kind: 'page' | 'action' | 'day' | 'month' | 'session' | 'income' | 'project' | 'exercise' | 'workout' | 'note' | 'journal' | 'accomplishment' | 'goal' | 'place' | 'vision';
   title: string;
   subtitle?: string;
   href: string;
   date?: ISODate;
+}
+
+export type PlaceStatus = 'visited' | 'want' | 'home';
+
+export interface Visit {
+  id: number;
+  placeId: number;
+  startDate: ISODate;
+  endDate: ISODate;
+  title: string | null;
+  notes: string | null;
+}
+
+export interface Place {
+  id: number;
+  name: string;
+  region: string | null;
+  country: string | null;
+  countryCode: string | null;
+  lat: number;
+  lng: number;
+  status: PlaceStatus;
+  notes: string | null;
+  visits: Visit[];
+  firstVisit: ISODate | null;
+  lastVisit: ISODate | null;
+  days: number;
+}
+
+export interface CityResult {
+  name: string;
+  region: string | null;
+  country: string;
+  countryCode: string;
+  lat: number;
+  lng: number;
+  population: number;
+}
+
+export interface VisionItem {
+  id: number;
+  kind: 'image' | 'quote';
+  title: string | null;
+  body: string | null;
+  area: string | null;
+  imageUrl: string | null;
+  thumbUrl: string | null;
+  width: number | null;
+  height: number | null;
+  tone: string | null;
+  goalId: number | null;
+  goal: GoalProgress | null;
+  placeId: number | null;
+  placeName: string | null;
+  placeStatus: PlaceStatus | null;
+  /** First logged visit to the linked place. */
+  placeVisitedOn: ISODate | null;
+  targetDate: ISODate | null;
+  achievedOn: ISODate | null;
+  position: number;
+}
+
+export interface ScreenDay {
+  date: ISODate;
+  minutes: number;
+  pickups: number | null;
+  categories: Record<string, number>;
+  notes: string | null;
 }

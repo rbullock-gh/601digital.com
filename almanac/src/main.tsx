@@ -12,6 +12,7 @@ import './styles/ui.css';
 import './styles/shell.css';
 import './styles/year.css';
 import './styles/pages.css';
+import './styles/life.css';
 import './components/charts/charts.css';
 import { queryClient } from './lib/api.ts';
 import { applyTheme, getThemePref, watchSystemTheme } from './lib/theme.ts';

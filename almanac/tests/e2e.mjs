@@ -368,6 +368,119 @@ await step('Generate the Year in Review', async () => {
   assert.equal(r.totals.good, 1);
 });
 
+await step('Log screen time and see it on the day, dashboard and chart', async () => {
+  await page.goto(BASE + '/');
+  await page.locator('.greeting h1').waitFor();
+  await page.keyboard.press('n');
+  await page.locator('.qa-tile', { hasText: 'Screen time' }).click();
+  await page.locator('#st-h').fill('2');
+  await page.locator('#st-m').fill('30');
+  await page.locator('#st-p').fill('55');
+  await page.getByRole('button', { name: /Break it down/ }).click();
+  await page.locator('.st-cat', { hasText: 'Social' }).locator('input').fill('1h 10m');
+  await page.getByRole('button', { name: /^Save/ }).click();
+  await toast('Screen time saved');
+  const day = await api(`/days/${TODAY}`);
+  assert.equal(day.screen.minutes, 150);
+  assert.equal(day.screen.categories.Social, 70);
+  const dash = await api('/dashboard');
+  assert.equal(dash.week.screen.avg, 150);
+  await page.goto(BASE + '/screen-time');
+  await page.locator('.stat', { hasText: 'Today' }).getByText('2h 30m').waitFor();
+  assert.ok((await page.locator('.st-history .session-row').count()) >= 1);
+  // A screen-time limit goal passes while the average stays under it.
+  await page.getByRole('button', { name: 'New goal' }).click();
+  await page.getByRole('button', { name: 'Screen time', exact: true }).click();
+  await page.locator('#g-target').fill('3');
+  await page.getByRole('button', { name: 'Create goal' }).click();
+  await toast('Goal created');
+  const g = (await api('/goals')).find((x) => x.metric === 'screen_time');
+  assert.equal(g.target, 180);
+  assert.equal(g.done, true);
+  await page.locator('.st-goal', { hasText: 'On track' }).waitFor();
+});
+
+await step('Add trips and a bucket-list place with offline city search', async () => {
+  await page.goto(BASE + '/travel');
+  await page.getByRole('button', { name: 'Add trip' }).click();
+  await page.getByRole('button', { name: 'Home', exact: true }).click();
+  await page.getByPlaceholder('Search a city…').fill('Hattiesb');
+  await page.locator('.combo-opt', { hasText: 'Hattiesburg, Mississippi' }).first().click();
+  await page.getByRole('button', { name: 'Set as home' }).click();
+  await toast('Hattiesburg set as home');
+  await page.getByRole('button', { name: 'Add trip' }).click();
+  await page.getByPlaceholder('Search a city…').fill('New Orl');
+  await page.locator('.combo-opt', { hasText: 'New Orleans, Louisiana' }).first().click();
+  await page.locator('#t-from').fill(TODAY);
+  await page.locator('#t-to').fill(TODAY);
+  await page.locator('#t-title').fill('Jazz weekend');
+  await page.getByRole('button', { name: 'Save trip' }).click();
+  await toast('Trip to New Orleans saved');
+  await page.getByRole('button', { name: 'Bucket list', exact: true }).click();
+  await page.getByPlaceholder('Search a city…').fill('Tokyo');
+  await page.locator('.combo-opt', { hasText: 'Tokyo' }).first().click();
+  await page.getByRole('button', { name: 'Add to bucket list' }).click();
+  await toast('Tokyo added to your bucket list');
+  await page.locator('.tm-pin.want').waitFor();
+  await page.locator('.tm-pin.home').waitFor();
+  assert.equal(await page.locator('.tm-land.been').count() >= 1, true);
+  const t = await api('/travel');
+  assert.equal(t.allTime.places, 1);
+  assert.equal(t.allTime.bucketList, 1);
+  assert.equal(t.year.tripDays, 1);
+  // The trip shows up on the day and the calendar.
+  const day = await api(`/days/${TODAY}`);
+  assert.equal(day.travel[0].placeName, 'New Orleans');
+  const cal = await api(`/calendar/${MONTH}`);
+  assert.equal(cal.days.find((x) => x.date === TODAY).travel, 'New Orleans');
+  // Clicking the map drops a pin at the nearest real town.
+  await page.getByRole('button', { name: 'USA', exact: true }).click();
+  await page.locator('.tm-land').first().waitFor();
+  const box = await page.locator('.tmap > svg').boundingBox();
+  await page.mouse.click(box.x + box.width * 0.5, box.y + box.height * 0.45);
+  await page.locator('.picked-place').waitFor();
+  await page.keyboard.press('Escape');
+  // Open a place from its pin.
+  await page.locator('.tm-pin.visited').first().click();
+  await page.locator('.place-visit', { hasText: 'Jazz weekend' }).waitFor();
+  await page.keyboard.press('Escape');
+});
+
+await step('Vision board: image and quote cards, goal progress, reorder, achieved', async () => {
+  await page.goto(BASE + '/vision');
+  await page.getByRole('button', { name: 'Add the first card' }).click();
+  await page.locator('.vf-drop input[type=file]').setInputFiles(PHOTO);
+  await page.locator('.vf-drop img').waitFor();
+  await page.locator('#v-title').fill('Beach house');
+  await page.locator('#v-goal').selectOption({ index: 1 });
+  await page.getByRole('button', { name: 'Add to board' }).click();
+  await toast('Added to your vision board');
+  await page.getByRole('button', { name: 'Add', exact: true }).click();
+  await page.getByRole('button', { name: 'Words' }).click();
+  await page.locator('#v-body').fill('Phone down, eyes up.');
+  await page.getByRole('button', { name: 'Add to board' }).click();
+  await toast('Added to your vision board');
+  let v = await api('/vision');
+  assert.equal(v.items.length, 2);
+  assert.equal(v.items[0].body, 'Phone down, eyes up.'); // newest first
+  assert.ok(v.items[1].goal && typeof v.items[1].goal.pct === 'number');
+  await page.locator('.vcard .vcard-goal').first().waitFor();
+  // Original image bytes are kept as-is.
+  const bytes = Buffer.from(await (await fetch(BASE + v.items[1].imageUrl)).arrayBuffer());
+  assert.ok(bytes.equals(fs.readFileSync(PHOTO)));
+  // Drag to reorder.
+  await page.locator('.vcard', { hasText: 'Beach house' }).dragTo(page.locator('.vcard', { hasText: 'Phone down' }));
+  await waitFor(async () => (await api('/vision')).items[0].title === 'Beach house', 5000);
+  // Mark achieved from the card.
+  await page.locator('.vcard', { hasText: 'Phone down' }).locator('.vcard-open').click();
+  await page.getByRole('button', { name: 'Achieved', exact: true }).click();
+  await toast('Marked achieved');
+  v = await api('/vision');
+  assert.equal(v.items.find((x) => x.body === 'Phone down, eyes up.').achievedOn, TODAY);
+  await page.keyboard.press('Escape');
+  await page.locator('.vcard-done').waitFor();
+});
+
 await step('Search and command palette', async () => {
   await page.goto(BASE + '/');
   await page.locator('.greeting h1').waitFor();
@@ -462,7 +575,7 @@ await step('Mobile layout', async () => {
   assert.ok(overflow <= 0, `horizontal overflow ${overflow}px`);
   await p.locator('.tab-add').tap();
   await p.getByRole('button', { name: /Weight/ }).first().waitFor();
-  for (const route of ['/today', '/work', '/money', '/gym', '/calendar', '/year', '/goals', '/settings', `/reviews/month/${MONTH}`]) {
+  for (const route of ['/today', '/work', '/money', '/gym', '/calendar', '/year', '/goals', '/vision', '/travel', '/screen-time', '/settings', `/reviews/month/${MONTH}`]) {
     await p.goto(BASE + route);
     await p.waitForLoadState('networkidle');
     const o = await p.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);

@@ -1,12 +1,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { Briefcase, Camera, ChevronLeft, DollarSign, Dumbbell, FolderKanban, Play, Ruler, Scale, SquarePen, StickyNote, Target, Trophy, Square } from 'lucide-react';
+import { Briefcase, Camera, ChevronLeft, DollarSign, Dumbbell, FolderKanban, MapPin, Play, Ruler, Scale, Smartphone, Sparkles, SquarePen, StickyNote, Target, Trophy, Square } from 'lucide-react';
 import { useUI, type AddKind } from '../lib/ui.tsx';
 import { useBoot } from '../lib/boot.ts';
 import { api } from '../lib/api.ts';
 import { Dialog } from './ui/Dialog.tsx';
 import { BodyForm, DayEntryForm, GoalForm, IncomeForm, NoteForm, ProjectForm, WinForm, WorkSessionForm } from '../features/forms.tsx';
 import { useTimerActions } from './Timer.tsx';
+import { ScreenTimeForm, TripForm, VisionForm } from '../features/lifeForms.tsx';
 import type { DayView } from '../../shared/types.ts';
 import type { ISODate } from '../../shared/dates.ts';
 
@@ -20,6 +21,9 @@ const TITLES: Partial<Record<AddKind, string>> = {
   note: 'Quick note',
   win: 'Add a win',
   project: 'New project',
+  screen: 'Log screen time',
+  trip: 'Add a trip',
+  vision: 'Add to vision board',
 };
 
 /** The universal Add: every kind of entry, two taps away. */
@@ -49,7 +53,10 @@ export function QuickAdd() {
     { k: 'day', name: 'Rate today', sub: 'Good, okay, or bad', icon: <SquarePen />, tone: '' },
     { k: 'win', name: 'Win', sub: 'Accomplishment', icon: <Trophy />, tone: '' },
     { k: 'note', name: 'Note', sub: 'A quick thought', icon: <StickyNote />, tone: '' },
+    { k: 'screen', name: 'Screen time', sub: 'From your phone', icon: <Smartphone />, tone: 'screen' },
+    { k: 'trip', name: 'Trip', sub: 'Pin it on the map', icon: <MapPin />, tone: 'travel' },
     { k: 'goal', name: 'Goal', sub: 'Tracks itself', icon: <Target />, tone: '' },
+    { k: 'vision', name: 'Vision', sub: 'Image or words', icon: <Sparkles />, tone: '' },
     { k: 'project', name: 'Project', sub: 'For work & income', icon: <FolderKanban />, tone: '' },
   ];
 
@@ -85,7 +92,7 @@ export function QuickAdd() {
     );
 
   return (
-    <Dialog open={!!ui.add} onClose={close} title={title} width={kind === 'menu' ? 560 : kind === 'goal' ? 580 : 520}>
+    <Dialog open={!!ui.add} onClose={close} title={title} width={kind === 'menu' ? 560 : kind === 'goal' || kind === 'vision' ? 580 : 520}>
       {kind === 'menu' && (
         <div className="qa-grid">
           {tiles.map((t, i) => (
@@ -107,6 +114,9 @@ export function QuickAdd() {
       {kind === 'win' && <WinForm preset={preset} onDone={close} />}
       {kind === 'goal' && <GoalForm onDone={close} />}
       {kind === 'project' && <ProjectForm onDone={close} />}
+      {kind === 'screen' && <ScreenTimeForm preset={preset} onDone={close} />}
+      {kind === 'trip' && <TripForm preset={preset} onDone={close} />}
+      {kind === 'vision' && <VisionForm onDone={close} />}
       {kind === 'day' && day.data && <DayEntryForm date={dayDate} initialRating={day.data.rating} initialJournal={day.data.journal} onDone={close} />}
     </Dialog>
   );

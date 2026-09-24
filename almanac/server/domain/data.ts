@@ -26,7 +26,7 @@ import { recomputeAllPRs } from './fitness.ts';
 const TABLES = [
   'settings', 'projects', 'categories', 'work_sessions', 'income', 'days', 'notes', 'accomplishments',
   'exercises', 'workouts', 'workout_exercises', 'sets', 'body_metrics', 'photo_sets', 'photos',
-  'goals', 'goal_checkins', 'reviews',
+  'goals', 'goal_checkins', 'reviews', 'places', 'visits', 'vision_items', 'screen_time',
 ];
 
 function stamp() {
@@ -255,6 +255,9 @@ const CSV_QUERIES: Record<string, string> = {
                 forearms_cm, shoulders_cm, thighs_cm, calves_cm, neck_cm, body_fat_pct, notes
            FROM body_metrics WHERE deleted_at IS NULL ORDER BY date`,
   days: `SELECT date, CASE rating WHEN 3 THEN 'good' WHEN 2 THEN 'okay' WHEN 1 THEN 'bad' END AS rating, journal FROM days ORDER BY date`,
+  screen_time: `SELECT date, minutes, ROUND(minutes / 60.0, 2) AS hours, pickups, categories, notes FROM screen_time ORDER BY date`,
+  travel: `SELECT v.start_date, v.end_date, v.title AS trip, p.name AS place, p.region, p.country, ROUND(p.lat, 5) AS lat, ROUND(p.lng, 5) AS lng, v.notes
+             FROM visits v JOIN places p ON p.id = v.place_id WHERE v.deleted_at IS NULL AND p.deleted_at IS NULL ORDER BY v.start_date`,
   prs: `SELECT pr.date, e.name AS exercise, pr.type, ROUND(pr.weight_kg, 3) AS weight_kg, pr.reps, ROUND(pr.value, 3) AS value,
                ROUND(pr.previous_value, 3) AS previous_value
           FROM personal_records pr JOIN exercises e ON e.id = pr.exercise_id ORDER BY pr.date`,

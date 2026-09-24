@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { Briefcase, Dumbbell, Heart, Info, Link2, Ruler, Wallet } from 'lucide-react';
+import { Briefcase, Dumbbell, Heart, Info, Link2, MapPin, Ruler, Smartphone, Wallet } from 'lucide-react';
 import { api } from '../lib/api.ts';
 import { useDocumentTitle } from '../lib/hooks.ts';
 import { Card, Empty, ErrorBox, PageHead, PageSkeleton } from '../components/ui/primitives.tsx';
@@ -11,6 +11,8 @@ const DOMAINS: { key: Insight['domain']; label: string; icon: React.ReactNode; c
   { key: 'fitness', label: 'Fitness', icon: <Dumbbell />, c: 'var(--fitness)' },
   { key: 'body', label: 'Body', icon: <Ruler />, c: 'var(--body)' },
   { key: 'life', label: 'Life', icon: <Heart />, c: 'var(--good)' },
+  { key: 'screen', label: 'Screen time', icon: <Smartphone />, c: 'var(--screen)' },
+  { key: 'travel', label: 'Travel', icon: <MapPin />, c: 'var(--travel)' },
 ];
 
 export default function Insights() {

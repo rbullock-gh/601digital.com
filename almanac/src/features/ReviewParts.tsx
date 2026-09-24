@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Star, Trophy } from 'lucide-react';
+import { MapPin, Smartphone, Star, Trophy } from 'lucide-react';
 import { api, refreshAll } from '../lib/api.ts';
-import { dayDate, duration, hours, length, money, pct, plural, shortDate, weight } from '../lib/format.ts';
+import { dateRange, dayDate, duration, hours, length, money, pct, plural, shortDate, weight } from '../lib/format.ts';
 import { Card, Delta, Stat } from '../components/ui/primitives.tsx';
 import { RatingBar } from '../components/charts/charts.tsx';
 import { groupPRs, PRLine } from './shared.tsx';
@@ -188,6 +188,41 @@ export function ReportDetails({ r }: { r: PeriodReport }) {
           <div className="faint" style={{ fontSize: 13 }}>No body measurements in this period.</div>
         )}
       </Card>
+      {(r.screen.logged > 0 || r.travel.length > 0) && (
+        <>
+          <Card className="span-6" title="Screen time" actions={<Link to="/screen-time" className="dash-more">Open</Link>}>
+            {r.screen.avg != null ? (
+              <div className="review-screen">
+                <Smartphone />
+                <div>
+                  <div className="stat-value num">{duration(r.screen.avg)}</div>
+                  <div className="faint" style={{ fontSize: 12 }}>
+                    a day on average · {plural(r.screen.logged, 'day')} logged
+                  </div>
+                </div>
+                {r.screenPrev.avg != null && <Delta current={r.screen.avg} previous={r.screenPrev.avg} goodWhenUp={false} label="vs before" />}
+              </div>
+            ) : (
+              <div className="faint" style={{ fontSize: 13 }}>Not logged in this period.</div>
+            )}
+          </Card>
+          <Card className="span-6" title="Travel" sub={r.travel.length ? `${plural(r.travelStats.tripDays, 'day')} away` : undefined} actions={<Link to="/travel" className="dash-more">Map</Link>}>
+            {r.travel.length ? (
+              <div className="stack-8">
+                {r.travel.map((v) => (
+                  <Link key={v.id} to={`/travel?place=${v.placeId}`} className="milestone">
+                    <MapPin size={13} style={{ color: 'var(--travel)' }} />
+                    <span className="grow">{v.title && v.title !== v.placeName ? `${v.title} · ${v.placeName}` : v.placeName}</span>
+                    <span className="faint nowrap">{dateRange(v.startDate, v.endDate)}</span>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="faint" style={{ fontSize: 13 }}>Home the whole time.</div>
+            )}
+          </Card>
+        </>
+      )}
     </div>
   );
 }

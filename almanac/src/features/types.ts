@@ -1,6 +1,6 @@
 // Response shapes of the summary endpoints (mirrors server/domain/*).
 import type { ISODate } from '../../shared/dates.ts';
-import type { DaySummary, EarningRow, GoalProgress, PhotoSet, PR, Rating, Totals, WorkoutSummary } from '../../shared/types.ts';
+import type { DaySummary, EarningRow, GoalProgress, PhotoSet, Place, PR, Rating, ScreenDay, Totals, Visit, WorkoutSummary } from '../../shared/types.ts';
 
 export interface Range {
   start: ISODate;
@@ -77,7 +77,7 @@ export interface Dashboard {
     dailyGoals: GoalProgress[];
   };
   yesterdayUnrated: boolean;
-  week: { range: Range; totals: Totals; previous: Totals; goalsCompleted: number; workoutTarget: number };
+  week: { range: Range; totals: Totals; previous: Totals; goalsCompleted: number; workoutTarget: number; screen: ScreenAvg; screenPrev: ScreenAvg };
   month: {
     range: Range;
     totals: Totals;
@@ -140,6 +140,10 @@ export interface PeriodReport {
   strength: StrengthChange[];
   avgRate: number | null;
   daysInPeriod: number;
+  screen: ScreenAvg;
+  screenPrev: ScreenAvg;
+  travel: TravelVisit[];
+  travelStats: TravelStats;
   answers: Record<string, string>;
 }
 
@@ -164,6 +168,8 @@ export interface YearReviewData extends PeriodReport {
   lastPhotos: PhotoSet | null;
   grid: YearGridData;
   longestStreak: { length: number; start: ISODate | null; end: ISODate | null };
+  screenMonths: { month: string; avg: number; logged: number }[];
+  visionAchieved: { id: number; title: string | null; body: string | null; achievedOn: ISODate }[];
 }
 
 export interface MoneyBreakdown {
@@ -172,4 +178,50 @@ export interface MoneyBreakdown {
   rows: EarningRow[];
   byProject: { name: string; cents: number; count: number }[];
   byKind: { kind: string; cents: number }[];
+}
+
+// ── Screen time & travel ────────────────────────────────────────────────────
+
+export interface ScreenAvg {
+  avg: number | null;
+  logged: number;
+  total: number;
+}
+
+export interface ScreenSummary {
+  today: ScreenDay | null;
+  yesterday: ScreenDay | null;
+  week: ScreenAvg;
+  lastWeek: ScreenAvg;
+  last30: ScreenAvg;
+  prev30: ScreenAvg;
+  daily: { date: ISODate; minutes: number | null }[];
+  weeks: { start: ISODate; avg: number | null; logged: number }[];
+  byWeekday: { wd: number; avg: number | null }[];
+  categories: { name: string; avg: number }[];
+  pickupsAvg: number | null;
+  lowest: ScreenDay | null;
+  highest: ScreenDay | null;
+  recent: ScreenDay[];
+  categoryNames: string[];
+}
+
+export type TravelVisit = Visit & { placeName: string; region: string | null; country: string | null; lat: number; lng: number };
+
+export interface TravelStats {
+  places: number;
+  countries: number;
+  states: number;
+  bucketList: number;
+  trips: number;
+  tripDays: number;
+  newPlaces: string[];
+  farthest: { name: string; miles: number } | null;
+  home: { name: string } | null;
+}
+
+export interface TravelData {
+  places: Place[];
+  year: TravelStats;
+  allTime: TravelStats;
 }

@@ -8,7 +8,7 @@
    The Custom theme layers a chosen accent over either base. Its variables are
    computed in src/lib/theme.ts and set inline on <html data-accent="custom">.
 
-   Data colours (work, money, fitness, body) and the day-rating colours were
+   Data colours (work, money, fitness, body, travel, screen) and the day-rating colours were
    checked for colour-vision separation and contrast against each surface.
    ───────────────────────────────────────────────────────────────────────────── */
 
@@ -46,6 +46,10 @@
   --money-soft: rgba(27, 158, 116, 0.1);
   --fitness-soft: rgba(226, 103, 47, 0.1);
   --body-soft: rgba(117, 99, 208, 0.1);
+  --travel: #c2417a;
+  --screen: #0e7f95;
+  --travel-soft: rgba(194, 65, 122, 0.1);
+  --screen-soft: rgba(14, 127, 149, 0.1);
 
   --good: #2e8a4f;
   --okay: #d9a634;
@@ -100,6 +104,10 @@
   --money-soft: rgba(25, 158, 112, 0.14);
   --fitness-soft: rgba(217, 89, 38, 0.14);
   --body-soft: rgba(144, 133, 233, 0.14);
+  --travel: #e0649b;
+  --screen: #2fa9bf;
+  --travel-soft: rgba(224, 100, 155, 0.14);
+  --screen-soft: rgba(47, 169, 191, 0.14);
 
   --good: #2f9457;
   --okay: #c99a30;

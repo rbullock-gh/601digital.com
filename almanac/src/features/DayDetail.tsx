@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate } from 'react-router-dom';
-import { Briefcase, Camera, ChevronLeft, ChevronRight, DollarSign, Dumbbell, Plus, Scale, Star, StickyNote, Trash2, Trophy } from 'lucide-react';
+import { Briefcase, Camera, ChevronLeft, ChevronRight, DollarSign, Dumbbell, MapPin, Plus, Scale, Smartphone, Star, StickyNote, Trash2, Trophy } from 'lucide-react';
 import { api, refreshAll } from '../lib/api.ts';
 import { useBoot } from '../lib/boot.ts';
 import { useUI } from '../lib/ui.tsx';
-import { clock, duration, length, longDate, money, weight } from '../lib/format.ts';
+import { clock, dateRange, duration, length, longDate, money, weight } from '../lib/format.ts';
 import { Card, Empty, ErrorBox, PageSkeleton, RatingBadge } from '../components/ui/primitives.tsx';
 import { Dialog } from '../components/ui/Dialog.tsx';
 import { BodyForm, IncomeForm, WorkSessionForm } from './forms.tsx';
@@ -55,6 +55,11 @@ export function DayDetail({ date, isToday }: { date: ISODate; isToday?: boolean 
             {d.earnedCents > 0 && <span className="badge">{money(d.earnedCents)}</span>}
             {d.workouts.length > 0 && <span className="badge">{d.workouts[0].name}</span>}
             {d.prs.length > 0 && <span className="badge badge-pr"><Trophy /> {groupPRs(d.prs).length} PR{groupPRs(d.prs).length > 1 ? 's' : ''}</span>}
+            {d.travel.map((v) => (
+              <Link key={v.id} to={`/travel?place=${v.placeId}`} className="badge badge-travel">
+                <MapPin /> {v.placeName}
+              </Link>
+            ))}
           </div>
         </div>
         <div className="row day-nav">
@@ -203,8 +208,47 @@ export function DayDetail({ date, isToday }: { date: ISODate; isToday?: boolean 
               </div>
             </Card>
           )}
+          {d.travel.length > 0 && (
+            <Card title="Travel">
+              <div className="stack-8">
+                {d.travel.map((v) => (
+                  <Link key={v.id} to={`/travel?place=${v.placeId}`} className="day-trip">
+                    <MapPin />
+                    <span className="grow" style={{ minWidth: 0 }}>
+                      <b className="truncate">{v.title ?? v.placeName}</b>
+                      <span className="faint">
+                        {[v.title ? v.placeName : null, dateRange(v.startDate, v.endDate)].filter(Boolean).join(' · ')}
+                      </span>
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </Card>
+          )}
           <Wins date={date} items={d.accomplishments} />
           <Notes date={date} items={d.notes} />
+          {!future && (
+            <Card
+              title="Screen time"
+              actions={
+                <button className="btn btn-ghost btn-sm" onClick={() => ui.openAdd('screen', preset)}>
+                  {d.screen ? 'Edit' : <><Plus /> Log</>}
+                </button>
+              }
+            >
+              {d.screen ? (
+                <button className="day-screen" onClick={() => ui.openAdd('screen', preset)}>
+                  <Smartphone />
+                  <b className="num">{duration(d.screen.minutes)}</b>
+                  <span className="faint">
+                    {[d.screen.pickups != null ? `${d.screen.pickups} pickups` : null, Object.entries(d.screen.categories).sort((a, b) => b[1] - a[1])[0]?.[0]].filter(Boolean).join(' · ')}
+                  </span>
+                </button>
+              ) : (
+                <div className="faint" style={{ fontSize: 13 }}>Not logged.</div>
+              )}
+            </Card>
+          )}
           <Card
             title="Body"
             actions={

@@ -126,6 +126,7 @@ export function monthYear(ym: string, short = false): string {
 }
 
 export function dateRange(a: ISODate, b: ISODate): string {
+  if (a === b) return shortDate(a);
   const pa = parts(a);
   const pb = parts(b);
   if (pa.y === pb.y && pa.m === pb.m) return `${MONTHS_SHORT[pa.m - 1]} ${pa.d}–${pb.d}${pa.y !== new Date().getFullYear() ? `, ${pa.y}` : ''}`;

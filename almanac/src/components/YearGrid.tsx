@@ -7,12 +7,13 @@ import { useTooltip } from './ui/Tooltip.tsx';
 import { duration, longDate, money, RATING_LONG } from '../lib/format.ts';
 import { useMediaQuery } from '../lib/hooks.ts';
 
-export type GridMode = 'rating' | 'work' | 'money' | 'gym';
+export type GridMode = 'rating' | 'work' | 'money' | 'gym' | 'travel';
 
 const MODE_COLOR: Record<Exclude<GridMode, 'rating'>, string> = {
   work: 'var(--work)',
   money: 'var(--money)',
   gym: 'var(--fitness)',
+  travel: 'var(--travel)',
 };
 
 /** Tooltip body shared by the year grid and the calendar. */
@@ -56,13 +57,24 @@ export function DayTip({ d }: { d: DaySummary }) {
           </b>
         </div>
       )}
-      {!d.minutes && !d.earnedCents && !d.workout && !d.rating && <div className="tip-row">Nothing logged</div>}
+      {d.screenMinutes != null && (
+        <div className="tip-row">
+          Screen <b>{duration(d.screenMinutes)}</b>
+        </div>
+      )}
+      {d.travel && (
+        <div className="tip-row">
+          Away <b>{d.travel}</b>
+        </div>
+      )}
+      {!d.minutes && !d.earnedCents && !d.workout && !d.rating && !d.travel && d.screenMinutes == null && <div className="tip-row">Nothing logged</div>}
     </>
   );
 }
 
 function cellStyle(d: DaySummary | undefined, mode: GridMode, max: number): React.CSSProperties | undefined {
   if (!d || mode === 'rating') return undefined;
+  if (mode === 'travel') return d.travel ? { background: 'var(--travel)' } : undefined;
   const v = mode === 'work' ? d.minutes : mode === 'money' ? d.earnedCents : d.workoutCount;
   if (!v) return undefined;
   // Sequential single-hue ramp: 4 steps from light to full.
@@ -93,7 +105,7 @@ export const YearGrid = memo(function YearGrid({ year, days, today, mode = 'rati
   const touch = useMediaQuery('(hover: none)');
   const byDate = useMemo(() => new Map(days.map((d) => [d.date, d])), [days]);
   const max = useMemo(() => {
-    if (mode === 'rating') return 1;
+    if (mode === 'rating' || mode === 'travel') return 1;
     const vals = days.map((d) => (mode === 'work' ? d.minutes : mode === 'money' ? d.earnedCents : d.workoutCount)).filter((v) => v > 0).sort((a, b) => a - b);
     return vals.length ? vals[Math.floor(vals.length * 0.9)] || vals[vals.length - 1] : 1;
   }, [days, mode]);
@@ -210,6 +222,17 @@ export function GridLegend({ mode }: { mode: GridMode }) {
       </div>
     );
   const c = MODE_COLOR[mode];
+  if (mode === 'travel')
+    return (
+      <div className="legend">
+        <span className="legend-item">
+          <span className="legend-swatch" style={{ background: c }} /> Away
+        </span>
+        <span className="legend-item">
+          <span className="legend-swatch" style={{ background: 'var(--unrated)' }} /> Home
+        </span>
+      </div>
+    );
   return (
     <div className="legend">
       <span>Less</span>

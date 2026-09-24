@@ -12,11 +12,14 @@ import {
   Dumbbell,
   FileText,
   FolderKanban,
+  MapPin,
   Moon,
   Palette,
   Play,
   Scale,
   Search,
+  Smartphone,
+  Sparkles,
   SquarePen,
   Square,
   StickyNote,
@@ -58,6 +61,8 @@ const KIND_ICON: Record<SearchResult['kind'], ReactNode> = {
   journal: <BookOpen />,
   accomplishment: <Trophy />,
   goal: <Target />,
+  place: <MapPin />,
+  vision: <Sparkles />,
 };
 
 function useDebounced<T>(v: T, ms: number): T {
@@ -121,6 +126,9 @@ export function CommandPalette() {
       { id: 'a-note', group: 'Actions', title: 'Add note', icon: <StickyNote />, run: add('note') },
       { id: 'a-win', group: 'Actions', title: 'Add a win', icon: <Trophy />, keywords: 'accomplishment milestone', run: add('win') },
       { id: 'a-goal', group: 'Actions', title: 'New goal', icon: <Target />, run: add('goal') },
+      { id: 'a-screen', group: 'Actions', title: 'Log screen time', icon: <Smartphone />, keywords: 'phone usage minutes', run: add('screen') },
+      { id: 'a-trip', group: 'Actions', title: 'Add a trip', icon: <MapPin />, keywords: 'travel visit place map pin vacation', run: add('trip') },
+      { id: 'a-vision', group: 'Actions', title: 'Add to vision board', icon: <Sparkles />, keywords: 'dream image quote inspiration', run: add('vision') },
       { id: 'a-project', group: 'Actions', title: 'New project', icon: <FolderKanban />, run: add('project') },
       { id: 'v-month', group: 'Go to', title: 'View this month', sub: 'Monthly review', icon: <CalendarDays />, run: go(`/reviews/month/${month}`) },
       { id: 'v-week', group: 'Go to', title: 'View this week', sub: 'Weekly review', icon: <CalendarDays />, run: go(`/reviews/week/${boot.today}`) },

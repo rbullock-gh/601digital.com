@@ -5,6 +5,8 @@ import { listPRs, listWorkouts, workoutExerciseNames } from './fitness.ts';
 import { listBody, photoSetOnDate } from './body.ts';
 import { dailyGoalCounts, goalsForDay } from './goals.ts';
 import { dailySeries } from './stats.ts';
+import { getScreenDay } from './screentime.ts';
+import { travelDays, visitsIn } from './travel.ts';
 import {
   addDays,
   daysInYear,
@@ -117,6 +119,8 @@ export function dayView(date: ISODate, today: ISODate, weekStart: number): DayVi
     notes: listNotes(date),
     accomplishments: listAccomplishments(date, date),
     goals: goalsForDay(date, today, weekStart),
+    screen: getScreenDay(date),
+    travel: visitsIn({ start: date, end: date }).map(({ lat: _lat, lng: _lng, ...v }) => v),
     prev: addDays(date, -1),
     next: addDays(date, 1),
   };
@@ -148,6 +152,10 @@ export function daySummaries(r: Range, today: ISODate): DaySummary[] {
       )
       .all({ start: r.start, end: r.end }) as { date: string; n: number }[]).map((x) => [x.date, x.n]),
   );
+  const screen = new Map(
+    (db().prepare('SELECT date, minutes FROM screen_time WHERE date >= ? AND date <= ?').all(r.start, r.end) as { date: string; minutes: number }[]).map((x) => [x.date, x.minutes]),
+  );
+  const travel = travelDays(r);
   const prs = new Map(
     (db()
       .prepare('SELECT date, COUNT(DISTINCT exercise_id) n FROM personal_records WHERE date >= ? AND date <= ? GROUP BY date')
@@ -167,6 +175,8 @@ export function daySummaries(r: Range, today: ISODate): DaySummary[] {
     hasBody: bodies.has(p.date),
     hasPhotos: photos.has(p.date),
     noteCount: notes.get(p.date) ?? 0,
+    screenMinutes: screen.get(p.date) ?? null,
+    travel: travel.get(p.date) ?? null,
   }));
 }
 

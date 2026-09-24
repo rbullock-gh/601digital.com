@@ -154,6 +154,43 @@ export function generateSample(db: Database.Database, photosDir: string, root: s
       };
     };
 
+    // ── Travel: home, past trips, and a bucket list ──
+    type P = [string, string | null, string, string, number, number];
+    const placeId: Record<string, number> = {};
+    const addPlace = ([name, region, country, cc, lat, lng]: P, status: string) =>
+      (placeId[name] = ins('INSERT INTO places (name, region, country, country_code, lat, lng, status) VALUES (?, ?, ?, ?, ?, ?, ?)', name, region, country, cc, lat, lng, status));
+    addPlace(['Hattiesburg', 'Mississippi', 'United States', 'US', 31.3271, -89.2903], 'home');
+    const US = (name: string, state: string, lat: number, lng: number): P => [name, state, 'United States', 'US', lat, lng];
+    for (const pl of [
+      US('New Orleans', 'Louisiana', 29.9511, -90.0715), US('Gulf Shores', 'Alabama', 30.246, -87.7008), US('Nashville', 'Tennessee', 36.1627, -86.7816),
+      US('Atlanta', 'Georgia', 33.749, -84.388), US('Birmingham', 'Alabama', 33.5186, -86.8104), US('Austin', 'Texas', 30.2672, -97.7431),
+      US('Destin', 'Florida', 30.3935, -86.4958), US('Denver', 'Colorado', 39.7392, -104.9903), US('Chicago', 'Illinois', 41.8781, -87.6298),
+      ['Cancún', null, 'Mexico', 'MX', 21.1619, -86.8515] as P,
+    ]) addPlace(pl, 'visited');
+    for (const pl of [
+      ['Tokyo', null, 'Japan', 'JP', 35.6762, 139.6503], ['Kyoto', null, 'Japan', 'JP', 35.0116, 135.7681],
+      ['Reykjavík', null, 'Iceland', 'IS', 64.1466, -21.9426], ['Banff', null, 'Canada', 'CA', 51.1784, -115.5708],
+      ['Lisbon', null, 'Portugal', 'PT', 38.7223, -9.1393], ['Paris', null, 'France', 'FR', 48.8566, 2.3522],
+      US('Kahului', 'Hawaii', 20.8893, -156.4729),
+    ] as P[]) addPlace(pl, 'want');
+    db.prepare("UPDATE places SET notes = ? WHERE name = 'Tokyo'").run('Cherry blossom season — late March / early April.');
+    db.prepare("UPDATE places SET notes = ? WHERE name = 'Reykjavík'").run('Northern lights. Go between September and March.');
+    // [place, start, end, trip title]
+    const tripDefs: [string, ISODate, ISODate, string][] = [
+      ['Cancún', make(2019, 6, 10), make(2019, 6, 15), 'Cancún'],
+      ['Chicago', make(2022, 10, 7), make(2022, 10, 10), 'Chicago long weekend'],
+      ['New Orleans', make(y0, 4, 11), make(y0, 4, 13), 'French Quarter Fest'],
+      ['Gulf Shores', make(y0, 7, 3), make(y0, 7, 7), 'Fourth of July at the beach'],
+      ['Nashville', make(y0, 9, 19), make(y0, 9, 21), 'Nashville weekend'],
+      ['Atlanta', make(y0, 11, 14), make(y0, 11, 15), 'Braves game + client lunch'],
+      ['Birmingham', make(y0, 12, 24), make(y0, 12, 28), 'Christmas with family'],
+      ['Austin', make(y0 + 1, 3, 13), make(y0 + 1, 3, 16), 'Austin — web conference'],
+      ['Destin', make(y0 + 1, 5, 22), make(y0 + 1, 5, 26), 'Memorial Day in Destin'],
+      ['Denver', make(y0 + 1, 8, 7), make(y0 + 1, 8, 10), 'Denver + Rockies hike'],
+    ];
+    const trips = tripDefs.filter(([, start]) => start < today);
+    for (const [pl, start, end, title] of trips) ins('INSERT INTO visits (place_id, start_date, end_date, title) VALUES (?, ?, ?, ?)', placeId[pl], start, end < today ? end : addDays(today, -1), title);
+
     const journalOpeners = [
       'Solid day.', 'Long one today.', 'Quiet morning, busy afternoon.', 'Felt locked in.', 'Slow start but got there.',
       'Good energy today.', 'Tired, but made progress.', 'Kept it simple today.',
@@ -167,7 +204,7 @@ export function generateSample(db: Database.Database, photosDir: string, root: s
       const isWeekend = wd === 0 || wd === 6;
       const isToday = d === today;
       const p = progress(d);
-      const vacation = (d >= make(y0, 7, 3) && d <= make(y0, 7, 7)) || (d >= make(y0, 12, 24) && d <= make(y0, 12, 28));
+      const vacation = trips.some(([, a, b]) => d >= a && d <= b);
 
       // ── Work ──
       let dayMinutes = 0;
@@ -269,12 +306,13 @@ export function generateSample(db: Database.Database, photosDir: string, root: s
       }
 
       // ── Rating & journal ──
+      let rating: number | null = null;
       if (!isToday && chance(vacation ? 0.7 : 0.9)) {
         let pg = 0.42 + (workedOut ? 0.2 : 0) + (dayMinutes >= 180 && dayMinutes <= 480 ? 0.12 : 0) + (dayMinutes > 540 ? -0.15 : 0) + p * 0.08;
         if (vacation) pg = 0.75;
         const pb = dayMinutes === 0 && !isWeekend && !vacation ? 0.28 : 0.08;
         const x = R();
-        const rating = x < pg ? 3 : x < pg + pb ? 1 : 2;
+        rating = x < pg ? 3 : x < pg + pb ? 1 : 2;
         let journal: string | null = null;
         if (chance(0.38) || (d >= addDays(today, -6))) {
           const bits: string[] = [];
@@ -286,6 +324,29 @@ export function generateSample(db: Database.Database, photosDir: string, root: s
           journal = `${pick(journalOpeners)} ${bits.length ? bits.join(', ') + ', and ' : ''}${feel}.`.replace(/^(.)/, (c) => c.toUpperCase());
         }
         ins('INSERT INTO days (date, rating, rated_at, journal) VALUES (?, ?, ?, ?)', d, rating, `${d}T22:00:00.000Z`, journal);
+      }
+
+      // ── Screen time: trending down, heavier on weekends and bad days ──
+      if (!isToday && chance(0.86)) {
+        let mins = 255 - 75 * p + (isWeekend ? 50 : 0) + (workedOut ? -18 : 0) + (vacation ? -55 : 0) + rand(-40, 40);
+        if (rating === 1) mins += rand(35, 80);
+        if (rating === 3) mins -= rand(5, 30);
+        mins = Math.round(Math.max(45, mins));
+        let cats: string | null = null;
+        if (chance(0.7)) {
+          const share: [string, number][] = [
+            ['Social', 0.3 - 0.06 * p], ['Entertainment', isWeekend ? 0.3 : 0.22], ['Productivity', isWeekend ? 0.06 : 0.16], ['Messaging', 0.12],
+            ['Reading', 0.05 + 0.04 * p], ['Games', 0.04], ['Other', 0.06],
+          ];
+          const total = share.reduce((a, [, v]) => a + v, 0);
+          const out: Record<string, number> = {};
+          for (const [k, v] of share) {
+            const m2 = Math.round((mins * v * rand(0.8, 1.2)) / total);
+            if (m2 > 0) out[k] = m2;
+          }
+          cats = JSON.stringify(out);
+        }
+        ins('INSERT INTO screen_time (date, minutes, pickups, categories) VALUES (?, ?, ?, ?)', d, mins, Math.round(rand(70, 110) - 25 * p + (isWeekend ? 10 : 0)), cats);
       }
 
       // ── Notes & wins ──
@@ -351,13 +412,49 @@ export function generateSample(db: Database.Database, photosDir: string, root: s
       ['Work 3+ hours', 'hours', 'day', 1, 180, addDays(today, -120), null, null, null],
       ['Read 20 pages', 'manual', 'day', 1, 1, addDays(today, -120), null, null, null],
       ['Waist under 33 in', 'waist', 'target', 0, inch(33), make(y0 + 1, 1, 1), null, inch(34.4), null],
+      ['Screen time under 3h a day', 'screen_time', 'week', 1, 180, addDays(START, -((weekday(START) + 6) % 7)), null, null, null],
+      [`3 new places in ${y0 + 1}`, 'new_places', 'year', 1, 3, make(y0, 1, 1), null, null, null],
     ];
+    const goalId: Record<string, number> = {};
     gs.forEach(([title, metric, period, rec, target, start, end, base, ex], i) => {
       const gid = ins(
         'INSERT INTO goals (title, metric, period, recurring, start_date, end_date, target, baseline, exercise_id, position) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
         title, metric, period, rec, start, end, target, base, ex, i,
       );
+      goalId[title] = gid;
       if (metric === 'manual') for (const d of eachDay(start!, addDays(today, -1))) if (chance(0.62)) ins('INSERT INTO goal_checkins (goal_id, date, value) VALUES (?, ?, 1)', gid, d);
+    });
+
+    // ── Vision board ──
+    const vdir = path.join(photosDir, 'vision');
+    fs.mkdirSync(vdir, { recursive: true });
+    type V = { kind: 'image' | 'quote'; title?: string; body?: string; area: string; art?: string; h?: number; tone?: string; goal?: string; place?: string; target?: ISODate; achieved?: ISODate };
+    const cards: V[] = [
+      { kind: 'image', title: 'Bench 250', body: 'Two plates and a quarter. Clean reps, no spotter needed.', area: 'Fitness', art: 'barbell', h: 1000, goal: 'Bench 250 lb' },
+      { kind: 'image', title: 'Tokyo in cherry blossom season', area: 'Travel', art: 'blossom', h: 1100, place: 'Tokyo', target: make(y0 + 2, 4, 1) },
+      { kind: 'quote', body: 'Fewer clients. Better work. Higher rates.', area: 'Career', tone: 'ink' },
+      { kind: 'image', title: `$55k year`, body: 'A business that pays like a job without feeling like one.', area: 'Money', art: 'chart', h: 800, goal: `Earn $55,000 in ${y0 + 1}` },
+      { kind: 'quote', body: 'Phone down, eyes up.', area: 'Health', tone: 'sage', goal: 'Screen time under 3h a day' },
+      { kind: 'image', title: 'Northern lights in Iceland', area: 'Travel', art: 'aurora', h: 900, place: 'Reykjavík' },
+      { kind: 'image', title: 'An office with a window', body: 'Natural light, plants, a real desk.', area: 'Home', art: 'window', h: 1000 },
+      { kind: 'quote', body: 'Show up on the days you don’t feel like it. Those are the ones that count.', area: 'Fitness', tone: 'sand' },
+      { kind: 'image', title: 'Hike above the treeline', area: 'Fun', art: 'peaks', h: 800, achieved: trips.some(([pl]) => pl === 'Denver') ? make(y0 + 1, 8, 9) : undefined },
+      { kind: 'image', title: 'Reach 170', body: 'Lighter, faster, stronger.', area: 'Health', art: 'scale', h: 900, goal: 'Reach 170 lb' },
+      { kind: 'quote', body: 'Build something that lasts longer than a launch.', area: 'Career', tone: 'sky' },
+    ];
+    cards.forEach((c, i) => {
+      let rel: string | null = null;
+      if (c.art) {
+        const file = path.join(vdir, `sample-${i}-${c.art}.svg`);
+        fs.writeFileSync(file, visionArt(c.art, 800, c.h ?? 1000));
+        rel = path.relative(root, file);
+      }
+      ins(
+        `INSERT INTO vision_items (kind, title, body, area, image, width, height, tone, goal_id, place_id, target_date, achieved_on, position)
+         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+        c.kind, c.title ?? null, c.body ?? null, c.area, rel, rel ? 800 : null, rel ? c.h ?? 1000 : null, c.tone ?? null,
+        c.goal ? goalId[c.goal] ?? null : null, c.place ? placeId[c.place] ?? null : null, c.target ?? null, c.achieved ?? null, i,
+      );
     });
 
     // ── Written reviews for a few past periods ──
@@ -433,5 +530,81 @@ function silhouette(angle: 'front' | 'side' | 'back', p: number, label: string):
   <text x="28" y="48" font-family="system-ui, sans-serif" font-size="20" font-weight="600" letter-spacing="2" fill="#4f4a42">${angle.toUpperCase()}</text>
   <text x="28" y="74" font-family="system-ui, sans-serif" font-size="16" letter-spacing="1.5" fill="#4f4a42" opacity=".7">${label}</text>
   <text x="572" y="772" text-anchor="end" font-family="system-ui, sans-serif" font-size="14" letter-spacing="3" fill="#4f4a42" opacity=".6">SAMPLE PHOTO</text>
+</svg>`;
+}
+
+/** Simple illustrated placeholders for sample vision cards, marked as sample. */
+function visionArt(kind: string, w: number, h: number): string {
+  const g = (id: string, a: string, b: string, dir = 'x1="0" y1="0" x2="0" y2="1"') =>
+    `<linearGradient id="${id}" ${dir}><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>`;
+  let defs = '';
+  let art = '';
+  const cx = w / 2;
+  switch (kind) {
+    case 'barbell': {
+      defs = g('bg', '#1f2326', '#383d40');
+      const y = h * 0.55;
+      art = `<rect x="${cx - 300}" y="${y - 7}" width="600" height="14" rx="7" fill="#c9cdd0"/>
+        ${[-1, 1].map((s) => [0, 38, 70].map((o, k) => `<rect x="${cx + s * (190 + o) - 16}" y="${y - [120, 100, 70][k]}" width="32" height="${[240, 200, 140][k]}" rx="6" fill="${['#2a78d6', '#d8b24a', '#e7e7e7'][k]}"/>`).join('')).join('')}
+        <text x="${cx}" y="${h * 0.3}" text-anchor="middle" font-family="system-ui,sans-serif" font-size="120" font-weight="700" fill="#fff" opacity=".92">250</text>`;
+      break;
+    }
+    case 'blossom': {
+      defs = g('bg', '#fbe3e8', '#f3b7c6');
+      const petals = Array.from({ length: 70 }, (_, i) => {
+        const x = (i * 137.5) % w;
+        const y = ((i * 71) % (h * 0.6)) + 20;
+        const r = 10 + ((i * 7) % 14);
+        return `<circle cx="${x}" cy="${y}" r="${r}" fill="${i % 3 ? '#f7a8bb' : '#fff'}" opacity="${0.55 + (i % 4) * 0.1}"/>`;
+      }).join('');
+      art = `<circle cx="${w * 0.7}" cy="${h * 0.34}" r="90" fill="#e8546a" opacity=".85"/>
+        <path d="M0 ${h * 0.8} L${w * 0.3} ${h * 0.52} L${w * 0.5} ${h * 0.66} L${w * 0.72} ${h * 0.46} L${w} ${h * 0.74} L${w} ${h} L0 ${h} Z" fill="#8f5a6b" opacity=".55"/>
+        <path d="M${w * 0.08} ${h * 0.56} Q${w * 0.22} ${h * 0.54} ${w * 0.36} ${h * 0.56}" stroke="#c0392b" stroke-width="20" fill="none" stroke-linecap="round"/>
+        <path d="M${w * 0.11} ${h * 0.62} H${w * 0.33}" stroke="#c0392b" stroke-width="12"/>
+        <path d="M${w * 0.15} ${h * 0.56} V${h} M${w * 0.29} ${h * 0.56} V${h}" stroke="#c0392b" stroke-width="16"/>${petals}`;
+      break;
+    }
+    case 'chart': {
+      defs = g('bg', '#0c3b35', '#11574d');
+      const pts = [0.72, 0.66, 0.68, 0.58, 0.55, 0.47, 0.42, 0.36, 0.3, 0.22].map((v, i) => `${80 + i * ((w - 160) / 9)},${h * v}`).join(' ');
+      art = `<polyline points="${pts}" fill="none" stroke="#81d8d0" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="80" y="${h * 0.16}" font-family="system-ui,sans-serif" font-size="72" font-weight="700" fill="#e8fffb">$55,000</text>`;
+      break;
+    }
+    case 'aurora':
+      defs = g('bg', '#07121f', '#123047') + g('au', '#3ef0b0', '#7f6fd8', 'x1="0" y1="0" x2="1" y2="0"');
+      art = `${Array.from({ length: 80 }, (_, i) => `<circle cx="${(i * 97) % w}" cy="${(i * 53) % (h * 0.5)}" r="${1 + (i % 3)}" fill="#fff" opacity=".7"/>`).join('')}
+        <path d="M-20 ${h * 0.42} C ${w * 0.25} ${h * 0.18}, ${w * 0.55} ${h * 0.5}, ${w + 20} ${h * 0.2} L ${w + 20} ${h * 0.34} C ${w * 0.55} ${h * 0.62}, ${w * 0.25} ${h * 0.32}, -20 ${h * 0.56} Z" fill="url(#au)" opacity=".7"/>
+        <path d="M0 ${h * 0.82} L${w * 0.22} ${h * 0.64} L${w * 0.4} ${h * 0.76} L${w * 0.66} ${h * 0.58} L${w} ${h * 0.8} L${w} ${h} L0 ${h} Z" fill="#0a1a26"/>`;
+      break;
+    case 'window':
+      defs = g('bg', '#efe7da', '#e2d6c3') + g('sky', '#9fd2ee', '#f6e7c1');
+      art = `<rect x="${cx - 220}" y="${h * 0.12}" width="440" height="${h * 0.48}" rx="10" fill="url(#sky)" stroke="#fff" stroke-width="18"/>
+        <path d="M${cx} ${h * 0.12} V${h * 0.6} M${cx - 220} ${h * 0.36} H${cx + 220}" stroke="#fff" stroke-width="12"/>
+        <rect x="${cx - 300}" y="${h * 0.7}" width="600" height="22" rx="6" fill="#8a6a4a"/>
+        <rect x="${cx - 280}" y="${h * 0.72}" width="16" height="${h * 0.22}" fill="#8a6a4a"/><rect x="${cx + 264}" y="${h * 0.72}" width="16" height="${h * 0.22}" fill="#8a6a4a"/>
+        <rect x="${cx - 90}" y="${h * 0.6}" width="180" height="110" rx="8" fill="#2d2f31"/><rect x="${cx - 20}" y="${h * 0.6 + 110}" width="40" height="${h * 0.1 - 110 + 10}" fill="#2d2f31"/>
+        <path d="M${cx + 190} ${h * 0.7} q-30 -120 10 -160 q20 60 -10 160 M${cx + 200} ${h * 0.7} q40 -90 70 -100 q-10 60 -70 100" fill="#3f8a55"/>
+        <rect x="${cx + 170}" y="${h * 0.64}" width="60" height="${h * 0.06}" rx="6" fill="#c0643c"/>`;
+      break;
+    case 'peaks':
+      defs = g('bg', '#f6c28b', '#f08a5d');
+      art = `<circle cx="${w * 0.72}" cy="${h * 0.3}" r="70" fill="#fff4dd"/>
+        <path d="M0 ${h * 0.75} L${w * 0.28} ${h * 0.35} L${w * 0.46} ${h * 0.56} L${w * 0.62} ${h * 0.4} L${w} ${h * 0.78} L${w} ${h} L0 ${h} Z" fill="#6b4e71"/>
+        <path d="M${w * 0.28} ${h * 0.35} L${w * 0.22} ${h * 0.44} L${w * 0.3} ${h * 0.42} L${w * 0.34} ${h * 0.45} Z M${w * 0.62} ${h * 0.4} L${w * 0.57} ${h * 0.47} L${w * 0.66} ${h * 0.46} Z" fill="#fff"/>
+        <path d="M0 ${h * 0.9} L${w * 0.3} ${h * 0.7} L${w * 0.6} ${h * 0.86} L${w} ${h * 0.72} L${w} ${h} L0 ${h} Z" fill="#3b2c45"/>`;
+      break;
+    case 'scale':
+      defs = g('bg', '#e9eef2', '#cfd8df');
+      art = `<rect x="${cx - 200}" y="${h * 0.3}" width="400" height="400" rx="60" fill="#2d2f31"/>
+        <rect x="${cx - 130}" y="${h * 0.3 + 60}" width="260" height="110" rx="14" fill="#9fe3c9"/>
+        <text x="${cx}" y="${h * 0.3 + 145}" text-anchor="middle" font-family="ui-monospace,monospace" font-size="80" font-weight="700" fill="#133b2e">170.0</text>`;
+      break;
+  }
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}">
+  <defs>${defs}</defs>
+  <rect width="${w}" height="${h}" fill="url(#bg)"/>
+  ${art}
+  <text x="${w - 24}" y="${h - 22}" text-anchor="end" font-family="system-ui, sans-serif" font-size="16" letter-spacing="3" fill="#000" opacity=".35">SAMPLE IMAGE</text>
 </svg>`;
 }

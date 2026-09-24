@@ -1,9 +1,9 @@
 # Almanac
 
 A private, local-first personal operating system: work, money, projects,
-training, body, progress photos, and a daily rating and journal. Each thing is
-logged once, and every dashboard, calendar, goal, review and insight is derived
-from those records.
+training, body, progress photos, a daily rating and journal, a vision board, a
+travel map, and screen time. Each thing is logged once, and every dashboard,
+calendar, goal, review and insight is derived from those records.
 
 It runs on your own machine. There are no accounts, no cloud, and no analytics.
 
@@ -75,7 +75,7 @@ Settings → Your data:
 - **Export JSON / Import JSON** covers every record as readable JSON. Photos
   aren't included; use the zip for those.
 - **CSV exports** cover work sessions, income, all earnings, workout sets, PRs,
-  body measurements, and days with journal entries.
+  body measurements, days with journal entries, screen time, and trips.
 - Deleting anything moves it to **Recently deleted**, where it can be restored.
   Reset moves the whole dataset into `backups/` rather than destroying it.
 
@@ -88,11 +88,14 @@ server/                 Fastify + better-sqlite3 (TypeScript, run with tsx)
   db/migrations/        Versioned SQL schema (PRAGMA user_version)
   domain/               All business logic: work, fitness (PR detection), body
                         & photos, days, goals, stats, summaries, insights,
-                        reviews, search, backup/restore, sample data
+                        reviews, search, backup/restore, sample data,
+                        travel (places, visits, offline city search),
+                        screen time, vision board
   routes/api.ts         JSON API
 src/                    React 19 + React Router + TanStack Query (Vite)
   components/           Shell, charts (SVG, no chart library), year grid,
-                        dialogs, command palette, quick add, timer
+                        travel map (d3-geo), dialogs, command palette,
+                        quick add, timer
   pages/                One file per screen
   features/             Forms and pieces shared between screens
   styles/               Design tokens (light, dark, Tiffany) and components
@@ -115,12 +118,23 @@ Principles the code follows:
   is edited or deleted, and the first session of an exercise is the baseline.
 - **Insights are arithmetic**, shown only above minimum sample sizes.
   Relationships between areas are labelled as correlations.
+- **Screen time is a limit, not a total.** Screen-time goals pass while your
+  average over the days you logged stays under the target; an unlogged day is
+  never counted as a pass.
+- **The map is offline.** Country and state shapes (Natural Earth, via
+  `world-atlas` / `us-atlas`) and a 138,000-city list (GeoNames, via
+  `all-the-cities`) ship with the app. City search, dropping a pin, and drawing
+  the map all happen on your machine. No tile servers or geocoding APIs.
+- **Vision cards check themselves off.** A card linked to a target goal is
+  achieved when the goal is reached. One linked to a bucket-list place is
+  achieved when you log a trip there. Images are stored exactly as uploaded.
 
 ## Tests
 
 ```bash
 npm test             # domain tests (dates, earnings, PRs, goals, ratings,
-                     # backup/restore, sample isolation)
+                     # screen time, travel, vision board, backup/restore,
+                     # sample isolation)
 npm run test:e2e     # builds, boots a throwaway server, drives the real UI
 npm run typecheck
 ```

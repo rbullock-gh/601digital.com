@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ChevronDown, ChevronLeft, ChevronRight, Star, Trophy } from 'lucide-react';
+import { ChevronDown, ChevronLeft, ChevronRight, Sparkles, Star, Trophy } from 'lucide-react';
 import { api } from '../lib/api.ts';
 import { useBoot } from '../lib/boot.ts';
 import { useDocumentTitle } from '../lib/hooks.ts';
@@ -10,6 +10,8 @@ import { ErrorBox, PageSkeleton } from '../components/ui/primitives.tsx';
 import { BarChart, RatingBar } from '../components/charts/charts.tsx';
 import { YearGrid } from '../components/YearGrid.tsx';
 import { Reflection } from '../features/ReviewParts.tsx';
+import { TravelMap } from '../components/TravelMap.tsx';
+import { useTravel } from '../features/lifeForms.tsx';
 import { groupPRs, prText } from '../features/shared.tsx';
 import { addDays } from '../../shared/dates.ts';
 import { MEASUREMENT_LABELS, type MeasurementKey } from '../../shared/types.ts';
@@ -86,6 +88,7 @@ export default function YearInReview() {
   const navigate = useNavigate();
   const year = Number(yp) || Number(boot.today.slice(0, 4));
   const q = useQuery({ queryKey: ['wrapped', year], queryFn: () => api.get<YearReviewData>(`/reviews/year/${year}`) });
+  const travel = useTravel();
   useDocumentTitle(`${year} in review`);
   if (q.isError) return <div className="page"><ErrorBox error={q.error} retry={() => q.refetch()} /></div>;
   if (!q.data) return <PageSkeleton />;
@@ -98,6 +101,10 @@ export default function YearInReview() {
   const milestones = r.accomplishments.filter((a) => a.isMilestone);
   const wins = r.accomplishments.filter((a) => !a.isMilestone);
   const photoPair = r.firstPhotos && r.lastPhotos && r.firstPhotos.month !== r.lastPhotos.month;
+  const yearPlaces = (travel.data?.places ?? []).filter((p) => p.status === 'home' || r.travel.some((v) => v.placeId === p.id));
+  const tripCount = r.travelStats.trips;
+  const screenFirst = r.screenMonths[0];
+  const screenLast = r.screenMonths[r.screenMonths.length - 1];
 
   return (
     <div className="wrapped">
@@ -359,8 +366,67 @@ export default function YearInReview() {
             </Chapter>
           )}
 
-          {(r.goalsCompleted.length > 0 || milestones.length > 0 || wins.length > 0) && (
-            <Chapter n="06" title="Milestones">
+          {r.travel.length > 0 && (
+            <Chapter n="06" title="Places" tone="var(--travel)">
+              <Reveal>
+                <div className="hero-number"><CountUp value={r.travelStats.tripDays} format={(n) => num(Math.round(n))} /> <span>days away</span></div>
+              </Reveal>
+              <Reveal delay={100}>
+                <p className="wrapped-line">
+                  on <b>{plural(tripCount, 'trip')}</b> to <b>{plural(r.travelStats.places, 'place')}</b>
+                  {r.travelStats.countries > 1 && <> in <b>{r.travelStats.countries} countries</b></>}
+                  {r.travelStats.newPlaces.length > 0 && <> — <b>{r.travelStats.newPlaces.length} of them</b> for the first time</>}.
+                </p>
+              </Reveal>
+              {yearPlaces.length > 0 && (
+                <Reveal delay={160}>
+                  <div className="wrapped-map">
+                    <TravelMap places={yearPlaces} view={yearPlaces.every((p) => p.countryCode === 'US') ? 'us' : 'world'} still height={320} />
+                  </div>
+                </Reveal>
+              )}
+              <Reveal>
+                <div className="wrapped-list">
+                  {r.travel.map((v) => (
+                    <Link key={v.id} to={`/travel?place=${v.placeId}`} className="wl-row">
+                      <span className="faint num wl-date">{dateRange(v.startDate, v.endDate).replace(/, \d{4}$/, '')}</span>
+                      <span className="grow">{v.title && v.title !== v.placeName ? v.title : v.placeName}</span>
+                      <span className="faint">{v.title && v.title !== v.placeName ? v.placeName : v.country}</span>
+                    </Link>
+                  ))}
+                </div>
+              </Reveal>
+            </Chapter>
+          )}
+
+          {r.screen.avg != null && r.screen.logged >= 7 && (
+            <Chapter n="07" title="Screen time" tone="var(--screen)">
+              <Reveal>
+                <div className="hero-number"><CountUp value={r.screen.avg / 60} format={(n) => n.toFixed(1)} /> <span>hours a day</span></div>
+              </Reveal>
+              <Reveal delay={100}>
+                <p className="wrapped-line">
+                  on average, across <b>{plural(r.screen.logged, 'logged day')}</b>
+                  {screenFirst && screenLast && screenFirst.month !== screenLast.month && (
+                    <>
+                      {' '}— from <b>{duration(screenFirst.avg)}</b> a day in {monthName(screenFirst.month)} to <b>{duration(screenLast.avg)}</b> in {monthName(screenLast.month)}
+                    </>
+                  )}
+                  .
+                </p>
+              </Reveal>
+              {r.screenMonths.length > 1 && (
+                <Reveal delay={160}>
+                  <div className="wrapped-chart">
+                    <BarChart ariaLabel="Average daily screen time per month" data={r.screenMonths.map((m) => ({ key: m.month, label: monthName(m.month, true), value: m.avg }))} format={(v) => `${duration(v)} a day`} axisFormat={(v) => `${+(v / 60).toFixed(1)}h`} tickUnit={60} minMax={60} color="var(--screen)" height={200} />
+                  </div>
+                </Reveal>
+              )}
+            </Chapter>
+          )}
+
+          {(r.goalsCompleted.length > 0 || milestones.length > 0 || wins.length > 0 || r.visionAchieved.length > 0) && (
+            <Chapter n="08" title="Milestones">
               {r.goalsCompleted.length > 0 && (
                 <Reveal>
                   <div className="hero-number"><CountUp value={r.goalsCompleted.length} format={(n) => num(Math.round(n))} /> <span>goals completed</span></div>
@@ -379,6 +445,20 @@ export default function YearInReview() {
                   </div>
                 </Reveal>
               )}
+              {r.visionAchieved.length > 0 && (
+                <Reveal>
+                  <div className="wrapped-list">
+                    <div className="eyebrow">Off the vision board</div>
+                    {r.visionAchieved.map((v) => (
+                      <Link key={v.id} to={`/vision#card-${v.id}`} className="wl-row">
+                        <span className="wl-rank"><Sparkles size={13} /></span>
+                        <span className="grow">{v.title ?? v.body}</span>
+                        <span className="faint">{shortDate(v.achievedOn)}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </Reveal>
+              )}
               {wins.length > 0 && (
                 <Reveal>
                   <p className="wrapped-line small">
@@ -389,7 +469,7 @@ export default function YearInReview() {
             </Chapter>
           )}
 
-          <Chapter n="07" title="Looking back">
+          <Chapter n="09" title="Looking back">
             <Reveal>
               <div className="wrapped-closing">
                 <RatingBar good={t.good} okay={t.okay} bad={t.bad} height={14} />
