@@ -1,10 +1,12 @@
 /* ─────────────────────────────────────────────────────────────────────────────
    Almanac design tokens.
 
-   Three palettes, one vocabulary:
+   Two palettes, one vocabulary:
      light    warm paper, ink-black accents
      dark     deep charcoal, soft white accents
-     tiffany  near-black with Tiffany blue accents
+
+   The Custom theme layers a chosen accent over either base. Its variables are
+   computed in src/lib/theme.ts and set inline on <html data-accent="custom">.
 
    Data colours (work, money, fitness, body) and the day-rating colours were
    checked for colour-vision separation and contrast against each surface.
@@ -117,60 +119,6 @@
   --shadow-md: 0 6px 20px -6px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 28px 72px -16px rgba(0, 0, 0, 0.7), 0 4px 12px rgba(0, 0, 0, 0.4);
   --scrim: rgba(0, 0, 0, 0.55);
-}
-
-:root[data-theme='tiffany'] {
-  color-scheme: dark;
-
-  --bg: #060707;
-  --bg-sunken: #030404;
-  --surface: #0d0f0f;
-  --surface-2: #131616;
-  --surface-hover: #161a1a;
-  --border: #1d2323;
-  --border-strong: #2a3232;
-  --hairline: rgba(129, 216, 208, 0.08);
-
-  --text: #eaf3f2;
-  --text-2: #a2b4b2;
-  --text-3: #6d7e7c;
-  --text-4: #4a5857;
-
-  --accent: #81d8d0;
-  --accent-hover: #9be2db;
-  --accent-contrast: #031110;
-  --accent-soft: rgba(129, 216, 208, 0.1);
-  --highlight: #81d8d0;
-  --focus: #81d8d0;
-  --selection: rgba(129, 216, 208, 0.26);
-
-  --work: #5aa7ea;
-  --money: #81d8d0;
-  --fitness: #e8845a;
-  --body: #a598f2;
-  --work-soft: rgba(90, 167, 234, 0.13);
-  --money-soft: rgba(129, 216, 208, 0.12);
-  --fitness-soft: rgba(232, 132, 90, 0.13);
-  --body-soft: rgba(165, 152, 242, 0.13);
-
-  --good: #2f9457;
-  --okay: #c99a30;
-  --bad: #d85c44;
-  --unrated: #172020;
-  --future: transparent;
-  --future-border: #151b1b;
-
-  --positive: #6fd3a1;
-  --negative: #ec7d67;
-  --warning: #d9a634;
-
-  --grid: #151b1b;
-  --axis: #263030;
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --shadow-md: 0 6px 20px -6px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(129, 216, 208, 0.04);
-  --shadow-lg: 0 28px 72px -16px rgba(0, 0, 0, 0.85), 0 0 0 1px rgba(129, 216, 208, 0.06);
-  --scrim: rgba(0, 0, 0, 0.65);
 }
 
 :root {

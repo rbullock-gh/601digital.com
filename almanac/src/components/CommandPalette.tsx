@@ -12,8 +12,8 @@ import {
   Dumbbell,
   FileText,
   FolderKanban,
-  Gem,
   Moon,
+  Palette,
   Play,
   Scale,
   Search,
@@ -130,7 +130,7 @@ export function CommandPalette() {
       { id: 'nav-settings', group: 'Go to', title: 'Settings', icon: <FileText />, keywords: 'backup export restore', run: go('/settings') },
       { id: 't-light', group: 'Theme', title: 'Light theme', icon: <Sun />, run: () => (setThemePref('light'), close()) },
       { id: 't-dark', group: 'Theme', title: 'Dark theme', icon: <Moon />, run: () => (setThemePref('dark'), close()) },
-      { id: 't-tiffany', group: 'Theme', title: 'Tiffany theme', sub: 'Black & Tiffany blue', icon: <Gem />, run: () => (setThemePref('tiffany'), close()) },
+      { id: 't-custom', group: 'Theme', title: 'Custom theme', sub: 'Your own accent color', icon: <Palette />, keywords: 'colour color accent tiffany', run: () => (setThemePref('custom'), close()) },
     ],
     [boot.timer, boot.today],
   );

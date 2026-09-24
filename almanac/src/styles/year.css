@@ -78,10 +78,10 @@ button.yg-cell:focus-visible {
     0 0 0 3.5px var(--text);
   z-index: 1;
 }
-:root[data-theme='tiffany'] .yg-cell.today {
+:root[data-accent='custom'] .yg-cell.today {
   box-shadow:
     0 0 0 2px var(--bg),
-    0 0 0 3.5px var(--accent);
+    0 0 0 3.5px var(--accent-ink);
 }
 .yg-cell.selected {
   box-shadow:

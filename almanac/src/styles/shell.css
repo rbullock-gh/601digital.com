@@ -157,8 +157,8 @@
 .nav-link.active svg {
   color: var(--text);
 }
-:root[data-theme='tiffany'] .nav-link.active svg {
-  color: var(--accent);
+:root[data-accent='custom'] .nav-link.active svg {
+  color: var(--accent-ink);
 }
 .nav-link .count {
   margin-left: auto;
@@ -446,8 +446,8 @@
   .tab.active {
     color: var(--text);
   }
-  :root[data-theme='tiffany'] .tab.active {
-    color: var(--accent);
+  :root[data-accent='custom'] .tab.active {
+    color: var(--accent-ink);
   }
   .tab-add {
     justify-self: center;
@@ -752,8 +752,8 @@
   color: var(--text);
   box-shadow: var(--shadow-sm), 0 0 0 1px var(--hairline);
 }
-:root[data-theme='tiffany'] .theme-toggle button.on {
-  color: var(--accent);
+:root[data-accent='custom'] .theme-toggle button.on {
+  color: var(--accent-ink);
 }
 
 .more-grid {

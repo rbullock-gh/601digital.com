@@ -920,7 +920,7 @@ button.card:hover {
   font-weight: 500;
   animation: toast-in var(--t-slow) var(--ease-out);
 }
-:root[data-theme='tiffany'] .toast {
+:root[data-theme='dark'][data-accent='custom'] .toast {
   background: var(--surface-2);
   color: var(--text);
   border: 1px solid var(--border-strong);

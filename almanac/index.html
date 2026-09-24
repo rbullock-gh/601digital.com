@@ -18,10 +18,21 @@
       // Apply the saved theme before first paint so there is never a flash.
       (function () {
         try {
+          var root = document.documentElement;
           var p = localStorage.getItem('almanac-theme') || 'system';
           var t = p === 'system' ? (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : p;
-          document.documentElement.dataset.theme = t;
-          var c = { light: '#f4f2ec', dark: '#111113', tiffany: '#060707' }[t];
+          var c;
+          if (p === 'custom' || p === 'tiffany') {
+            // Colours cached by the app (src/lib/theme.ts); the old Tiffany theme maps to Custom.
+            var custom = JSON.parse(localStorage.getItem('almanac-custom-theme') || 'null') || {};
+            t = custom.base === 'light' ? 'light' : 'dark';
+            var vars = custom.vars || {};
+            for (var k in vars) root.style.setProperty(k, vars[k]);
+            if (custom.vars) root.dataset.accent = 'custom';
+            c = vars['--bg'];
+          }
+          root.dataset.theme = t;
+          c = c || { light: '#f4f2ec', dark: '#111113' }[t];
           document.querySelector('meta[name="theme-color"]').setAttribute('content', c);
         } catch (e) {}
       })();

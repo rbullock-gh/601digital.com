@@ -411,19 +411,45 @@ await step('Restore data from the backup', async () => {
   assert.equal((await api('/photos')).current.complete, true);
 });
 
-await step('Dark, Tiffany and light themes, remembered', async () => {
+await step('Dark, custom and light themes, remembered', async () => {
+  const state = () =>
+    page.evaluate(() => ({
+      theme: document.documentElement.dataset.theme,
+      accent: document.documentElement.dataset.accent ?? null,
+      accentVar: document.documentElement.style.getPropertyValue('--accent'),
+    }));
   await page.goto(BASE + '/');
   await page.locator('.theme-toggle').getByRole('radio', { name: 'Dark' }).click();
-  assert.equal(await page.evaluate(() => document.documentElement.dataset.theme), 'dark');
+  assert.equal((await state()).theme, 'dark');
   await page.reload();
-  assert.equal(await page.evaluate(() => document.documentElement.dataset.theme), 'dark');
-  await page.locator('.theme-toggle').getByRole('radio', { name: 'Tiffany' }).click();
-  assert.equal(await page.evaluate(() => document.documentElement.dataset.theme), 'tiffany');
-  await page.waitForTimeout(600);
-  const bg = await page.evaluate(() => getComputedStyle(document.body).backgroundColor);
-  assert.equal(bg, 'rgb(6, 7, 7)');
+  assert.equal((await state()).theme, 'dark');
+
+  // Custom starts as the old Tiffany look: dark base, Tiffany blue accent.
+  await page.locator('.theme-toggle').getByRole('radio', { name: 'Custom' }).click();
+  assert.deepEqual(await state(), { theme: 'dark', accent: 'custom', accentVar: '#81d8d0' });
+
+  // Change base and accent in Settings; both survive a reload.
+  await page.goto(BASE + '/settings');
+  await page.locator('.custom-theme').getByRole('button', { name: 'Light' }).click();
+  await page.locator('.custom-theme').getByRole('button', { name: 'Coral' }).click();
+  assert.deepEqual(await state(), { theme: 'light', accent: 'custom', accentVar: '#f2795a' });
+  await page.locator('.accent-hex').fill('#3d6df2');
+  await page.locator('.accent-hex').press('Enter');
+  await page.reload();
+  assert.deepEqual(await state(), { theme: 'light', accent: 'custom', accentVar: '#3d6df2' });
+
+  // Anyone who had the old Tiffany theme lands on Custom.
+  await page.evaluate(() => {
+    localStorage.setItem('almanac-theme', 'tiffany');
+    localStorage.removeItem('almanac-custom-theme');
+  });
+  await page.reload();
+  assert.deepEqual(await state(), { theme: 'dark', accent: 'custom', accentVar: '#81d8d0' });
+
   await page.locator('.theme-toggle').getByRole('radio', { name: 'Light' }).click();
-  assert.equal(await page.evaluate(() => document.documentElement.dataset.theme), 'light');
+  assert.deepEqual(await state(), { theme: 'light', accent: null, accentVar: '' });
+  await page.waitForTimeout(600);
+  assert.equal(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), 'rgb(244, 242, 236)');
 });
 
 await step('Mobile layout', async () => {

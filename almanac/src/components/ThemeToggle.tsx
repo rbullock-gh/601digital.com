@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { Gem, Monitor, Moon, Sun } from 'lucide-react';
-import { getThemePref, setThemePref, THEME_LABEL, THEME_ORDER, type ThemePref } from '../lib/theme.ts';
+import { Monitor, Moon, Palette, Sun } from 'lucide-react';
+import { getCustomTheme, getThemePref, setThemePref, THEME_LABEL, THEME_ORDER, type CustomTheme, type ThemePref } from '../lib/theme.ts';
 
 const ICON: Record<ThemePref, React.ReactNode> = {
   light: <Sun />,
   dark: <Moon />,
-  tiffany: <Gem />,
+  custom: <Palette />,
   system: <Monitor />,
 };
 
@@ -19,7 +19,17 @@ export function useThemePref(): [ThemePref, (p: ThemePref) => void] {
   return [pref, (p) => setThemePref(p)];
 }
 
-/** Light · Dark · Tiffany (black + Tiffany blue) · System. */
+export function useCustomTheme(): CustomTheme {
+  const [custom, setCustom] = useState<CustomTheme>(getCustomTheme);
+  useEffect(() => {
+    const on = (e: Event) => setCustom((e as CustomEvent<CustomTheme>).detail);
+    window.addEventListener('almanac:custom-theme', on);
+    return () => window.removeEventListener('almanac:custom-theme', on);
+  }, []);
+  return custom;
+}
+
+/** Light · Dark · Custom (your own accent, set in Settings) · System. */
 export function ThemeToggle({ compact }: { compact?: boolean }) {
   const [pref, set] = useThemePref();
   if (compact) {

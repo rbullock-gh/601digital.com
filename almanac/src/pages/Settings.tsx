@@ -1,4 +1,4 @@
-import { useRef, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Archive, Database, Download, FlaskConical, Keyboard, Lock, RotateCcw, Trash2, Upload } from 'lucide-react';
 import { api, refreshAll } from '../lib/api.ts';
@@ -9,8 +9,8 @@ import { currencySymbol, shortDate } from '../lib/format.ts';
 import { Card, PageHead } from '../components/ui/primitives.tsx';
 import { Segmented } from '../components/ui/Segmented.tsx';
 import { Dialog } from '../components/ui/Dialog.tsx';
-import { useThemePref } from '../components/ThemeToggle.tsx';
-import { THEME_LABEL, type ThemePref } from '../lib/theme.ts';
+import { useCustomTheme, useThemePref } from '../components/ThemeToggle.tsx';
+import { ACCENT_PRESETS, customVars, normalizeHex, setCustomTheme, THEME_LABEL, THEME_ORDER, type CustomTheme } from '../lib/theme.ts';
 import type { Settings as S } from '../../shared/types.ts';
 
 const CURRENCIES = ['USD', 'EUR', 'GBP', 'CAD', 'AUD', 'NZD', 'CHF', 'JPY', 'SEK', 'NOK', 'DKK', 'MXN', 'BRL', 'INR', 'ZAR', 'SGD'];
@@ -23,6 +23,68 @@ function Row({ label, hint, children }: { label: string; hint?: ReactNode; child
         {hint && <div className="sr-hint">{hint}</div>}
       </div>
       <div className="sr-control">{children}</div>
+    </div>
+  );
+}
+
+const THEME_SUB = { light: 'Warm paper', dark: 'Deep charcoal', custom: 'Your own accent', system: 'Follows your device' };
+
+/** Colours for the Custom theme card's miniature preview. */
+function customPreview(c: CustomTheme): React.CSSProperties {
+  const v = customVars(c);
+  const light = c.base === 'light';
+  return {
+    '--tp-bg': light ? '#f1eee7' : v['--bg'],
+    '--tp-surface': light ? '#fbfaf7' : v['--surface'],
+    '--tp-text': light ? '#1b1a18' : '#edece8',
+    '--tp-unrated': light ? '#e5e1d8' : v['--unrated'],
+    '--tp-accent': c.accent,
+  } as React.CSSProperties;
+}
+
+function CustomThemeControls({ custom }: { custom: CustomTheme }) {
+  const [hex, setHex] = useState(custom.accent);
+  useEffect(() => setHex(custom.accent), [custom.accent]);
+  const commitHex = () => {
+    const v = normalizeHex(hex);
+    if (v) setCustomTheme({ ...custom, accent: v });
+    else setHex(custom.accent);
+  };
+  const isPreset = ACCENT_PRESETS.some((p) => p.hex === custom.accent);
+  return (
+    <div className="custom-theme">
+      <Row label="Base" hint="The background the accent sits on.">
+        <Segmented
+          size="sm"
+          label="Base"
+          value={custom.base}
+          onChange={(base) => setCustomTheme({ ...custom, base })}
+          options={[
+            { value: 'light', label: 'Light' },
+            { value: 'dark', label: 'Dark' },
+          ]}
+        />
+      </Row>
+      <Row label="Accent" hint="Buttons, highlights and today's mark. Text in the accent is adjusted automatically so it stays readable.">
+        <div className="accent-picker">
+          {ACCENT_PRESETS.map((p) => (
+            <button key={p.hex} type="button" className={`color-swatch ${custom.accent === p.hex ? 'on' : ''}`} style={{ background: p.hex }} onClick={() => setCustomTheme({ ...custom, accent: p.hex })} aria-label={p.name} title={p.name} aria-pressed={custom.accent === p.hex} />
+          ))}
+          <label className={`color-swatch color-pick ${isPreset ? '' : 'on'}`} title="Any color" style={isPreset ? undefined : { background: custom.accent }}>
+            <input type="color" aria-label="Pick any accent color" value={custom.accent} onChange={(e) => setCustomTheme({ ...custom, accent: e.target.value })} />
+          </label>
+          <input
+            className="input num accent-hex"
+            aria-label="Accent hex code"
+            value={hex}
+            spellCheck={false}
+            maxLength={7}
+            onChange={(e) => setHex(e.target.value)}
+            onBlur={commitHex}
+            onKeyDown={(e) => e.key === 'Enter' && commitHex()}
+          />
+        </div>
+      </Row>
     </div>
   );
 }
@@ -51,6 +113,7 @@ export default function Settings() {
   const s = boot.settings;
   useDocumentTitle('Settings');
   const [theme, setTheme] = useThemePref();
+  const custom = useCustomTheme();
   const [name, setName] = useState(s.name);
   const [rate, setRate] = useState(String(s.defaultRateCents / 100));
   const info = useQuery({ queryKey: ['data-info'], queryFn: () => api.get<DataInfo>('/data/info') });
@@ -172,9 +235,9 @@ export default function Settings() {
 
         <Card title="Appearance">
           <div className="theme-cards">
-            {(['light', 'dark', 'tiffany', 'system'] as ThemePref[]).map((t) => (
+            {THEME_ORDER.map((t) => (
               <button key={t} className={`theme-card ${theme === t ? 'on' : ''}`} onClick={() => setTheme(t)} aria-pressed={theme === t}>
-                <span className={`theme-preview tp-${t}`} aria-hidden>
+                <span className={`theme-preview tp-${t}`} style={t === 'custom' ? customPreview(custom) : undefined} aria-hidden>
                   <span className="tp-side" />
                   <span className="tp-main">
                     <span className="tp-line" />
@@ -185,10 +248,11 @@ export default function Settings() {
                   </span>
                 </span>
                 <span className="tc-label">{THEME_LABEL[t]}</span>
-                <span className="tc-sub">{t === 'tiffany' ? 'Black & Tiffany blue' : t === 'system' ? 'Follows your device' : t === 'light' ? 'Warm paper' : 'Deep charcoal'}</span>
+                <span className="tc-sub">{THEME_SUB[t]}</span>
               </button>
             ))}
           </div>
+          {theme === 'custom' && <CustomThemeControls custom={custom} />}
         </Card>
 
         <Card title="Work & money">
