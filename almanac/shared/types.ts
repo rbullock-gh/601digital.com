@@ -489,3 +489,30 @@ export interface ScreenDay {
   categories: Record<string, number>;
   notes: string | null;
 }
+
+export interface WebsiteSale {
+  slot: number;
+  soldOn: ISODate;
+  client: string | null;
+  downCents: number;
+  monthlyCents: number;
+  notes: string | null;
+  /** Monthly payments due so far: one on the sale date and one each month after. */
+  payments: number;
+  /** Down payment plus the monthly payments due so far. */
+  collectedCents: number;
+}
+
+export interface WebsiteSummary {
+  cols: number;
+  rows: number;
+  slots: number;
+  defaults: { downCents: number; monthlyCents: number };
+  sales: WebsiteSale[];
+  sold: number;
+  monthlyCents: number;
+  yearlyCents: number;
+  collectedCents: number;
+  /** Monthly revenue with every slot sold at the default price. */
+  fullBoardMonthlyCents: number;
+}

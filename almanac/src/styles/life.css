@@ -1,4 +1,4 @@
-/* ── Vision board, travel map, screen time ───────────────────────────────── */
+/* ── Vision board, travel map, screen time, website sales ─────────────────── */
 
 .qa-tile.travel {
   --c: var(--travel);
@@ -838,5 +838,86 @@
   }
   .vb-filters::-webkit-scrollbar {
     display: none;
+  }
+}
+
+/* ── Website sales board ──────────────────────────────────────────────────── */
+
+.ws-board {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 10), minmax(0, 1fr));
+  gap: 8px;
+}
+.ws-cell {
+  position: relative;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-md);
+  border: 1.5px dashed var(--border-strong);
+  background: var(--bg-sunken);
+  color: var(--text-4);
+  transition:
+    background-color var(--t-fast),
+    border-color var(--t-fast),
+    transform var(--t-fast);
+}
+.ws-cell:hover {
+  border-color: var(--money);
+  color: var(--money);
+}
+.ws-cell:active {
+  transform: scale(0.96);
+}
+.ws-cell.sold {
+  border: 1.5px solid transparent;
+  background: var(--money);
+  color: #fff;
+}
+.ws-cell.sold:hover {
+  background: color-mix(in srgb, var(--money) 85%, var(--text));
+  color: #fff;
+}
+.ws-num {
+  position: absolute;
+  top: 5px;
+  left: 7px;
+  font-size: var(--fs-11);
+  font-weight: 550;
+  opacity: 0.85;
+}
+.ws-check {
+  width: 45%;
+  height: 45%;
+  stroke-width: 2.5;
+}
+.ws-client {
+  position: absolute;
+  bottom: 4px;
+  left: 6px;
+  right: 6px;
+  font-size: 10px;
+  text-align: center;
+  opacity: 0.9;
+}
+.ws-row {
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+}
+@media (max-width: 720px) {
+  .ws-board {
+    gap: 4px;
+  }
+  .ws-num {
+    top: 2px;
+    left: 4px;
+    font-size: 9px;
+  }
+  .ws-client {
+    display: none;
+  }
+  .ws-row .sr-time,
+  .ws-row .sr-main {
+    grid-row: auto;
+    grid-column: auto;
   }
 }

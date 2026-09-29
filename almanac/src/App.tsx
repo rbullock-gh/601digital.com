@@ -37,6 +37,7 @@ const Settings = lazy(() => import('./pages/Settings.tsx'));
 const Vision = lazy(() => import('./pages/Vision.tsx'));
 const Travel = lazy(() => import('./pages/Travel.tsx'));
 const ScreenTime = lazy(() => import('./pages/ScreenTime.tsx'));
+const Websites = lazy(() => import('./pages/Websites.tsx'));
 
 function Splash() {
   return (
@@ -117,6 +118,7 @@ export function App() {
                 <Route path="/vision" element={<Vision />} />
                 <Route path="/travel" element={<Travel />} />
                 <Route path="/screen-time" element={<ScreenTime />} />
+                <Route path="/websites" element={<Websites />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="*" element={<Navigate to="/" replace />} />
               </Routes>

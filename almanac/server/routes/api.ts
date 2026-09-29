@@ -18,6 +18,7 @@ import * as data from '../domain/data.ts';
 import * as travel from '../domain/travel.ts';
 import * as screen from '../domain/screentime.ts';
 import * as vision from '../domain/vision.ts';
+import * as websites from '../domain/websites.ts';
 import { insights } from '../domain/insights.ts';
 import { search, trash, softDelete, restore, TRASH_TABLES } from '../domain/search.ts';
 import { dailySeries, monthlySeries, totals, firstActivityDate } from '../domain/stats.ts';
@@ -316,6 +317,11 @@ export function registerApi(app: FastifyInstance, passcode: boolean) {
     screen.deleteScreenDay(req.params.date);
     return { ok: true };
   });
+
+  // ── Website sales board ──
+  get('/api/websites', (req) => websites.websiteSummary(todayOf(req)));
+  put('/api/websites/:slot', (req) => websites.setWebsiteSale(Number(req.params.slot), body_(req), todayOf(req)));
+  del('/api/websites/:slot', (req) => (websites.clearWebsiteSale(Number(req.params.slot)), { ok: true }));
 
   // ── Goals ──
   get('/api/goals', (req) => goals.goalsWithProgress(todayOf(req), getSettings().weekStart, req.query.archived === '1'));

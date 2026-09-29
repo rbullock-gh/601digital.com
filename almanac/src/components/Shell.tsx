@@ -7,6 +7,7 @@ import {
   Camera,
   Dumbbell,
   FolderKanban,
+  Globe,
   Grid3x3,
   LayoutDashboard,
   Lightbulb,
@@ -56,6 +57,7 @@ export const NAV: { label: string; items: NavItem[] }[] = [
       { to: '/work', label: 'Work', icon: <Briefcase /> },
       { to: '/money', label: 'Money', icon: <Wallet /> },
       { to: '/projects', label: 'Projects', icon: <FolderKanban /> },
+      { to: '/websites', label: 'Website Sales', icon: <Globe /> },
     ],
   },
   {

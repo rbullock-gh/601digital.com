@@ -354,6 +354,7 @@ export default function Settings() {
                 ['body', 'Body'],
                 ['days', 'Days & journal'],
                 ['screen_time', 'Screen time'],
+                ['website_sales', 'Website sales'],
                 ['travel', 'Trips'],
               ].map(([k, l]) => (
                 <a key={k} className="btn btn-ghost btn-sm" href={`/api/data/csv/${k}`} download>

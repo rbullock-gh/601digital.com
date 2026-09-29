@@ -565,6 +565,38 @@ await step('Dark, custom and light themes, remembered', async () => {
   assert.equal(await page.evaluate(() => getComputedStyle(document.body).backgroundColor), 'rgb(244, 242, 236)');
 });
 
+await step('Website sales board: check off squares and total the money', async () => {
+  await page.goto(BASE + '/websites');
+  const cell = (n) => page.getByRole('button', { name: new RegExp(`^Website ${n}, `) });
+  assert.equal(await page.locator('.ws-cell').count(), 50);
+  await cell(1).click();
+  await toast('Website 1 sold');
+  await cell(12).click();
+  await toast('Website 12 sold');
+  assert.equal(await cell(12).getAttribute('aria-pressed'), 'true');
+  let w = await api('/websites');
+  assert.equal(w.sold, 2);
+  assert.equal(w.monthlyCents, 40000);
+  assert.equal(w.collectedCents, 40000);
+
+  // Edit a sale from its square.
+  await cell(12).click();
+  await page.getByLabel('Client').fill('Acme Plumbing');
+  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  await toast('Sale saved');
+  assert.equal((await api('/websites')).sales.find((s) => s.slot === 12).client, 'Acme Plumbing');
+  await page.locator('.ws-list').getByText('Acme Plumbing').waitFor();
+
+  // Unmark it.
+  await cell(12).click();
+  await page.getByRole('button', { name: 'Unmark' }).first().click();
+  await page.getByRole('button', { name: 'Unmark' }).last().click();
+  await toast('Website 12 unmarked');
+  w = await api('/websites');
+  assert.deepEqual(w.sales.map((s) => s.slot), [1]);
+  assert.equal(w.monthlyCents, 20000);
+});
+
 await step('Mobile layout', async () => {
   const m = await browser.newContext({ viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
   const p = await m.newPage();

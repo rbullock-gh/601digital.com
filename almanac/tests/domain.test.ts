@@ -22,6 +22,7 @@ const dates = await import('../shared/dates.ts');
 const travel = await import('../server/domain/travel.ts');
 const screen = await import('../server/domain/screentime.ts');
 const vision = await import('../server/domain/vision.ts');
+const websites = await import('../server/domain/websites.ts');
 const { estimate1RM } = await import('../shared/fitness.ts');
 
 const TODAY = '2026-09-23';
@@ -377,6 +378,33 @@ describe('vision board', () => {
     expect(vision.updateVision(a.id, { achievedOn: TODAY, title: null }, TODAY)).toMatchObject({ achievedOn: TODAY, title: null });
     expect(() => vision.createVision({ area: 'Fun' }, TODAY)).toThrow();
     expect(search.search('Lisbon', TODAY).some((r) => r.href.startsWith('/travel'))).toBe(true);
+  });
+});
+
+describe('website sales board', () => {
+  it('counts one payment on the sale date and one each month after, clamping short months', () => {
+    expect(websites.paymentsDue(TODAY, TODAY)).toBe(1);
+    expect(websites.paymentsDue('2026-08-24', TODAY)).toBe(1);
+    expect(websites.paymentsDue('2026-08-23', TODAY)).toBe(2);
+    expect(websites.paymentsDue('2025-09-23', TODAY)).toBe(13);
+    expect(websites.paymentsDue('2026-01-31', '2026-02-28')).toBe(2);
+    expect(websites.paymentsDue('2026-09-30', TODAY)).toBe(0);
+  });
+  it('checks off slots at $0 down and $200 a month, and totals the money', () => {
+    const empty = websites.websiteSummary(TODAY);
+    expect(empty).toMatchObject({ cols: 10, rows: 5, slots: 50, sold: 0, monthlyCents: 0, fullBoardMonthlyCents: 1_000_000 });
+    expect(websites.setWebsiteSale(1, {}, TODAY)).toMatchObject({ slot: 1, soldOn: TODAY, downCents: 0, monthlyCents: 20000, collectedCents: 20000 });
+    websites.setWebsiteSale(7, { soldOn: '2026-07-01', client: ' Acme ' }, TODAY);
+    const s = websites.websiteSummary(TODAY);
+    expect(s).toMatchObject({ sold: 2, monthlyCents: 40000, yearlyCents: 480000, collectedCents: 20000 + 3 * 20000 });
+    expect(s.sales.find((x) => x.slot === 7)).toMatchObject({ client: 'Acme', payments: 3 });
+    // Editing keeps what isn't sent; terms can differ per sale.
+    expect(websites.setWebsiteSale(7, { downCents: 50000 }, TODAY)).toMatchObject({ client: 'Acme', soldOn: '2026-07-01', collectedCents: 50000 + 60000 });
+    expect(() => websites.setWebsiteSale(51, {}, TODAY)).toThrow();
+    expect(() => websites.setWebsiteSale(2, { soldOn: '2026-10-01' }, TODAY)).toThrow();
+    expect(() => websites.setWebsiteSale(2, { monthlyCents: -1 }, TODAY)).toThrow();
+    websites.clearWebsiteSale(1);
+    expect(websites.websiteSummary(TODAY).sales.map((x) => x.slot)).toEqual([7]);
   });
 });
 
