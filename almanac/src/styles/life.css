@@ -912,7 +912,8 @@
     left: 4px;
     font-size: 9px;
   }
-  .ws-client {
+  .ws-client,
+  .ws-cell.sold .ws-num {
     display: none;
   }
   .ws-row .sr-time,

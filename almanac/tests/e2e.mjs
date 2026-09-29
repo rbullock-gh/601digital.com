@@ -590,7 +590,9 @@ await step('Website sales board: check off squares and total the money', async (
 
   // Unmark it.
   await cell(12).click();
+  await page.getByLabel('Client').waitFor();
   await page.getByRole('button', { name: 'Unmark' }).first().click();
+  await page.getByText('Unmark website 12?').waitFor();
   await page.getByRole('button', { name: 'Unmark' }).last().click();
   await toast('Website 12 unmarked');
   w = await api('/websites');
