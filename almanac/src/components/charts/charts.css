@@ -1,0 +1,150 @@
+.chart {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+.chart svg {
+  overflow: visible;
+}
+.gridline {
+  stroke: var(--grid);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.baseline {
+  stroke: var(--axis);
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+.target-line {
+  stroke: var(--text-3);
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  opacity: 0.7;
+}
+.crosshair {
+  stroke: var(--axis);
+  stroke-width: 1;
+}
+.axis-label {
+  fill: var(--text-3);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.axis-label.strong {
+  fill: var(--text);
+  font-weight: 600;
+}
+.bar-g {
+  transition: opacity var(--t-fast);
+}
+.bar-g path,
+.bar-g rect:not([fill='transparent']) {
+  transition:
+    d var(--t-slow) var(--ease-out),
+    y var(--t-slow) var(--ease-out),
+    height var(--t-slow) var(--ease-out);
+}
+.line-path {
+  stroke-dasharray: 4000;
+  stroke-dashoffset: 0;
+  animation: draw-line 900ms var(--ease-out);
+}
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 4000;
+  }
+}
+
+.rank-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.rank-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  text-align: left;
+}
+.rank-row.interactive {
+  border-radius: 8px;
+  margin: -6px -8px;
+  padding: 6px 8px;
+  width: calc(100% + 16px);
+  transition: background-color var(--t-fast);
+}
+.rank-row.interactive:hover {
+  background: var(--surface-hover);
+}
+.rank-top {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: var(--fs-13);
+  min-width: 0;
+}
+.rank-label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--text);
+  font-weight: 500;
+}
+.rank-sub {
+  color: var(--text-3);
+  font-size: var(--fs-12);
+  white-space: nowrap;
+}
+.rank-value {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+  font-weight: 550;
+  white-space: nowrap;
+}
+.rank-track {
+  height: 6px;
+  border-radius: 6px;
+  background: var(--bg-sunken);
+  overflow: hidden;
+}
+.rank-track span {
+  display: block;
+  height: 100%;
+  border-radius: 6px;
+  transition: width var(--t-slow) var(--ease-out);
+}
+
+.rating-bar {
+  display: flex;
+  gap: 2px;
+  border-radius: 5px;
+  overflow: hidden;
+  width: 100%;
+}
+.rating-bar span {
+  min-width: 3px;
+  transition: flex-grow var(--t-slow) var(--ease-out);
+}
+.rating-bar.rb-empty {
+  background: var(--unrated);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  font-size: var(--fs-12);
+  color: var(--text-2);
+}
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
