@@ -54,8 +54,11 @@ export function ScreenTimeForm({ preset, onDone }: { preset?: { date?: ISODate }
   // Prefill from what's already logged for the chosen day.
   useEffect(() => {
     if (!day.data || loadedFor.current === date) return;
+    const first = loadedFor.current === null;
     loadedFor.current = date;
     const s = day.data.screen;
+    // Nothing logged yet: keep anything typed while the day was loading.
+    if (!s && first) return;
     setH(s ? String(Math.floor(s.minutes / 60)) : '');
     setM(s ? String(s.minutes % 60) : '');
     setPickups(s?.pickups != null ? String(s.pickups) : '');

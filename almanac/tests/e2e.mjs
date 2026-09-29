@@ -568,6 +568,7 @@ await step('Dark, custom and light themes, remembered', async () => {
 await step('Website sales board: check off squares and total the money', async () => {
   await page.goto(BASE + '/websites');
   const cell = (n) => page.getByRole('button', { name: new RegExp(`^Website ${n}, `) });
+  await cell(50).waitFor();
   assert.equal(await page.locator('.ws-cell').count(), 50);
   await cell(1).click();
   await toast('Website 1 sold');
