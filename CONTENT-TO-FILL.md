@@ -13,6 +13,7 @@ rather than something I could verify.
 | Before/After slider | Demonstration builds both sides | Real before/after screenshots, once approved |
 | Work item 02 | "Slot open" card | A second project, or delete the block |
 | Contact form | No `data-endpoint` set | A form endpoint — see `DEPLOY.md` step 3 |
+| Pricing — Growth Plan | Publicly promises: homepage before payment, live in 14 days or first month free, $0 setup for founding clients, 12-month term, client owns domain + content | Confirm you'll honour each one, and that your client agreement matches. Remove the founding-client tag and $0 line once those spots are filled |
 
 Search the repo for `is-placeholder` to find the testimonial and slot markers.
 

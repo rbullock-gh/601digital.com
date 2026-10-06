@@ -1511,6 +1511,22 @@ body.menu-open { overflow: hidden; }
 .price--featured .btn--accent::after { background: var(--white); }
 .price--featured .btn--accent:hover, .price--featured .btn--accent:focus-visible { color: var(--forest); }
 
+/* lead layout: one featured plan, one secondary card. The featured card sits
+   level here — there are no neighbours on both sides for it to rise above. */
+@media (min-width: 940px) {
+  .pricing--lead { grid-template-columns: minmax(0, 1.65fr) minmax(0, 1fr); }
+  .pricing--lead .price--featured { transform: none; }
+  .pricing--lead .price--featured:hover, .pricing--lead .price--featured:focus-within { transform: translateY(-6px); }
+  .pricing--lead .price--featured .price__list { grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 1.5rem; }
+}
+
+.price__promise {
+  display: grid; gap: .625rem;
+  padding-top: 1.5rem; border-top: 1px solid var(--line);
+  font-size: var(--t-small); line-height: 1.55; color: var(--fg-muted);
+}
+.price__promise b { font-weight: 550; color: var(--fg); }
+
 .price-note {
   margin: clamp(2.25rem, 1.5rem + 2.4vw, 3.5rem) auto 0;
   max-width: 72ch; text-align: center;
