@@ -1599,3 +1599,30 @@ body.menu-open { overflow: hidden; }
    tone they already had. */
 .eyebrow { color: var(--accent); }
 .inverted .eyebrow { color: var(--fg-faint); }
+
+/* ==========================================================================
+   REVIEW CARDS
+   One product, not a tier: a drawn card on the left, the offer reusing the
+   pricing card on the right. Blossom stays on the stars only.
+   ========================================================================== */
+.rc { display: grid; gap: var(--gutter); align-items: center; }
+@media (min-width: 900px) { .rc { grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); } }
+
+.rc__visual {
+  display: grid; place-items: center;
+  padding: clamp(2rem, 1rem + 4vw, 4.5rem) clamp(1rem, .5rem + 2vw, 2rem);
+  background: var(--bg-sunk); border-radius: var(--radius-lg);
+}
+.rc__card {
+  position: relative; width: min(100%, 23rem); aspect-ratio: 85.6 / 54;
+  display: grid; align-content: end; gap: .5rem;
+  padding: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  background: linear-gradient(140deg, var(--forest-raised), var(--forest));
+  color: var(--white); border-radius: 14px;
+  box-shadow: 0 30px 60px -28px rgba(24,32,28,.65);
+  transform: rotate(-4deg);
+}
+.rc__wave { position: absolute; top: 1.1rem; right: 1.1rem; width: 30px; height: 30px; color: var(--sage); }
+.rc__biz { font-family: var(--font-display); font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem); line-height: 1; }
+.rc__stars { color: var(--blossom); letter-spacing: .18em; font-size: 1rem; }
+.rc__cta { font-size: var(--t-micro); letter-spacing: .06em; color: var(--sage); }

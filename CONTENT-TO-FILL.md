@@ -105,3 +105,12 @@ If any of these is wrong, change the copy rather than leaving it:
 - Client details used in the case study (address, phone, hours, surgical suite,
   digital radiography, grooming, on-call vet) come from the client's own site
   and public listings. Worth a last check against what they publish today.
+
+## Review cards section
+
+The `#review-cards` section sells NFC Google review cards at $50 each, in a
+limited first run of 50. Check these lines are true for your cards before launch:
+
+- "Works with a tap on modern iPhone and Android phones" — test your chip on both.
+- "Delivered by hand, locally" — change if you post them.
+- "Limited first run of 50 cards" — update or remove once they sell out.

@@ -463,6 +463,12 @@
      14. Contact form — posts to an endpoint if one is configured,
          otherwise composes a pre-filled mail draft so the demo works.
      --------------------------------------------------------- */
+  /* Buttons carrying data-kind preselect "What do you need?" on the way down */
+  $$('[data-kind]').forEach(a => a.addEventListener('click', () => {
+    const sel = $('#f-kind');
+    if (sel) sel.value = a.dataset.kind;
+  }));
+
   $$('[data-contact]').forEach(form => {
     const status = $('[data-form-status]', form);
     const say = (msg, state) => {
